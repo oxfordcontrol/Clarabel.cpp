@@ -13,6 +13,16 @@
 
 namespace clarabel {
 
+extern "C" {
+
+void *CscMatrix_new(uintptr_t m,
+                    uintptr_t n,
+                    const uintptr_t *colptr,
+                    const uintptr_t *rowval,
+                    const double *nzval);
+
+} // extern "C"
+
 } // namespace clarabel
 
 #endif // CLARABEL_H

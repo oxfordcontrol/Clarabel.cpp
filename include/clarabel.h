@@ -10,4 +10,10 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+void *CscMatrix_new(uintptr_t m,
+                    uintptr_t n,
+                    const uintptr_t *colptr,
+                    const uintptr_t *rowval,
+                    const double *nzval);
+
 #endif /* CLARABEL_H */

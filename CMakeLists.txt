@@ -11,11 +11,11 @@ add_custom_target(
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/rust_wrapper
     # Commands for building the Rust library
     COMMAND cargo build
-    COMMAND cargo install cbindgen
+    COMMAND cargo install cbindgen --version 0.24.5
     # Generate the C header
-    COMMAND cbindgen --config cbindgen.toml --crate clarabel --output ../include/clarabel.h --lang c
+    COMMAND cbindgen --config cbindgen.toml --crate clarabel_c --output ../include/clarabel.h --lang c
     # Generate the C++ header
-    COMMAND cbindgen --config cbindgen.toml --crate clarabel --output ../include/clarabel.hpp
+    COMMAND cbindgen --config cbindgen.toml --crate clarabel_c --output ../include/clarabel.hpp
 )
 
 # Get the path to the Rust library for linking

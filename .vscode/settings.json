@@ -2,5 +2,6 @@
     "rust-analyzer.linkedProjects": [
         "${workspaceFolder}/Clarabel.rs/Cargo.toml",
         "${workspaceFolder}/rust_wrapper/Cargo.toml"
-    ]
+    ],
+    "cmake.configureOnOpen": true
 }
