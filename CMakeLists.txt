@@ -6,11 +6,15 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Build the Rust library
+if(CMAKE_BUILD_TYPE MATCHES Release)
+    set(clarabel_c_flags "--release")
+endif()
+
 add_custom_target(
     clarabel_c
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/rust_wrapper
     # Commands for building the Rust library
-    COMMAND cargo build
+    COMMAND cargo build ${clarabel_c_flags}
     COMMAND cargo install cbindgen --version 0.24.5
     # Generate the C header
     COMMAND cbindgen --config cbindgen.toml --crate clarabel_c --output ../include/clarabel.h --lang c
