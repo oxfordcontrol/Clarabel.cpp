@@ -25,6 +25,7 @@ pub extern "C" fn CscMatrix_new(
     let matrix = lib::CscMatrix::<f64>::new(m, n, colptr_vec, rowval_vec, nzval_vec);
 
     // Print the matrix in debug mode
+    #[cfg(debug_assertions)]
     println!("{:?}", matrix);
 
     // Return a raw pointer to the boxed lib::Cscmatrix<f64> object
