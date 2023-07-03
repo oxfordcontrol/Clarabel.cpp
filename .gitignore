@@ -1,3 +1,4 @@
 # rust_wrapper - Rust library project
 rust_wrapper/target
 rust_wrapper/Cargo.lock
+build

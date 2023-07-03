@@ -1,5 +1,5 @@
 [package]
-name = "rust_wrapper"
+name = "clarabel_c"
 version = "0.1.0"
 edition = "2021"
 
