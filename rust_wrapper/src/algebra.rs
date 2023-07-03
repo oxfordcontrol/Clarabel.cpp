@@ -1,7 +1,7 @@
 use clarabel::algebra as lib;
 use std::{ffi::c_void, usize};
 
-//pub type CscMatrixF64 = c_void;
+pub type CscMatrixF64 = c_void;
 
 #[no_mangle]
 pub extern "C" fn CscMatrix_new(
@@ -10,7 +10,7 @@ pub extern "C" fn CscMatrix_new(
     colptr: *const usize,
     rowval: *const usize,
     nzval: *const f64,
-) -> *mut c_void {
+) -> *mut CscMatrixF64 {
     // Recover the vectors from the raw array pointers
 
     // Length of colptr is n + 1
@@ -31,5 +31,15 @@ pub extern "C" fn CscMatrix_new(
     // The matrix is allocated on the heap and the pointer is returned for C to use
     let boxed = Box::new(matrix);
     let ptr: *mut lib::CscMatrix<f64> = Box::into_raw(boxed);
-    ptr as *mut c_void
+    ptr as *mut CscMatrixF64
+}
+
+#[no_mangle]
+pub extern "C" fn CscMatrix_delete(ptr: *mut CscMatrixF64) {
+    if !ptr.is_null() {
+        unsafe {
+            // Reconstruct the box to drop the lib::CscMatrix<f64> object
+            drop(Box::from_raw(ptr as *mut CscMatrixF64));
+        }
+    }
 }
