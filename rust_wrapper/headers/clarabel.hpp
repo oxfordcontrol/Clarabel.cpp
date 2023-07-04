@@ -13,17 +13,45 @@
 
 namespace clarabel {
 
-using CscMatrixF64 = void;
+using DefaultSolver = void;
+
+template<typename T>
+struct CscMatrix {
+  /**
+   * number of rows
+   */
+  uintptr_t m;
+  /**
+   * number of columns
+   */
+  uintptr_t n;
+  /**
+   * CSC format column pointer.
+   *
+   * Ths field should have length `n+1`. The last entry corresponds
+   * to the the number of nonzeros and should agree with the lengths
+   * of the `rowval` and `nzval` fields.
+   */
+  const uintptr_t *colptr;
+  /**
+   * vector of row indices
+   */
+  const uintptr_t *rowval;
+  /**
+   * vector of non-zero matrix elements
+   */
+  const T *nzval;
+};
 
 extern "C" {
 
-CscMatrixF64 *CscMatrix_new(uintptr_t m,
-                            uintptr_t n,
-                            const uintptr_t *colptr,
-                            const uintptr_t *rowval,
-                            const double *nzval);
-
-void CscMatrix_delete(CscMatrixF64 *ptr);
+DefaultSolver *DefaultSolver_new(const CscMatrix<double> *P,
+                                 const double *q,
+                                 const CscMatrix<double> *A,
+                                 const double *b,
+                                 uintptr_t n_cones,
+                                 const void *cones,
+                                 const void *settings);
 
 } // extern "C"
 

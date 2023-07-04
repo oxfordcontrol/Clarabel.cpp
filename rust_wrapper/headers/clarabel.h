@@ -10,14 +10,41 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-typedef void CscMatrixF64;
+typedef void DefaultSolver;
 
-CscMatrixF64 *CscMatrix_new(uintptr_t m,
-                            uintptr_t n,
-                            const uintptr_t *colptr,
-                            const uintptr_t *rowval,
-                            const double *nzval);
+typedef struct CscMatrix_f64 {
+  /**
+   * number of rows
+   */
+  uintptr_t m;
+  /**
+   * number of columns
+   */
+  uintptr_t n;
+  /**
+   * CSC format column pointer.
+   *
+   * Ths field should have length `n+1`. The last entry corresponds
+   * to the the number of nonzeros and should agree with the lengths
+   * of the `rowval` and `nzval` fields.
+   */
+  const uintptr_t *colptr;
+  /**
+   * vector of row indices
+   */
+  const uintptr_t *rowval;
+  /**
+   * vector of non-zero matrix elements
+   */
+  const double *nzval;
+} CscMatrix_f64;
 
-void CscMatrix_delete(CscMatrixF64 *ptr);
+DefaultSolver *DefaultSolver_new(const struct CscMatrix_f64 *P,
+                                 const double *q,
+                                 const struct CscMatrix_f64 *A,
+                                 const double *b,
+                                 uintptr_t n_cones,
+                                 const void *cones,
+                                 const void *settings);
 
 #endif /* CLARABEL_H */
