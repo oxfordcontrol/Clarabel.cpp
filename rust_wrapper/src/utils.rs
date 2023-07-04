@@ -1,9 +1,12 @@
-use std::mem::forget;
-
 use crate::algebra::CscMatrix;
 use clarabel::algebra as lib;
 
+/// Convert a CscMatrix from C to Rust
+/// 
+/// The CscMatrix object returned will take ownership of the memory of arrays allocated in C.
+/// Make sure to call std::mem::forget on the vectors in the CscMatrix object to leave the memory management for C side
 pub unsafe fn convert_from_C_CscMatrix(ptr: *const CscMatrix<f64>) -> lib::CscMatrix<f64> {
+    // Recover the CscMatrix from the raw pointer from C
     let matrix = match ptr.as_ref() {
         Some(mat) => mat,
         None => panic!("Null pointer passed to convert_from_C_CscMatrix"),
@@ -21,11 +24,6 @@ pub unsafe fn convert_from_C_CscMatrix(ptr: *const CscMatrix<f64>) -> lib::CscMa
     let rowval = Vec::from_raw_parts(matrix.rowval as *mut usize, colptr[n], colptr[n]);
     let nzval_vec = Vec::from_raw_parts(matrix.nzval as *mut f64, colptr[n], colptr[n]);
 
-    // Ensure Rust does not try to deallocate memory of arrays managed by C
-    forget(colptr);
-    forget(rowval);
-    forget(nzval_vec);
-
     // Call the CscMatrix constructor defined in Rust
     let rust_matrix = lib::CscMatrix::<f64> {
         m,
@@ -34,7 +32,7 @@ pub unsafe fn convert_from_C_CscMatrix(ptr: *const CscMatrix<f64>) -> lib::CscMa
         rowval,
         nzval: nzval_vec
     };
-
+    
     // Return the Rust CscMatrix built from the C struct
     rust_matrix
 }
