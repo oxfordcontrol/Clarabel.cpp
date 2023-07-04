@@ -44,7 +44,7 @@ CscMatrix_f64 *CscMatrix_f64_new(
     const uintptr_t *rowval,
     const double *nzval)
 {
-    CscMatrix_f64 *ptr = (CscMatrix_f64 *)malloc(sizeof(CscMatrix_f64));
+    CscMatrix_f64 *ptr = malloc(sizeof(CscMatrix_f64));
     
     if (ptr == NULL) // Failed to allocate memory
         return NULL;

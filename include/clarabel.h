@@ -6,11 +6,13 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+#include "CscMatrix.h"
+
 typedef void DefaultSolver;
 
-DefaultSolver *DefaultSolver_new(const struct CscMatrix_f64 *P,
+DefaultSolver *DefaultSolver_new(const CscMatrix_f64 *P,
                                  const double *q,
-                                 const struct CscMatrix_f64 *A,
+                                 const CscMatrix_f64 *A,
                                  const double *b,
                                  uintptr_t n_cones,
                                  const void *cones,
