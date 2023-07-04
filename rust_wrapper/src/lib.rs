@@ -1,1 +1,2 @@
-pub mod algebra;
+mod algebra;
+mod solver;
