@@ -49,9 +49,9 @@ DefaultSolver *DefaultSolver_new(const CscMatrix<double> *P,
                                  const double *q,
                                  const CscMatrix<double> *A,
                                  const double *b,
-                                 uintptr_t n_cones,
-                                 const void *cones,
-                                 const void *settings);
+                                 uintptr_t _n_cones,
+                                 const void *_cones,
+                                 const void *_settings);
 
 } // extern "C"
 
