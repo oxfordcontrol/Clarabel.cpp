@@ -24,9 +24,9 @@ add_custom_target(
     COMMAND cargo build ${clarabel_c_build_flags}
     COMMAND cargo install cbindgen --version 0.24.5
     # Generate the C header
-    COMMAND cbindgen --config cbindgen.toml --crate clarabel_c --output ../include/clarabel.h --lang c
+    COMMAND cbindgen --config cbindgen.toml --crate clarabel_c --output ./headers/clarabel.h --lang c
     # Generate the C++ header
-    COMMAND cbindgen --config cbindgen.toml --crate clarabel_c --output ../include/clarabel.hpp
+    COMMAND cbindgen --config cbindgen.toml --crate clarabel_c --output ./headers/clarabel.hpp
 )
 
 # Get the path to the Rust library for linking
