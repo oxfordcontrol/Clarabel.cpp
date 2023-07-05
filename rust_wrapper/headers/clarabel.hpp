@@ -53,6 +53,10 @@ DefaultSolver *DefaultSolver_new(const CscMatrix<double> *P,
                                  const void *_cones,
                                  const void *_settings);
 
+void DefaultSolver_solve(DefaultSolver *solver);
+
+void free_DefaultSolver(DefaultSolver *solver);
+
 } // extern "C"
 
 } // namespace clarabel

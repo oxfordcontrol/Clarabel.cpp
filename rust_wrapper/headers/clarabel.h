@@ -47,4 +47,8 @@ DefaultSolver *DefaultSolver_new(const struct CscMatrix_f64 *P,
                                  const void *_cones,
                                  const void *_settings);
 
+void DefaultSolver_solve(DefaultSolver *solver);
+
+void free_DefaultSolver(DefaultSolver *solver);
+
 #endif /* CLARABEL_H */
