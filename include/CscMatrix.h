@@ -66,6 +66,12 @@ CscMatrix_f64 *CscMatrix_f64_new(
 /// @return A new CscMatrix_f64 struct built from the dense matrix
 struct CscMatrix_f64 CscMatrix_f64_from(uintptr_t m, uintptr_t n, const double *matrix);
 
+/// @brief Create a sparse matrix in Compressed Sparse Column format of all zeros
+/// @param rows Number of rows
+/// @param cols Number of columns
+/// @return A new CscMatrix_f64 struct of all zeros
+struct CscMatrix_f64 CscMatrix_f64_zeros(uintptr_t rows, uintptr_t cols);
+
 /// @brief Free a CscMatrix_f64 object
 /// @param matrix Pointer to the matrix to free
 void free_CscMatrix_f64(CscMatrix_f64 *matrix)

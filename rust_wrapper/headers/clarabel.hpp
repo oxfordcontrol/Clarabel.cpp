@@ -47,6 +47,8 @@ extern "C" {
 
 CscMatrix<double> CscMatrix_f64_from(uintptr_t m, uintptr_t n, const double *matrix);
 
+CscMatrix<double> CscMatrix_f64_zeros(uintptr_t rows, uintptr_t cols);
+
 DefaultSolver *DefaultSolver_new(const CscMatrix<double> *P,
                                  const double *q,
                                  const CscMatrix<double> *A,

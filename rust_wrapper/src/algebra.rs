@@ -49,8 +49,32 @@ pub extern "C" fn CscMatrix_f64_from(m: usize, n: usize, matrix: *const f64) -> 
         matrix_slice.push(&raw_slice[start..end]);
     }
 
-    // Call the function construct the CscMatrix
+    // Call the function that constructs the CscMatrix
     let csc_matrix = lib::CscMatrix::<f64>::from(matrix_slice);
+
+    // Build the C struct
+    let result = CscMatrix::<f64> {
+        m: csc_matrix.m,
+        n: csc_matrix.n,
+        colptr: csc_matrix.colptr.as_ptr(),
+        rowval: csc_matrix.rowval.as_ptr(),
+        nzval: csc_matrix.nzval.as_ptr(),
+    };
+
+    // Forget the vectors to leave the memory management to C
+    std::mem::forget(csc_matrix.colptr);
+    std::mem::forget(csc_matrix.rowval);
+    std::mem::forget(csc_matrix.nzval);
+
+    // Return the C struct
+    result
+}
+
+
+#[no_mangle]
+pub extern fn CscMatrix_f64_zeros(rows: usize, cols: usize) -> CscMatrix<f64>{
+    // Call the function that constructs the CscMatrix
+    let csc_matrix = lib::CscMatrix::<f64>::zeros((rows, cols));
 
     // Build the C struct
     let result = CscMatrix::<f64> {

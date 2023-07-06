@@ -5,12 +5,12 @@ int main(void)
 {
     printf("Hello, world!\n");
 
-    // Allocate a new CscMatrixF64
-
-    // TODO: CscMatrix_f64 *P = CscMatrix::<f64>::zeros((2, 2));
+    CscMatrix_f64 P = CscMatrix_f64_zeros(2, 2);
 
     double q[2] = {1.0, -1.0};
 
+    // a 2-d box constraint, separated into 4 inequalities.
+    // A = [I; -I]
     CscMatrix_f64 *_A = CscMatrix_f64_new(
         4, 2,                            // row, col
         (uintptr_t[]){0, 2, 4},          // colptr
@@ -18,6 +18,7 @@ int main(void)
         (double[]){1.0, -1.0, 1.0, -1.0} // nzval
     );
 
+    // easier way - use the From trait to construct A:
     CscMatrix_f64 A = CscMatrix_f64_from(
         4, 2,
         (double[4][2]){
@@ -30,7 +31,7 @@ int main(void)
 
     // Build solver
     DefaultSolver *solver = DefaultSolver_new(
-        NULL, // P
+        &P,   // P
         q,    // q
         &A,   // A
         b,    // b

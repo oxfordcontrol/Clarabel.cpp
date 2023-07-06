@@ -21,11 +21,7 @@ pub mod implementations {
             _cones: *const c_void,    // TODO:
             _settings: *const c_void, // TODO:
         ) -> *mut DefaultSolver {
-            //let P = convert_from_C_CscMatrix(P);
-
-            // For testing example_lp
-            let P = clarabel::algebra::CscMatrix::<f64>::zeros((2, 2));
-
+            let P = convert_from_C_CscMatrix(P);
             let A = convert_from_C_CscMatrix(A);
             let q = Vec::from_raw_parts(q as *mut f64, A.n, A.n);
             let b = Vec::from_raw_parts(b as *mut f64, A.m, A.m);
