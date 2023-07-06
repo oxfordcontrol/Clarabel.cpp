@@ -20,6 +20,8 @@ pub struct CscMatrix<T = f64> {
     pub rowval: *const usize,
     /// vector of non-zero matrix elements
     pub nzval: *const T,
+    /// Indicates whether the memory is owned by Rust. Should never be changed by the user.
+    pub mem_owned_by_rust: bool,
 }
 
 #[no_mangle]
@@ -35,8 +37,9 @@ pub extern "C" fn CscMatrix_f64_from(m: usize, n: usize, matrix: *const f64) -> 
             colptr: std::ptr::null(),
             rowval: std::ptr::null(),
             nzval: std::ptr::null(),
+            mem_owned_by_rust: false,
         };
-    } 
+    }
 
     // Construct a flattened slice from the raw pointer.
     let raw_slice = unsafe { slice::from_raw_parts(matrix, m * n) };
@@ -59,6 +62,7 @@ pub extern "C" fn CscMatrix_f64_from(m: usize, n: usize, matrix: *const f64) -> 
         colptr: csc_matrix.colptr.as_ptr(),
         rowval: csc_matrix.rowval.as_ptr(),
         nzval: csc_matrix.nzval.as_ptr(),
+        mem_owned_by_rust: true,
     };
 
     // Forget the vectors to leave the memory management to C
@@ -70,9 +74,8 @@ pub extern "C" fn CscMatrix_f64_from(m: usize, n: usize, matrix: *const f64) -> 
     result
 }
 
-
 #[no_mangle]
-pub extern fn CscMatrix_f64_zeros(rows: usize, cols: usize) -> CscMatrix<f64>{
+pub extern "C" fn CscMatrix_f64_zeros(rows: usize, cols: usize) -> CscMatrix<f64> {
     // Call the function that constructs the CscMatrix
     let csc_matrix = lib::CscMatrix::<f64>::zeros((rows, cols));
 
@@ -83,6 +86,7 @@ pub extern fn CscMatrix_f64_zeros(rows: usize, cols: usize) -> CscMatrix<f64>{
         colptr: csc_matrix.colptr.as_ptr(),
         rowval: csc_matrix.rowval.as_ptr(),
         nzval: csc_matrix.nzval.as_ptr(),
+        mem_owned_by_rust: true,
     };
 
     // Forget the vectors to leave the memory management to C
@@ -92,6 +96,15 @@ pub extern fn CscMatrix_f64_zeros(rows: usize, cols: usize) -> CscMatrix<f64>{
 
     // Return the C struct
     result
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn delete_CscMatrix_f64(matrix: *const CscMatrix<f64>) {
+    if matrix.is_null() || !(*matrix).mem_owned_by_rust {
+        return;
+    }
+    let csc_matrix = crate::utils::convert_from_C_CscMatrix(matrix);
+    drop(csc_matrix);
 }
 
 // pub type CscMatrixF64 = c_void;

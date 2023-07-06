@@ -2,6 +2,7 @@
 #define CSC_MATRIX_H
 
 #include <stdint.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include "clarabel.h"
 
@@ -28,6 +29,12 @@ typedef struct CscMatrix_f64
     /// @brief Vector of non-zero matrix elements
     const double *nzval;
 
+    /** @brief whether the memory is owned by Rust
+     *
+     *  Should never be changed by the user.
+     */
+    bool mem_owned_by_rust;
+
 } CscMatrix_f64;
 
 /// @brief Create a sparse matrix in Compressed Sparse Column format
@@ -38,14 +45,14 @@ typedef struct CscMatrix_f64
 /// @param nzval Array of nonzero values (always have length colptr[n])
 /// @return Pointer to a new CscMatrix_f64 object allocated on the heap
 CscMatrix_f64 *CscMatrix_f64_new(
-    uintptr_t m, 
-    uintptr_t n, 
-    const uintptr_t *colptr, 
+    uintptr_t m,
+    uintptr_t n,
+    const uintptr_t *colptr,
     const uintptr_t *rowval,
     const double *nzval)
 {
     CscMatrix_f64 *ptr = malloc(sizeof(CscMatrix_f64));
-    
+
     if (ptr == NULL) // Failed to allocate memory
         return NULL;
 
@@ -55,6 +62,7 @@ CscMatrix_f64 *CscMatrix_f64_new(
     ptr->colptr = colptr;
     ptr->rowval = rowval;
     ptr->nzval = nzval;
+    ptr->mem_owned_by_rust = false;
 
     return ptr;
 }
@@ -72,10 +80,16 @@ struct CscMatrix_f64 CscMatrix_f64_from(uintptr_t m, uintptr_t n, const double m
 /// @return A new CscMatrix_f64 struct of all zeros
 struct CscMatrix_f64 CscMatrix_f64_zeros(uintptr_t rows, uintptr_t cols);
 
+/// @brief Delete a CscMatrix_f64 object which has memory owned by Rust
+/// @param matrix Pointer to the matrix to delete
+void delete_CscMatrix_f64(const struct CscMatrix_f64 *matrix);
+
 /// @brief Free a CscMatrix_f64 object
 /// @param matrix Pointer to the matrix to free
 void free_CscMatrix_f64(CscMatrix_f64 *matrix)
 {
+    if (matrix->mem_owned_by_rust)
+        delete_CscMatrix_f64(matrix);
     free(matrix);
 }
 

@@ -46,6 +46,8 @@ int main(void)
     // Free the matrices and the solver
     free_DefaultSolver(solver);
     free_CscMatrix_f64(_A);
+    delete_CscMatrix_f64(&P);
+    delete_CscMatrix_f64(&A);
 
     return 0;
 }

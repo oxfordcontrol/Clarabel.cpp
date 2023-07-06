@@ -39,6 +39,10 @@ struct CscMatrix {
    * vector of non-zero matrix elements
    */
   const T *nzval;
+  /**
+   * Indicates whether the memory is owned by Rust. Should never be changed by the user.
+   */
+  bool mem_owned_by_rust;
 };
 
 using DefaultSolver = void;
@@ -48,6 +52,8 @@ extern "C" {
 CscMatrix<double> CscMatrix_f64_from(uintptr_t m, uintptr_t n, const double *matrix);
 
 CscMatrix<double> CscMatrix_f64_zeros(uintptr_t rows, uintptr_t cols);
+
+void delete_CscMatrix_f64(const CscMatrix<double> *matrix);
 
 DefaultSolver *DefaultSolver_new(const CscMatrix<double> *P,
                                  const double *q,
