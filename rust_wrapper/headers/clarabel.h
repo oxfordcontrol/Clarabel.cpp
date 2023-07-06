@@ -43,11 +43,11 @@ typedef struct CscMatrix_f64 {
 
 typedef void DefaultSolver;
 
-struct CscMatrix_f64 CscMatrix_f64_from(uintptr_t m, uintptr_t n, const double *matrix);
+struct CscMatrix_f64 *CscMatrix_f64_from(uintptr_t m, uintptr_t n, const double *matrix);
 
-struct CscMatrix_f64 CscMatrix_f64_zeros(uintptr_t rows, uintptr_t cols);
+struct CscMatrix_f64 *CscMatrix_f64_zeros(uintptr_t rows, uintptr_t cols);
 
-void delete_CscMatrix_f64(const struct CscMatrix_f64 *matrix);
+void delete_CscMatrix_f64(struct CscMatrix_f64 *matrix);
 
 DefaultSolver *DefaultSolver_new(const struct CscMatrix_f64 *P,
                                  const double *q,

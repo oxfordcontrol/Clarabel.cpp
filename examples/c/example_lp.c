@@ -5,7 +5,7 @@ int main(void)
 {
     printf("Hello, world!\n");
 
-    CscMatrix_f64 P = CscMatrix_f64_zeros(2, 2);
+    CscMatrix_f64 *P = CscMatrix_f64_zeros(2, 2);
 
     double q[2] = {1.0, -1.0};
 
@@ -19,7 +19,7 @@ int main(void)
     );
 
     // easier way - use the From trait to construct A:
-    CscMatrix_f64 A = CscMatrix_f64_from(
+    CscMatrix_f64 *A = CscMatrix_f64_from(
         4, 2,
         (double[4][2]){
             {1.0, 0.0},
@@ -31,9 +31,9 @@ int main(void)
 
     // Build solver
     DefaultSolver *solver = DefaultSolver_new(
-        &P,   // P
+        P,   // P
         q,    // q
-        &A,   // A
+        A,   // A
         b,    // b
         1,    // TODO: n_cones
         NULL, // TODO: cones
@@ -45,9 +45,9 @@ int main(void)
 
     // Free the matrices and the solver
     free_DefaultSolver(solver);
+    free_CscMatrix_f64(P);
+    free_CscMatrix_f64(A);
     free_CscMatrix_f64(_A);
-    delete_CscMatrix_f64(&P);
-    delete_CscMatrix_f64(&A);
 
     return 0;
 }

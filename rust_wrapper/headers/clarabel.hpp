@@ -49,11 +49,11 @@ using DefaultSolver = void;
 
 extern "C" {
 
-CscMatrix<double> CscMatrix_f64_from(uintptr_t m, uintptr_t n, const double *matrix);
+CscMatrix<double> *CscMatrix_f64_from(uintptr_t m, uintptr_t n, const double *matrix);
 
-CscMatrix<double> CscMatrix_f64_zeros(uintptr_t rows, uintptr_t cols);
+CscMatrix<double> *CscMatrix_f64_zeros(uintptr_t rows, uintptr_t cols);
 
-void delete_CscMatrix_f64(const CscMatrix<double> *matrix);
+void delete_CscMatrix_f64(CscMatrix<double> *matrix);
 
 DefaultSolver *DefaultSolver_new(const CscMatrix<double> *P,
                                  const double *q,

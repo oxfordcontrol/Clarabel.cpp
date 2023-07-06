@@ -25,20 +25,13 @@ pub struct CscMatrix<T = f64> {
 }
 
 #[no_mangle]
-pub extern "C" fn CscMatrix_f64_from(m: usize, n: usize, matrix: *const f64) -> CscMatrix<f64> {
+pub extern "C" fn CscMatrix_f64_from(m: usize, n: usize, matrix: *const f64) -> *mut CscMatrix<f64> {
     // Check if the pointer is null
     if matrix.is_null() {
         #[cfg(debug_assertions)]
         println!("Null pointer received");
 
-        return CscMatrix::<f64> {
-            m: 0,
-            n: 0,
-            colptr: std::ptr::null(),
-            rowval: std::ptr::null(),
-            nzval: std::ptr::null(),
-            owns_matrix_data: false,
-        };
+        return std::ptr::null_mut();
     }
 
     // Construct a flattened slice from the raw pointer.
@@ -56,7 +49,7 @@ pub extern "C" fn CscMatrix_f64_from(m: usize, n: usize, matrix: *const f64) -> 
     let csc_matrix = lib::CscMatrix::<f64>::from(matrix_slice);
 
     // Build the C struct
-    let result = CscMatrix::<f64> {
+    let c_struct = CscMatrix::<f64> {
         m: csc_matrix.m,
         n: csc_matrix.n,
         colptr: csc_matrix.colptr.as_ptr(),
@@ -70,17 +63,17 @@ pub extern "C" fn CscMatrix_f64_from(m: usize, n: usize, matrix: *const f64) -> 
     std::mem::forget(csc_matrix.rowval);
     std::mem::forget(csc_matrix.nzval);
 
-    // Return the C struct
-    result
+    // Box the C struct and return its pointer
+    Box::into_raw(Box::new(c_struct)) as *mut CscMatrix<f64>
 }
 
 #[no_mangle]
-pub extern "C" fn CscMatrix_f64_zeros(rows: usize, cols: usize) -> CscMatrix<f64> {
+pub extern "C" fn CscMatrix_f64_zeros(rows: usize, cols: usize) -> *mut CscMatrix<f64> {
     // Call the function that constructs the CscMatrix
     let csc_matrix = lib::CscMatrix::<f64>::zeros((rows, cols));
 
     // Build the C struct
-    let result = CscMatrix::<f64> {
+    let c_struct = CscMatrix::<f64> {
         m: csc_matrix.m,
         n: csc_matrix.n,
         colptr: csc_matrix.colptr.as_ptr(),
@@ -94,17 +87,22 @@ pub extern "C" fn CscMatrix_f64_zeros(rows: usize, cols: usize) -> CscMatrix<f64
     std::mem::forget(csc_matrix.rowval);
     std::mem::forget(csc_matrix.nzval);
 
-    // Return the C struct
-    result
+    // Box the C struct and return its pointer
+    Box::into_raw(Box::new(c_struct)) as *mut CscMatrix<f64>
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn delete_CscMatrix_f64(matrix: *const CscMatrix<f64>) {
+pub unsafe extern "C" fn delete_CscMatrix_f64(matrix: *mut CscMatrix<f64>) {
     if matrix.is_null() || !(*matrix).owns_matrix_data {
         return;
     }
+
+    // Free the memory of matrix data
     let csc_matrix = crate::utils::convert_from_C_CscMatrix(matrix);
     drop(csc_matrix);
+
+    // Free the memory of the C struct
+    drop(Box::from_raw(matrix));
 }
 
 // pub type CscMatrixF64 = c_void;
