@@ -59,6 +59,13 @@ CscMatrix_f64 *CscMatrix_f64_new(
     return ptr;
 }
 
+/// @brief Create a sparse matrix in Compressed Sparse Column format from a dense matrix
+/// @param m Number of rows
+/// @param n Number of columns
+/// @param matrix Dense matrix in the form of a contiguous array
+/// @return A new CscMatrix_f64 struct built from the dense matrix
+struct CscMatrix_f64 CscMatrix_f64_from(uintptr_t m, uintptr_t n, const double *matrix);
+
 /// @brief Free a CscMatrix_f64 object
 /// @param matrix Pointer to the matrix to free
 void free_CscMatrix_f64(CscMatrix_f64 *matrix)

@@ -1,5 +1,7 @@
-//use clarabel::algebra as lib;
+use clarabel::algebra as lib;
 //use std::{ffi::c_void, usize};
+
+use std::slice;
 
 #[repr(C)]
 // This struct is for interfacing with C only and should be synched with clarabel::algebra::CscMatrix
@@ -18,6 +20,54 @@ pub struct CscMatrix<T = f64> {
     pub rowval: *const usize,
     /// vector of non-zero matrix elements
     pub nzval: *const T,
+}
+
+#[no_mangle]
+pub extern "C" fn CscMatrix_f64_from(m: usize, n: usize, matrix: *const f64) -> CscMatrix<f64> {
+    // Check if the pointer is null
+    if matrix.is_null() {
+        #[cfg(debug_assertions)]
+        println!("Null pointer received");
+
+        return CscMatrix::<f64> {
+            m: 0,
+            n: 0,
+            colptr: std::ptr::null(),
+            rowval: std::ptr::null(),
+            nzval: std::ptr::null(),
+        };
+    } 
+
+    // Construct a flattened slice from the raw pointer.
+    let raw_slice = unsafe { slice::from_raw_parts(matrix, m * n) };
+
+    // Convert the 1D slice into a 2D array.
+    let mut matrix_slice = Vec::with_capacity(m);
+    for row in 0..m {
+        let start = row * n;
+        let end = start + n;
+        matrix_slice.push(&raw_slice[start..end]);
+    }
+
+    // Call the function construct the CscMatrix
+    let csc_matrix = lib::CscMatrix::<f64>::from(matrix_slice);
+
+    // Build the C struct
+    let result = CscMatrix::<f64> {
+        m: csc_matrix.m,
+        n: csc_matrix.n,
+        colptr: csc_matrix.colptr.as_ptr(),
+        rowval: csc_matrix.rowval.as_ptr(),
+        nzval: csc_matrix.nzval.as_ptr(),
+    };
+
+    // Forget the vectors to leave the memory management to C
+    std::mem::forget(csc_matrix.colptr);
+    std::mem::forget(csc_matrix.rowval);
+    std::mem::forget(csc_matrix.nzval);
+
+    // Return the C struct
+    result
 }
 
 // pub type CscMatrixF64 = c_void;

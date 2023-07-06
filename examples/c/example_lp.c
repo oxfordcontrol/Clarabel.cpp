@@ -18,17 +18,25 @@ int main(void)
         (double[]){1.0, -1.0, 1.0, -1.0} // nzval
     );
 
+    CscMatrix_f64 A = CscMatrix_f64_from(
+        4, 2,
+        (double[4][2]){
+            {1.0, 0.0},
+            {0.0, 1.0},
+            {-1.0, 0.0},
+            {0.0, -1.0}});
+
     double b[4] = {1.0, 1.0, 1.0, 1.0};
 
     // Build solver
     DefaultSolver *solver = DefaultSolver_new(
-        NULL,   // P
-        q,      // q
-        _A,     // A
-        b,      // b
-        1,      // TODO: n_cones
-        NULL,   // TODO: cones
-        NULL    // TODO: settings
+        NULL, // P
+        q,    // q
+        &A,   // A
+        b,    // b
+        1,    // TODO: n_cones
+        NULL, // TODO: cones
+        NULL  // TODO: settings
     );
 
     // Solve

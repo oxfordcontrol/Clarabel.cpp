@@ -10,8 +10,6 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-typedef void DefaultSolver;
-
 typedef struct CscMatrix_f64 {
   /**
    * number of rows
@@ -38,6 +36,10 @@ typedef struct CscMatrix_f64 {
    */
   const double *nzval;
 } CscMatrix_f64;
+
+typedef void DefaultSolver;
+
+struct CscMatrix_f64 CscMatrix_f64_from(uintptr_t m, uintptr_t n, const double *matrix);
 
 DefaultSolver *DefaultSolver_new(const struct CscMatrix_f64 *P,
                                  const double *q,

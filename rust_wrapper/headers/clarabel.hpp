@@ -13,8 +13,6 @@
 
 namespace clarabel {
 
-using DefaultSolver = void;
-
 template<typename T>
 struct CscMatrix {
   /**
@@ -43,7 +41,11 @@ struct CscMatrix {
   const T *nzval;
 };
 
+using DefaultSolver = void;
+
 extern "C" {
+
+CscMatrix<double> CscMatrix_f64_from(uintptr_t m, uintptr_t n, const double *matrix);
 
 DefaultSolver *DefaultSolver_new(const CscMatrix<double> *P,
                                  const double *q,
