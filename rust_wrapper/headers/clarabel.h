@@ -36,9 +36,9 @@ typedef struct CscMatrix_f64 {
    */
   const double *nzval;
   /**
-   * Indicates whether the memory is owned by Rust. Should never be changed by the user.
+   * Indicates whether the memory of colptr, rowval and nzval is owned by this struct. Should never be changed by the user.
    */
-  bool mem_owned_by_rust;
+  bool owns_matrix_data;
 } CscMatrix_f64;
 
 typedef void DefaultSolver;

@@ -29,9 +29,10 @@ typedef struct CscMatrix_f64
     /// @brief Vector of non-zero matrix elements
     const double *nzval;
 
-    /** @brief whether the memory is owned by Rust
+    /**
+     * @brief Indicates whether the memory of colptr, rowval and nzval is owned by this struct.
      *
-     *  Should never be changed by the user.
+     * Should never be changed by the user.
      */
     bool mem_owned_by_rust;
 
@@ -90,7 +91,8 @@ void free_CscMatrix_f64(CscMatrix_f64 *matrix)
 {
     if (matrix->mem_owned_by_rust)
         delete_CscMatrix_f64(matrix);
-    free(matrix);
+    else
+        free(matrix);
 }
 
 #endif

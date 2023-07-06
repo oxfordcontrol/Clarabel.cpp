@@ -40,9 +40,9 @@ struct CscMatrix {
    */
   const T *nzval;
   /**
-   * Indicates whether the memory is owned by Rust. Should never be changed by the user.
+   * Indicates whether the memory of colptr, rowval and nzval is owned by this struct. Should never be changed by the user.
    */
-  bool mem_owned_by_rust;
+  bool owns_matrix_data;
 };
 
 using DefaultSolver = void;
