@@ -56,17 +56,22 @@ pub mod implementations {
 
         #[no_mangle]
         pub extern "C" fn DefaultSolver_solve(solver: *mut DefaultSolver) {
-            let mut solver = *unsafe { Box::from_raw(solver as *mut lib::DefaultSolver<f64>) };
+            // Recover the solver object from the opaque pointer
+            let mut solver = unsafe { Box::from_raw(solver as *mut lib::DefaultSolver<f64>) };
+
+            // Use the recovered solver object
             solver.solve();
+
+            // Leave the solver object on the heap
+            Box::into_raw(solver);
         }
 
         #[no_mangle]
-        pub extern "C" fn free_DefaultSolver(solver: *mut DefaultSolver) {
+        pub unsafe extern "C" fn free_DefaultSolver(solver: *mut DefaultSolver) {
             if !solver.is_null() {
-                unsafe {
-                    // Reconstruct the box to drop the solver object
-                    drop(Box::from_raw(solver as *mut DefaultSolver));
-                }
+                // Reconstruct the box to drop the solver object
+                let boxed = Box::from_raw(solver as *mut lib::DefaultSolver<f64>);
+                drop(boxed);
             }
         }
     }
