@@ -21,19 +21,22 @@ int main(void)
     // easier way - use the From trait to construct A:
     CscMatrix_f64 *A = CscMatrix_f64_from(
         4, 2,
-        (double[4][2]){
+        (double[4][2])
+        {
             {1.0, 0.0},
             {0.0, 1.0},
             {-1.0, 0.0},
-            {0.0, -1.0}});
+            {0.0, -1.0}
+        }
+    );
 
     double b[4] = {1.0, 1.0, 1.0, 1.0};
 
     // Build solver
     DefaultSolver *solver = DefaultSolver_new(
-        P,   // P
+        P,    // P
         q,    // q
-        A,   // A
+        A,    // A
         b,    // b
         1,    // TODO: n_cones
         NULL, // TODO: cones

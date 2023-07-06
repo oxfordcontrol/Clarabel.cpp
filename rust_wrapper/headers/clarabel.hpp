@@ -53,6 +53,8 @@ CscMatrix<double> *CscMatrix_f64_from(uintptr_t m, uintptr_t n, const double *ma
 
 CscMatrix<double> *CscMatrix_f64_zeros(uintptr_t rows, uintptr_t cols);
 
+CscMatrix<double> *CscMatrix_f64_identity(uintptr_t n);
+
 void delete_CscMatrix_f64(CscMatrix<double> *matrix);
 
 DefaultSolver *DefaultSolver_new(const CscMatrix<double> *P,

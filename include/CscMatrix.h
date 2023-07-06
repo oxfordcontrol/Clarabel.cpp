@@ -72,14 +72,19 @@ CscMatrix_f64 *CscMatrix_f64_new(
 /// @param m Number of rows
 /// @param n Number of columns
 /// @param matrix Dense matrix in the form of a contiguous array
-/// @return A new CscMatrix_f64 struct built from the dense matrix
+/// @return A pointer to a new CscMatrix_f64 struct built from the dense matrix
 CscMatrix_f64 *CscMatrix_f64_from(uintptr_t m, uintptr_t n, const double matrix[m][n]);
 
 /// @brief Create a sparse matrix in Compressed Sparse Column format of all zeros
 /// @param rows Number of rows
 /// @param cols Number of columns
-/// @return A new CscMatrix_f64 struct of all zeros
+/// @return A pointer to a new CscMatrix_f64 struct of all zeros
 CscMatrix_f64 *CscMatrix_f64_zeros(uintptr_t rows, uintptr_t cols);
+
+/// @brief Create an identity matrix in Compressed Sparse Column format
+/// @param n Number of rows and columns of the identity matrix
+/// @return A pointer to a new CscMatrix_f64 struct of the identity matrix
+CscMatrix_f64 *CscMatrix_f64_identity(uintptr_t n);
 
 /// @brief Delete a CscMatrix_f64 object which has memory owned by Rust
 /// @param matrix Pointer to the matrix to delete
