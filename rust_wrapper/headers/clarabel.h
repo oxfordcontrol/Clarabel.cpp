@@ -43,6 +43,62 @@ typedef struct CscMatrix_f64 {
 
 typedef void DefaultSolver;
 
+typedef enum SupportedConeT_f64_Tag {
+  /**
+   * The zero cone (used for equality constraints).
+   *
+   * The parameter indicates the cones dimension.
+   */
+  ZeroConeT_f64,
+  /**
+   * The nonnegative orthant.
+   *
+   * The parameter indicates the cones dimension.
+   */
+  NonnegativeConeT_f64,
+  /**
+   * The second order cone / Lorenz cone / ice-cream cone.
+   *
+   * The parameter indicates the cones dimension.
+   */
+  SecondOrderConeT_f64,
+  /**
+   * The exponential cone in R^3.
+   *
+   * This cone takes no parameters
+   */
+  ExponentialConeT_f64,
+  /**
+   * The power cone in R^3.
+   *
+   * The parameter indicates the power.
+   */
+  PowerConeT_f64,
+} SupportedConeT_f64_Tag;
+
+typedef struct ExponentialConeT_Body_f64 {
+
+} ExponentialConeT_Body_f64;
+
+typedef struct SupportedConeT_f64 {
+  SupportedConeT_f64_Tag tag;
+  union {
+    struct {
+      uintptr_t zero_cone_t;
+    };
+    struct {
+      uintptr_t nonnegative_cone_t;
+    };
+    struct {
+      uintptr_t second_order_cone_t;
+    };
+    ExponentialConeT_Body_f64 exponential_cone_t;
+    struct {
+      double power_cone_t;
+    };
+  };
+} SupportedConeT_f64;
+
 struct CscMatrix_f64 *CscMatrix_f64_from(uintptr_t m, uintptr_t n, const double *matrix);
 
 struct CscMatrix_f64 *CscMatrix_f64_zeros(uintptr_t rows, uintptr_t cols);
@@ -51,13 +107,13 @@ struct CscMatrix_f64 *CscMatrix_f64_identity(uintptr_t n);
 
 void delete_CscMatrix_f64(struct CscMatrix_f64 *matrix);
 
-DefaultSolver *DefaultSolver_new(const struct CscMatrix_f64 *P,
-                                 const double *q,
-                                 const struct CscMatrix_f64 *A,
-                                 const double *b,
-                                 uintptr_t _n_cones,
-                                 const void *_cones,
-                                 const void *_settings);
+DefaultSolver *DefaultSolver_f64_new(const struct CscMatrix_f64 *P,
+                                     const double *q,
+                                     const struct CscMatrix_f64 *A,
+                                     const double *b,
+                                     uintptr_t n_cones,
+                                     const struct SupportedConeT_f64 *cones,
+                                     const void *_settings);
 
 void DefaultSolver_solve(DefaultSolver *solver);
 
