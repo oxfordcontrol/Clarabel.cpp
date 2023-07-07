@@ -34,7 +34,7 @@ int main(void)
 
     SupportedConeT_f64 cones[1] =
     {
-        {.tag = NonnegativeConeT_f64, .nonnegative_cone_t = 4}
+        NonnegativeConeT_f64(4)
     };
 
     // Build solver
