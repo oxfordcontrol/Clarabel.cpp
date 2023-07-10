@@ -1,0 +1,46 @@
+name: ci
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+    types: [opened, synchronize, reopened]
+
+env:
+  BUILD_TYPE: Release
+  CMAKE_BUILD_DIR: ${{github.workspace}}/build
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: 'recursive'
+
+    - name: Configure CMake
+      # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
+      # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
+      run: cmake -B ${{env.CMAKE_BUILD_DIR}} -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+
+    - name: Build
+      # Build using CMake
+      run: cmake --build ${{env.CMAKE_BUILD_DIR}} --config ${{env.BUILD_TYPE}}
+
+    - name: CTest
+      # Run CTest
+      working-directory: ${{env.CMAKE_BUILD_DIR}}
+      run: ctest -C ${{env.BUILD_TYPE}}
+
+    # Run Valgrind Memcheck
+    - name: Install valgrind
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y valgrind
+
+    - name: Valgrind Memcheck
+      working-directory: ${{env.CMAKE_BUILD_DIR}}
+      run: |
+        valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --error-exitcode=1 ./examples/example_lp
