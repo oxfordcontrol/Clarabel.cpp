@@ -6,7 +6,7 @@
 Interior Point Conic Optimization for C/C++
 </h1>
 <p align="center">
-  <!-- <a href="https://github.com/oxfordcontrol/Clarabel.rs/actions"><img src="https://github.com/oxfordcontrol/Clarabel.rs/workflows/ci/badge.svg?branch=main"></a> -->
+  <a href="https://github.com/oxfordcontrol/Clarabel.cpp/actions"><img src="https://github.com/oxfordcontrol/Clarabel.cpp/workflows/ci/badge.svg?branch=main"></a>
   <!-- <a href="https://codecov.io/gh/oxfordcontrol/Clarabel.rs"><img src="https://codecov.io/gh/oxfordcontrol/Clarabel.rs/branch/main/graph/badge.svg"></a> -->
   <a href="https://oxfordcontrol.github.io/ClarabelDocs/stable"><img src="https://img.shields.io/badge/Documentation-stable-purple.svg"></a>
   <a href="https://opensource.org/licenses/Apache-2.0"><img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg"></a>
