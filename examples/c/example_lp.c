@@ -32,6 +32,11 @@ int main(void)
 
     double b[4] = {1.0, 1.0, 1.0, 1.0};
 
+    // Settings
+    DefaultSettings_f64 settings = DefaultSettingsBuilder_f64_default();
+    settings.equilibrate_enable = true;
+    settings.equilibrate_max_iter = 50;
+
     // Build solver
     DefaultSolver *solver = DefaultSolver_new(
         P,    // P
@@ -40,7 +45,7 @@ int main(void)
         b,    // b
         1,    // TODO: n_cones
         NULL, // TODO: cones
-        NULL  // TODO: settings
+        &settings
     );
 
     // Solve
