@@ -1,4 +1,4 @@
-use crate::{algebra::CscMatrix, solver::implementations::default::DefaultSettings};
+use crate::{algebra::CscMatrix, solver::implementations::default::settings::*};
 use clarabel::algebra::{self as lib, FloatT};
 
 /// Convert a CscMatrix from C to Rust
@@ -67,7 +67,11 @@ pub fn get_solver_settings_from_c<T: FloatT>(
         min_switch_step_length: value.min_switch_step_length,
         min_terminate_step_length: value.min_terminate_step_length,
         direct_kkt_solver: value.direct_kkt_solver,
-        //direct_solve_method: value.direct_solve_method, // TODO: string interop not supported
+        direct_solve_method: match value.direct_solve_method {
+            DirectSolveMethods::QDLDL => String::from("qdldl"),
+            DirectSolveMethods::MKL => String::from("mkl"),
+            DirectSolveMethods::CHOLMOD => String::from("cholmod"),
+        },
         static_regularization_enable: value.static_regularization_enable,
         static_regularization_constant: value.static_regularization_constant,
         static_regularization_proportional: value.static_regularization_proportional,
@@ -80,8 +84,5 @@ pub fn get_solver_settings_from_c<T: FloatT>(
         iterative_refinement_max_iter: value.iterative_refinement_max_iter,
         iterative_refinement_stop_ratio: value.iterative_refinement_stop_ratio,
         presolve_enable: value.presolve_enable,
-
-        // TODO: remove this once all fields are supported
-        ..clarabel::solver::implementations::default::DefaultSettings::default()
     }
 }

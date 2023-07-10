@@ -13,6 +13,12 @@
 
 namespace clarabel {
 
+enum class DirectSolveMethods {
+  QDLDL,
+  MKL,
+  CHOLMOD,
+};
+
 template<typename T>
 struct CscMatrix {
   /**
@@ -71,6 +77,7 @@ struct DefaultSettings {
   T min_switch_step_length;
   T min_terminate_step_length;
   bool direct_kkt_solver;
+  DirectSolveMethods direct_solve_method;
   bool static_regularization_enable;
   T static_regularization_constant;
   T static_regularization_proportional;

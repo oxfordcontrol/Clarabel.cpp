@@ -10,6 +10,12 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+typedef enum DirectSolveMethods {
+  QDLDL,
+  MKL,
+  CHOLMOD,
+} DirectSolveMethods;
+
 typedef struct CscMatrix_f64 {
   /**
    * number of rows
@@ -66,6 +72,7 @@ typedef struct DefaultSettings_f64 {
   double min_switch_step_length;
   double min_terminate_step_length;
   bool direct_kkt_solver;
+  enum DirectSolveMethods direct_solve_method;
   bool static_regularization_enable;
   double static_regularization_constant;
   double static_regularization_proportional;
