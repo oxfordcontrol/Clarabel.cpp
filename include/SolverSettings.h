@@ -5,6 +5,13 @@
 #include <stdint.h>
 #include <math.h>
 
+typedef enum DirectSolveMethods
+{
+    QDLDL,
+    MKL,
+    CHOLMOD,
+} DirectSolveMethods;
+
 typedef struct DefaultSettings_f64
 {
     uint32_t max_iter;
@@ -31,6 +38,7 @@ typedef struct DefaultSettings_f64
     double min_switch_step_length;
     double min_terminate_step_length;
     bool direct_kkt_solver;
+    DirectSolveMethods direct_solve_method;
     bool static_regularization_enable;
     double static_regularization_constant;
     double static_regularization_proportional;
