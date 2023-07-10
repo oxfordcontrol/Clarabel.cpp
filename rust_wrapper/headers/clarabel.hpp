@@ -45,6 +45,46 @@ struct CscMatrix {
   bool owns_matrix_data;
 };
 
+template<typename T>
+struct DefaultSettings {
+  uint32_t max_iter;
+  double time_limit;
+  bool verbose;
+  T max_step_fraction;
+  T tol_gap_abs;
+  T tol_gap_rel;
+  T tol_feas;
+  T tol_infeas_abs;
+  T tol_infeas_rel;
+  T tol_ktratio;
+  T reduced_tol_gap_abs;
+  T reduced_tol_gap_rel;
+  T reduced_tol_feas;
+  T reduced_tol_infeas_abs;
+  T reduced_tol_infeas_rel;
+  T reduced_tol_ktratio;
+  bool equilibrate_enable;
+  uint32_t equilibrate_max_iter;
+  T equilibrate_min_scaling;
+  T equilibrate_max_scaling;
+  T linesearch_backtrack_step;
+  T min_switch_step_length;
+  T min_terminate_step_length;
+  bool direct_kkt_solver;
+  bool static_regularization_enable;
+  T static_regularization_constant;
+  T static_regularization_proportional;
+  bool dynamic_regularization_enable;
+  T dynamic_regularization_eps;
+  T dynamic_regularization_delta;
+  bool iterative_refinement_enable;
+  T iterative_refinement_reltol;
+  T iterative_refinement_abstol;
+  uint32_t iterative_refinement_max_iter;
+  T iterative_refinement_stop_ratio;
+  bool presolve_enable;
+};
+
 using DefaultSolver = void;
 
 extern "C" {
@@ -57,13 +97,15 @@ CscMatrix<double> *CscMatrix_f64_identity(uintptr_t n);
 
 void delete_CscMatrix_f64(CscMatrix<double> *matrix);
 
+DefaultSettings<double> DefaultSettingsBuilder_f64_default();
+
 DefaultSolver *DefaultSolver_new(const CscMatrix<double> *P,
                                  const double *q,
                                  const CscMatrix<double> *A,
                                  const double *b,
                                  uintptr_t _n_cones,
                                  const void *_cones,
-                                 const void *_settings);
+                                 const DefaultSettings<double> *settings);
 
 void DefaultSolver_solve(DefaultSolver *solver);
 

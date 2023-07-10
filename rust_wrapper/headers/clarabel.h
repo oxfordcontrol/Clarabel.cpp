@@ -41,6 +41,45 @@ typedef struct CscMatrix_f64 {
   bool owns_matrix_data;
 } CscMatrix_f64;
 
+typedef struct DefaultSettings_f64 {
+  uint32_t max_iter;
+  double time_limit;
+  bool verbose;
+  double max_step_fraction;
+  double tol_gap_abs;
+  double tol_gap_rel;
+  double tol_feas;
+  double tol_infeas_abs;
+  double tol_infeas_rel;
+  double tol_ktratio;
+  double reduced_tol_gap_abs;
+  double reduced_tol_gap_rel;
+  double reduced_tol_feas;
+  double reduced_tol_infeas_abs;
+  double reduced_tol_infeas_rel;
+  double reduced_tol_ktratio;
+  bool equilibrate_enable;
+  uint32_t equilibrate_max_iter;
+  double equilibrate_min_scaling;
+  double equilibrate_max_scaling;
+  double linesearch_backtrack_step;
+  double min_switch_step_length;
+  double min_terminate_step_length;
+  bool direct_kkt_solver;
+  bool static_regularization_enable;
+  double static_regularization_constant;
+  double static_regularization_proportional;
+  bool dynamic_regularization_enable;
+  double dynamic_regularization_eps;
+  double dynamic_regularization_delta;
+  bool iterative_refinement_enable;
+  double iterative_refinement_reltol;
+  double iterative_refinement_abstol;
+  uint32_t iterative_refinement_max_iter;
+  double iterative_refinement_stop_ratio;
+  bool presolve_enable;
+} DefaultSettings_f64;
+
 typedef void DefaultSolver;
 
 struct CscMatrix_f64 *CscMatrix_f64_from(uintptr_t m, uintptr_t n, const double *matrix);
@@ -51,13 +90,15 @@ struct CscMatrix_f64 *CscMatrix_f64_identity(uintptr_t n);
 
 void delete_CscMatrix_f64(struct CscMatrix_f64 *matrix);
 
+struct DefaultSettings_f64 DefaultSettingsBuilder_f64_default(void);
+
 DefaultSolver *DefaultSolver_new(const struct CscMatrix_f64 *P,
                                  const double *q,
                                  const struct CscMatrix_f64 *A,
                                  const double *b,
                                  uintptr_t _n_cones,
                                  const void *_cones,
-                                 const void *_settings);
+                                 const struct DefaultSettings_f64 *settings);
 
 void DefaultSolver_solve(DefaultSolver *solver);
 
