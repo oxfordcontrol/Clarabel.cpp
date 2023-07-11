@@ -8,9 +8,12 @@ use std::{ffi::c_void, mem::forget};
 
 pub type DefaultSolver = c_void;
 
+// Wrapper function to create a DefaultSolver object from C using dynamic memory allocation
+// - Matrices and vectors are constructed from raw pointers
+// - Cones are converted from C struct to Rust struct
+// - Settings are converted from C struct to Rust struct
 #[no_mangle]
 #[allow(non_snake_case)]
-#[allow(unused_variables)]
 pub unsafe extern "C" fn DefaultSolver_f64_new(
     P: *const CscMatrix<f64>,
     q: *const f64, // Array of double from C
@@ -57,9 +60,11 @@ pub unsafe extern "C" fn DefaultSolver_f64_new(
     forget(b);
 
     // Return the solver object as an opaque pointer to C
+    // The solver object is boxed and left on the heap.
     Box::into_raw(Box::new(solver)) as *mut DefaultSolver
 }
 
+// Wrapper function to call DefaultSolver.solve() from C
 #[no_mangle]
 pub extern "C" fn DefaultSolver_solve(solver: *mut DefaultSolver) {
     // Recover the solver object from the opaque pointer
@@ -72,6 +77,7 @@ pub extern "C" fn DefaultSolver_solve(solver: *mut DefaultSolver) {
     Box::into_raw(solver);
 }
 
+// Function to free the memory of the solver object
 #[no_mangle]
 pub unsafe extern "C" fn free_DefaultSolver(solver: *mut DefaultSolver) {
     if !solver.is_null() {

@@ -1,5 +1,6 @@
 use clarabel::algebra::FloatT;
 
+/// Used to replace the String type in the DefaultSettings struct
 #[repr(C)]
 pub enum DirectSolveMethods {
     QDLDL,
@@ -7,6 +8,7 @@ pub enum DirectSolveMethods {
     CHOLMOD,
 }
 
+/// DefaultSettings struct used by the C side
 #[repr(C)]
 pub struct DefaultSettings<T: FloatT> {
     // Main algorithm settings
@@ -67,6 +69,9 @@ pub struct DefaultSettings<T: FloatT> {
     pub presolve_enable: bool,
 }
 
+/// Wrapper function for DefaultSettings::default()
+/// 
+/// Get the default settings for the solver
 #[no_mangle]
 pub extern "C" fn DefaultSettingsBuilder_f64_default() -> DefaultSettings<f64> {
     let default = clarabel::solver::DefaultSettings::<f64>::default();

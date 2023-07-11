@@ -1,16 +1,17 @@
+// Submodules: csc_matrix.rs, supported_cones_T.rs
 mod csc_matrix;
-
 #[allow(non_snake_case)]
 mod supported_cones_T;
 
-// Re-export the module members
+// Re-export the submodule members
 pub use csc_matrix::*;
 pub use supported_cones_T::*;
 
+// Uses
 use crate::solver::implementations::default::settings::*;
 use clarabel::algebra::FloatT;
 
-// Convert from the C struct to the Rust struct by copying the values
+/// Convert from the C struct to the Rust struct by copying the values
 pub fn get_solver_settings_from_c<T: FloatT>(
     value: &DefaultSettings<T>,
 ) -> clarabel::solver::implementations::default::DefaultSettings<T> {
