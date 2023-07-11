@@ -47,6 +47,71 @@ struct CscMatrix {
 
 using DefaultSolver = void;
 
+template<typename T>
+struct SupportedConeT {
+  enum class Tag {
+    /**
+     * The zero cone (used for equality constraints).
+     *
+     * The parameter indicates the cones dimension.
+     */
+    ZeroConeT,
+    /**
+     * The nonnegative orthant.
+     *
+     * The parameter indicates the cones dimension.
+     */
+    NonnegativeConeT,
+    /**
+     * The second order cone / Lorenz cone / ice-cream cone.
+     *
+     * The parameter indicates the cones dimension.
+     */
+    SecondOrderConeT,
+    /**
+     * The exponential cone in R^3.
+     *
+     * This cone takes no parameters
+     */
+    ExponentialConeT,
+    /**
+     * The power cone in R^3.
+     *
+     * The parameter indicates the power.
+     */
+    PowerConeT,
+  };
+
+  struct ZeroConeT_Body {
+    uintptr_t _0;
+  };
+
+  struct NonnegativeConeT_Body {
+    uintptr_t _0;
+  };
+
+  struct SecondOrderConeT_Body {
+    uintptr_t _0;
+  };
+
+  struct ExponentialConeT_Body {
+
+  };
+
+  struct PowerConeT_Body {
+    T _0;
+  };
+
+  Tag tag;
+  union {
+    ZeroConeT_Body zero_cone_t;
+    NonnegativeConeT_Body nonnegative_cone_t;
+    SecondOrderConeT_Body second_order_cone_t;
+    ExponentialConeT_Body exponential_cone_t;
+    PowerConeT_Body power_cone_t;
+  };
+};
+
 extern "C" {
 
 CscMatrix<double> *CscMatrix_f64_from(uintptr_t m, uintptr_t n, const double *matrix);
@@ -57,13 +122,13 @@ CscMatrix<double> *CscMatrix_f64_identity(uintptr_t n);
 
 void delete_CscMatrix_f64(CscMatrix<double> *matrix);
 
-DefaultSolver *DefaultSolver_new(const CscMatrix<double> *P,
-                                 const double *q,
-                                 const CscMatrix<double> *A,
-                                 const double *b,
-                                 uintptr_t _n_cones,
-                                 const void *_cones,
-                                 const void *_settings);
+DefaultSolver *DefaultSolver_f64_new(const CscMatrix<double> *P,
+                                     const double *q,
+                                     const CscMatrix<double> *A,
+                                     const double *b,
+                                     uintptr_t n_cones,
+                                     const SupportedConeT<double> *cones,
+                                     const void *_settings);
 
 void DefaultSolver_solve(DefaultSolver *solver);
 

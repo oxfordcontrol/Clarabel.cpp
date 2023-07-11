@@ -32,15 +32,20 @@ int main(void)
 
     double b[4] = {1.0, 1.0, 1.0, 1.0};
 
+    SupportedConeT_f64 cones[1] =
+    {
+        NonnegativeConeT_f64(4)
+    };
+
     // Build solver
-    DefaultSolver *solver = DefaultSolver_new(
-        P,    // P
-        q,    // q
-        A,    // A
-        b,    // b
-        1,    // TODO: n_cones
-        NULL, // TODO: cones
-        NULL  // TODO: settings
+    DefaultSolver *solver = DefaultSolver_f64_new(
+        P,     // P
+        q,     // q
+        A,     // A
+        b,     // b
+        1,     // n_cones
+        cones, // cones
+        NULL   // TODO: settings
     );
 
     // Solve
