@@ -4,5 +4,8 @@
         "${workspaceFolder}/rust_wrapper/Cargo.toml"
     ],
     "cmake.configureOnOpen": true,
-    "files.associations": {}
+    "files.associations": {
+        "clarabel.h": "c",
+        "cscmatrix.h": "c"
+    }
 }

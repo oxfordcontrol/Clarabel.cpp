@@ -6,14 +6,20 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-typedef void CscMatrixF64;
+#include "CscMatrix.h"
 
-CscMatrixF64 *CscMatrix_new(uintptr_t m,
-                            uintptr_t n,
-                            const uintptr_t *colptr,
-                            const uintptr_t *rowval,
-                            const double *nzval);
+typedef void DefaultSolver;
 
-void CscMatrix_delete(CscMatrixF64 *ptr);
+DefaultSolver *DefaultSolver_new(const CscMatrix_f64 *P,
+                                 const double *q,
+                                 const CscMatrix_f64 *A,
+                                 const double *b,
+                                 uintptr_t n_cones,
+                                 const void *cones,
+                                 const void *settings);
+
+void DefaultSolver_solve(void *solver);
+
+void free_DefaultSolver(DefaultSolver *solver);
 
 #endif /* CLARABEL_H */

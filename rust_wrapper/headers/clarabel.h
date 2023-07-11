@@ -10,14 +10,57 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-typedef void CscMatrixF64;
+typedef struct CscMatrix_f64 {
+  /**
+   * number of rows
+   */
+  uintptr_t m;
+  /**
+   * number of columns
+   */
+  uintptr_t n;
+  /**
+   * CSC format column pointer.
+   *
+   * Ths field should have length `n+1`. The last entry corresponds
+   * to the the number of nonzeros and should agree with the lengths
+   * of the `rowval` and `nzval` fields.
+   */
+  const uintptr_t *colptr;
+  /**
+   * vector of row indices
+   */
+  const uintptr_t *rowval;
+  /**
+   * vector of non-zero matrix elements
+   */
+  const double *nzval;
+  /**
+   * Indicates whether the memory of colptr, rowval and nzval is owned by this struct. Should never be changed by the user.
+   */
+  bool owns_matrix_data;
+} CscMatrix_f64;
 
-CscMatrixF64 *CscMatrix_new(uintptr_t m,
-                            uintptr_t n,
-                            const uintptr_t *colptr,
-                            const uintptr_t *rowval,
-                            const double *nzval);
+typedef void DefaultSolver;
 
-void CscMatrix_delete(CscMatrixF64 *ptr);
+struct CscMatrix_f64 *CscMatrix_f64_from(uintptr_t m, uintptr_t n, const double *matrix);
+
+struct CscMatrix_f64 *CscMatrix_f64_zeros(uintptr_t rows, uintptr_t cols);
+
+struct CscMatrix_f64 *CscMatrix_f64_identity(uintptr_t n);
+
+void delete_CscMatrix_f64(struct CscMatrix_f64 *matrix);
+
+DefaultSolver *DefaultSolver_new(const struct CscMatrix_f64 *P,
+                                 const double *q,
+                                 const struct CscMatrix_f64 *A,
+                                 const double *b,
+                                 uintptr_t _n_cones,
+                                 const void *_cones,
+                                 const void *_settings);
+
+void DefaultSolver_solve(DefaultSolver *solver);
+
+void free_DefaultSolver(DefaultSolver *solver);
 
 #endif /* CLARABEL_H */
