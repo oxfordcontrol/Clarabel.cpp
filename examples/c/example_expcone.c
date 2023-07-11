@@ -38,7 +38,8 @@ int main(void)
         b, // b
         2, // n_cones
         cones,
-        &settings);
+        &settings
+    );
 
     // Solve
     DefaultSolver_solve(solver);

@@ -1,5 +1,5 @@
 # Define a list of target names
-set(C_EXAMPLES example_expcone example_lp)
+set(C_EXAMPLES example_expcone example_lp example_powcone)
 
 # Define an executable target for each example
 foreach(EXAMPLE_NAME ${C_EXAMPLES})
