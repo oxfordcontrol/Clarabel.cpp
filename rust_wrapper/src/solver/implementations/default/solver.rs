@@ -1,8 +1,9 @@
 use crate::algebra::CscMatrix;
-use crate::utils::{self, *};
+use crate::core::cones::SupportedConeT;
 use crate::solver::implementations::default::settings::*;
-use clarabel::solver::SupportedConeT::NonnegativeConeT;
+use crate::utils;
 use clarabel::solver::{self as lib, IPSolver};
+use std::slice;
 use std::{ffi::c_void, mem::forget};
 
 pub type DefaultSolver = c_void;
@@ -10,17 +11,24 @@ pub type DefaultSolver = c_void;
 #[no_mangle]
 #[allow(non_snake_case)]
 #[allow(unused_variables)]
-pub unsafe extern "C" fn DefaultSolver_new(
+pub unsafe extern "C" fn DefaultSolver_f64_new(
     P: *const CscMatrix<f64>,
     q: *const f64, // Array of double from C
     A: *const CscMatrix<f64>,
-    b: *const f64,         // Array of double from C
-    _n_cones: usize,       // Number of cones
-    _cones: *const c_void, // TODO:
+    b: *const f64,  // Array of double from C
+    n_cones: usize, // Number of cones
+    cones: *const SupportedConeT<f64>,
     settings: *const DefaultSettings<f64>,
 ) -> *mut DefaultSolver {
-    let P = convert_from_C_CscMatrix(P);
-    let A = convert_from_C_CscMatrix(A);
+    // Check null pointers
+    if P.is_null() || q.is_null() || A.is_null() || b.is_null() || cones.is_null() {
+        return std::ptr::null_mut();
+    }
+
+    // Recover the matrices from C structs
+    let P = utils::convert_from_C_CscMatrix(P);
+    let A = utils::convert_from_C_CscMatrix(A);
+    // Recover the arrays from C pointers and deduce their lengths from the matrix dimensions
     let q = Vec::from_raw_parts(q as *mut f64, A.n, A.n);
     let b = Vec::from_raw_parts(b as *mut f64, A.m, A.m);
 
@@ -28,12 +36,15 @@ pub unsafe extern "C" fn DefaultSolver_new(
     let settings_struct = &*(settings as *const DefaultSettings<f64>);
     let settings = utils::get_solver_settings_from_c::<f64>(settings_struct);
 
-    // example_lp cones for testing
-    // TODO: use array of cones from C
-    let cones = [NonnegativeConeT(4)];
+    // Convert the cones from C to Rust
+    let c_cones = slice::from_raw_parts(cones, n_cones);
+    // c_cones is a slice created from a raw pointer, so it is not managed by Rust, i.e. C side array is not freed when the slice is dropped.
+    let cones_vec = utils::convert_from_C_cones(c_cones);
+    let cones = cones_vec.as_slice();
 
     // Create the solver
-    let solver = lib::DefaultSolver::new(&P, &q, &A, &b, &cones, settings);
+    // This is dropped at the end of the function because it exists on the Rust side only, and cones and settings are created on the Rust side.
+    let solver = lib::DefaultSolver::new(&P, &q, &A, &b, cones, settings);
 
     // Ensure Rust does not free the memory of arrays managed by C
     forget(P.colptr);

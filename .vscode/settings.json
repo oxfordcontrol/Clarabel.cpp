@@ -3,9 +3,7 @@
         "${workspaceFolder}/Clarabel.rs/Cargo.toml",
         "${workspaceFolder}/rust_wrapper/Cargo.toml"
     ],
-    "cmake.configureOnOpen": true,
-    "files.associations": {
-        "clarabel.h": "c",
-        "cscmatrix.h": "c"
-    }
+    "C_Cpp.default.includePath": [
+        "${workspaceFolder}/include"
+    ]
 }
