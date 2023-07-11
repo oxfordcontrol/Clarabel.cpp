@@ -43,4 +43,8 @@ jobs:
     - name: Valgrind Memcheck
       working-directory: ${{env.CMAKE_BUILD_DIR}}
       run: |
+        valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --error-exitcode=1 ./examples/example_expcone
         valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --error-exitcode=1 ./examples/example_lp
+        valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --error-exitcode=1 ./examples/example_powcone
+        valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --error-exitcode=1 ./examples/example_qp
+        valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --error-exitcode=1 ./examples/example_socp
