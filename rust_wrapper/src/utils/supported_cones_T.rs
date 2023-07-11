@@ -2,6 +2,7 @@ use crate::core::cones::SupportedConeT;
 use clarabel::algebra::FloatT;
 use clarabel::solver as lib;
 
+/// Convert a slice of C SupportedConeT structs to a Vec of Rust SupportedCone<T> struct
 #[allow(non_snake_case)]
 pub fn convert_from_C_cones<T>(c_cones: &[SupportedConeT<T>]) -> Vec<lib::SupportedConeT<T>>
 where
@@ -17,6 +18,7 @@ where
     cones
 }
 
+/// Convert a single C SupportedConeT<T> struct to a Rust SupportedCone<T> struct
 #[allow(non_snake_case)]
 pub fn convert_from_C_cone<T>(cone: &SupportedConeT<T>) -> lib::SupportedConeT<T>
 where

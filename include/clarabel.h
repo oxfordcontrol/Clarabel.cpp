@@ -7,6 +7,7 @@
 #include <stdlib.h>
 
 #include "CscMatrix.h"
+#include "SolverSettings.h"
 #include "SupportedConeT.h"
 
 typedef void DefaultSolver;
@@ -17,7 +18,7 @@ DefaultSolver *DefaultSolver_f64_new(const CscMatrix_f64 *P,
                                      const double *b,
                                      uintptr_t n_cones,
                                      const SupportedConeT_f64 *cones,
-                                     const void *settings);
+                                     const DefaultSettings_f64 *settings);
 
 void DefaultSolver_solve(void *solver);
 
