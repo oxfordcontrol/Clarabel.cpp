@@ -4,6 +4,7 @@ set(C_EXAMPLES
   example_lp
   example_powcone
   example_qp
+  example_socp
   )
 
 # Define an executable target for each example
