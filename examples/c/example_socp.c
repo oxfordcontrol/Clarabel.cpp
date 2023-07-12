@@ -1,4 +1,5 @@
 #include "clarabel.h"
+#include "utils.h"
 
 int main(void)
 {
@@ -48,6 +49,10 @@ int main(void)
 
     // Solve
     DefaultSolver_solve(solver);
+
+    // Get solution
+    DefaultSolution_f64 solution = DefaultSolver_f64_solution(solver);
+    print_solution(&solution);
 
     // Free the matrices and the solver
     free_DefaultSolver(solver);
