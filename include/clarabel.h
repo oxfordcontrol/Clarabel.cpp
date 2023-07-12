@@ -24,4 +24,37 @@ void DefaultSolver_solve(void *solver);
 
 void free_DefaultSolver(DefaultSolver *solver);
 
+typedef enum SolverStatus
+{
+    Unsolved,
+    Solved,
+    PrimalInfeasible,
+    DualInfeasible,
+    AlmostSolved,
+    AlmostPrimalInfeasible,
+    AlmostDualInfeasible,
+    MaxIterations,
+    MaxTime,
+    NumericalError,
+    InsufficientProgress,
+} SolverStatus;
+
+typedef struct DefaultSolution_f64
+{
+    double *x;
+    uintptr_t x_length;
+    double *z;
+    uintptr_t z_length;
+    double *s;
+    uintptr_t s_length;
+    SolverStatus status;
+    double obj_val;
+    double solve_time;
+    uint32_t iterations;
+    double r_prim;
+    double r_dual;
+} DefaultSolution_f64;
+
+DefaultSolution_f64 DefaultSolver_f64_solution(DefaultSolver *solver);
+
 #endif /* CLARABEL_H */

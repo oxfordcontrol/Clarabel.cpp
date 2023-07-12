@@ -19,6 +19,20 @@ typedef enum DirectSolveMethods {
   CHOLMOD,
 } DirectSolveMethods;
 
+typedef enum SolverStatus {
+  Unsolved,
+  Solved,
+  PrimalInfeasible,
+  DualInfeasible,
+  AlmostSolved,
+  AlmostPrimalInfeasible,
+  AlmostDualInfeasible,
+  MaxIterations,
+  MaxTime,
+  NumericalError,
+  InsufficientProgress,
+} SolverStatus;
+
 typedef struct CscMatrix_f64 {
   uintptr_t m;
   uintptr_t n;
@@ -101,6 +115,21 @@ typedef struct SupportedConeT_f64 {
   };
 } SupportedConeT_f64;
 
+typedef struct DefaultSolution_f64 {
+  double *x;
+  uintptr_t x_length;
+  double *z;
+  uintptr_t z_length;
+  double *s;
+  uintptr_t s_length;
+  enum SolverStatus status;
+  double obj_val;
+  double solve_time;
+  uint32_t iterations;
+  double r_prim;
+  double r_dual;
+} DefaultSolution_f64;
+
 struct CscMatrix_f64 *CscMatrix_f64_from(uintptr_t m, uintptr_t n, const double *matrix);
 
 struct CscMatrix_f64 *CscMatrix_f64_zeros(uintptr_t rows, uintptr_t cols);
@@ -122,5 +151,7 @@ DefaultSolver *DefaultSolver_f64_new(const struct CscMatrix_f64 *P,
 void DefaultSolver_solve(DefaultSolver *solver);
 
 void free_DefaultSolver(DefaultSolver *solver);
+
+struct DefaultSolution_f64 DefaultSolver_f64_solution(DefaultSolver *solver);
 
 #endif /* CLARABEL_H */

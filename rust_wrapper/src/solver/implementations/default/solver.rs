@@ -6,6 +6,8 @@ use clarabel::solver::{self as lib, IPSolver};
 use std::slice;
 use std::{ffi::c_void, mem::forget};
 
+use super::solution::DefaultSolution;
+
 pub type DefaultSolver = c_void;
 
 // Wrapper function to create a DefaultSolver object from C using dynamic memory allocation
@@ -85,4 +87,46 @@ pub unsafe extern "C" fn free_DefaultSolver(solver: *mut DefaultSolver) {
         let boxed = Box::from_raw(solver as *mut lib::DefaultSolver<f64>);
         drop(boxed);
     }
+}
+
+#[repr(C)]
+#[allow(dead_code)]
+pub enum SolverStatus {
+    /// Problem is not solved (solver hasn't run).
+    Unsolved,
+    /// Solver terminated with a solution.
+    Solved,
+    /// Problem is primal infeasible.  Solution returned is a certificate of primal infeasibility.
+    PrimalInfeasible,
+    /// Problem is dual infeasible.  Solution returned is a certificate of dual infeasibility.
+    DualInfeasible,
+    /// Solver terminated with a solution (reduced accuracy)
+    AlmostSolved,
+    /// Problem is primal infeasible.  Solution returned is a certificate of primal infeasibility (reduced accuracy).
+    AlmostPrimalInfeasible,
+    /// Problem is dual infeasible.  Solution returned is a certificate of dual infeasibility (reduced accuracy).
+    AlmostDualInfeasible,
+    /// Iteration limit reached before solution or infeasibility certificate found.
+    MaxIterations,
+    /// Time limit reached before solution or infeasibility certificate found.
+    MaxTime,
+    /// Solver terminated with a numerical error
+    NumericalError,
+    /// Solver terminated due to lack of progress.
+    InsufficientProgress,
+}
+
+#[no_mangle]
+pub extern "C" fn DefaultSolver_f64_solution(solver: *mut DefaultSolver) -> DefaultSolution<f64> {
+    // Recover the solver object from the opaque pointer
+    let mut solver = unsafe { Box::from_raw(solver as *mut lib::DefaultSolver<f64>) };
+
+    // Get the solution and convert to C struct
+    let solution = DefaultSolution::<f64>::from(&mut solver.solution);
+
+    // Leave the solver object on the heap
+    Box::into_raw(solver);
+
+    // Return the solution as a C struct
+    solution
 }
