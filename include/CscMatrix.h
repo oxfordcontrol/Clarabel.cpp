@@ -45,7 +45,7 @@ typedef struct CscMatrix_f64
 /// @param rowval Array of row indices (always have length colptr[n])
 /// @param nzval Array of nonzero values (always have length colptr[n])
 /// @return Pointer to a new CscMatrix_f64 object allocated on the heap
-CscMatrix_f64 *CscMatrix_f64_new(
+static inline CscMatrix_f64 *CscMatrix_f64_new(
     uintptr_t m,
     uintptr_t n,
     const uintptr_t *colptr,
@@ -92,7 +92,7 @@ void delete_CscMatrix_f64(CscMatrix_f64 *matrix);
 
 /// @brief Free a CscMatrix_f64 object
 /// @param matrix Pointer to the matrix to free
-void free_CscMatrix_f64(CscMatrix_f64 *matrix)
+static inline void free_CscMatrix_f64(CscMatrix_f64 *matrix)
 {
     if (matrix->owns_matrix_data)
         delete_CscMatrix_f64(matrix);
