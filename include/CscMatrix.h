@@ -38,6 +38,16 @@ typedef struct CscMatrix_f64
 
 } CscMatrix_f64;
 
+typedef struct CscMatrix_f32
+{
+    uintptr_t m;
+    uintptr_t n;
+    const uintptr_t *colptr;
+    const uintptr_t *rowval;
+    const float *nzval;
+    bool owns_matrix_data;
+} CscMatrix_f32;
+
 /// @brief Create a sparse matrix in Compressed Sparse Column format
 /// @param m Number of rows
 /// @param n Number of columns
@@ -68,6 +78,29 @@ static inline CscMatrix_f64 *CscMatrix_f64_new(
     return ptr;
 }
 
+static inline CscMatrix_f32 *CscMatrix_f32_new(
+    uintptr_t m,
+    uintptr_t n,
+    const uintptr_t *colptr,
+    const uintptr_t *rowval,
+    const float *nzval)
+{
+    CscMatrix_f32 *ptr = malloc(sizeof(CscMatrix_f32));
+
+    if (ptr == NULL) // Failed to allocate memory
+        return NULL;
+
+    // Initialize CscMatrix_f32
+    ptr->m = m;
+    ptr->n = n;
+    ptr->colptr = colptr;
+    ptr->rowval = rowval;
+    ptr->nzval = nzval;
+    ptr->owns_matrix_data = false;
+
+    return ptr;
+}
+
 /// @brief Create a sparse matrix in Compressed Sparse Column format from a dense matrix
 /// @param m Number of rows
 /// @param n Number of columns
@@ -75,20 +108,28 @@ static inline CscMatrix_f64 *CscMatrix_f64_new(
 /// @return A pointer to a new CscMatrix_f64 struct built from the dense matrix
 CscMatrix_f64 *CscMatrix_f64_from(uintptr_t m, uintptr_t n, const double matrix[m][n]);
 
+CscMatrix_f32 *CscMatrix_f32_from(uintptr_t m, uintptr_t n, const float matrix[m][n]);
+
 /// @brief Create a sparse matrix in Compressed Sparse Column format of all zeros
 /// @param rows Number of rows
 /// @param cols Number of columns
 /// @return A pointer to a new CscMatrix_f64 struct of all zeros
 CscMatrix_f64 *CscMatrix_f64_zeros(uintptr_t rows, uintptr_t cols);
 
+CscMatrix_f32 *CscMatrix_f32_zeros(uintptr_t rows, uintptr_t cols);
+
 /// @brief Create an identity matrix in Compressed Sparse Column format
 /// @param n Number of rows and columns of the identity matrix
 /// @return A pointer to a new CscMatrix_f64 struct of the identity matrix
 CscMatrix_f64 *CscMatrix_f64_identity(uintptr_t n);
 
+CscMatrix_f32 *CscMatrix_f32_identity(uintptr_t n);
+
 /// @brief Delete a CscMatrix_f64 object which has memory owned by Rust
 /// @param matrix Pointer to the matrix to delete
 void delete_CscMatrix_f64(CscMatrix_f64 *matrix);
+
+void delete_CscMatrix_f32(CscMatrix_f32 *matrix);
 
 /// @brief Free a CscMatrix_f64 object
 /// @param matrix Pointer to the matrix to free
@@ -96,6 +137,14 @@ static inline void free_CscMatrix_f64(CscMatrix_f64 *matrix)
 {
     if (matrix->owns_matrix_data)
         delete_CscMatrix_f64(matrix);
+    else
+        free(matrix);
+}
+
+static inline void free_CscMatrix_f32(CscMatrix_f32 *matrix)
+{
+    if (matrix->owns_matrix_data)
+        delete_CscMatrix_f32(matrix);
     else
         free(matrix);
 }

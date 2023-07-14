@@ -78,7 +78,48 @@ typedef struct SupportedConeT_f64
     };
 } SupportedConeT_f64;
 
+typedef enum SupportedConeT_f32_Tag
+{
+    ZeroConeT_f32,
+    NonnegativeConeT_f32,
+    SecondOrderConeT_f32,
+    ExponentialConeT_f32,
+    PowerConeT_f32,
+} SupportedConeT_f32_Tag;
+
+typedef struct ExponentialConeT_Body_f32
+{
+
+} ExponentialConeT_Body_f32;
+
+typedef struct SupportedConeT_f32
+{
+    SupportedConeT_f32_Tag tag;
+    union
+    {
+        struct
+        {
+            uintptr_t zero_cone_t;
+        };
+        struct
+        {
+            uintptr_t nonnegative_cone_t;
+        };
+        struct
+        {
+            uintptr_t second_order_cone_t;
+        };
+        ExponentialConeT_Body_f32 exponential_cone_t;
+        struct
+        {
+            float power_cone_t;
+        };
+    };
+} SupportedConeT_f32;
+
 // Enum constructors
+
+// f64
 #define ZeroConeT_f64(size) \
     ((SupportedConeT_f64){.tag = ZeroConeT_f64_Tag, .zero_cone_t = (uintptr_t)(size)})
 
@@ -93,6 +134,22 @@ typedef struct SupportedConeT_f64
 
 #define PowerConeT_f64(power) \
     ((SupportedConeT_f64){.tag = PowerConeT_f64_Tag, .power_cone_t = (double)(power)})
+
+// f32
+#define ZeroConeT_f32(size) \
+    ((SupportedConeT_f32){.tag = ZeroConeT_f32_Tag, .zero_cone_t = (uintptr_t)(size)})
+
+#define NonnegativeConeT_f32(size) \
+    (SupportedConeT_f32) { .tag = NonnegativeConeT_f32_Tag, .nonnegative_cone_t = (uintptr_t)(size) }
+
+#define SecondOrderConeT_f32(size) \
+    ((SupportedConeT_f32){.tag = SecondOrderConeT_f32_Tag, .second_order_cone_t = (uintptr_t)(size)})
+
+#define ExponentialConeT_f32() \
+    ((SupportedConeT_f32){.tag = ExponentialConeT_f32_Tag})
+
+#define PowerConeT_f32(power) \
+    ((SupportedConeT_f32){.tag = PowerConeT_f32_Tag, .power_cone_t = (double)(power)})
 
 // TODO: PSDTriangleConeT
 
