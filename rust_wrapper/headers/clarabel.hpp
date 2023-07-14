@@ -165,6 +165,8 @@ void delete_CscMatrix_f32(CscMatrix<float> *matrix);
 
 DefaultSettings<double> DefaultSettingsBuilder_f64_default();
 
+DefaultSettings<float> DefaultSettingsBuilder_f32_default();
+
 DefaultSolver *DefaultSolver_f64_new(const CscMatrix<double> *P,
                                      const double *q,
                                      const CscMatrix<double> *A,
