@@ -1,4 +1,5 @@
 #include "clarabel.h"
+#include "utils.h"
 
 int main(void)
 {
@@ -39,7 +40,7 @@ int main(void)
     settings.equilibrate_max_iter = 50;
 
     // Build solver
-    DefaultSolver *solver = DefaultSolver_f64_new(
+    DefaultSolver_f64 *solver = DefaultSolver_f64_new(
         P, // P
         q, // q
         A, // A
@@ -49,14 +50,14 @@ int main(void)
         &settings);
 
     // Solve
-    DefaultSolver_solve(solver);
+    DefaultSolver_f64_solve(solver);
 
     // Get solution
     DefaultSolution_f64 solution = DefaultSolver_f64_solution(solver);
     print_solution(&solution);
 
     // Free the matrices and the solver
-    free_DefaultSolver(solver);
+    free_DefaultSolver_f64(solver);
     free_CscMatrix_f64(P);
     free_CscMatrix_f64(A);
     free_CscMatrix_f64(_A);
