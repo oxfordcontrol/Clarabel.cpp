@@ -64,7 +64,7 @@ int main(void)
 
     // Get solution
     DefaultSolution_f64 solution = DefaultSolver_f64_solution(solver);
-    print_solution(&solution);
+    print_solution_f64(&solution);
 
     // Free the matrices and the solver
     free_DefaultSolver_f64(solver);
