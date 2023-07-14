@@ -87,7 +87,7 @@ struct DefaultSettings {
   bool presolve_enable;
 };
 
-using DefaultSolver = void;
+using DefaultSolver_f64 = void;
 
 template<typename T>
 struct SupportedConeT {
@@ -129,6 +129,8 @@ struct SupportedConeT {
   };
 };
 
+using DefaultSolver_f32 = void;
+
 template<typename T>
 struct DefaultSolution {
   T *x;
@@ -167,19 +169,33 @@ DefaultSettings<double> DefaultSettingsBuilder_f64_default();
 
 DefaultSettings<float> DefaultSettingsBuilder_f32_default();
 
-DefaultSolver *DefaultSolver_f64_new(const CscMatrix<double> *P,
-                                     const double *q,
-                                     const CscMatrix<double> *A,
-                                     const double *b,
-                                     uintptr_t n_cones,
-                                     const SupportedConeT<double> *cones,
-                                     const DefaultSettings<double> *settings);
+DefaultSolver_f64 *DefaultSolver_f64_new(const CscMatrix<double> *P,
+                                         const double *q,
+                                         const CscMatrix<double> *A,
+                                         const double *b,
+                                         uintptr_t n_cones,
+                                         const SupportedConeT<double> *cones,
+                                         const DefaultSettings<double> *settings);
 
-void DefaultSolver_solve(DefaultSolver *solver);
+DefaultSolver_f32 *DefaultSolver_f32_new(const CscMatrix<float> *P,
+                                         const float *q,
+                                         const CscMatrix<float> *A,
+                                         const float *b,
+                                         uintptr_t n_cones,
+                                         const SupportedConeT<float> *cones,
+                                         const DefaultSettings<float> *settings);
 
-void free_DefaultSolver(DefaultSolver *solver);
+void DefaultSolver_f64_solve(DefaultSolver_f64 *solver);
 
-DefaultSolution<double> DefaultSolver_f64_solution(DefaultSolver *solver);
+void DefaultSolver_f32_solve(DefaultSolver_f32 *solver);
+
+void free_DefaultSolver_f64(DefaultSolver_f64 *solver);
+
+void free_DefaultSolver_f32(DefaultSolver_f32 *solver);
+
+DefaultSolution<double> DefaultSolver_f64_solution(DefaultSolver_f64 *solver);
+
+DefaultSolution<float> DefaultSolver_f32_solution(DefaultSolver_f32 *solver);
 
 } // extern "C"
 

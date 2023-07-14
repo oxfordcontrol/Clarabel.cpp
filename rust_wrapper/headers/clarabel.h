@@ -131,7 +131,7 @@ typedef struct DefaultSettings_f32 {
   bool presolve_enable;
 } DefaultSettings_f32;
 
-typedef void DefaultSolver;
+typedef void DefaultSolver_f64;
 
 typedef enum SupportedConeT_f64_Tag {
   ZeroConeT_f64,
@@ -164,6 +164,39 @@ typedef struct SupportedConeT_f64 {
   };
 } SupportedConeT_f64;
 
+typedef void DefaultSolver_f32;
+
+typedef enum SupportedConeT_f32_Tag {
+  ZeroConeT_f32,
+  NonnegativeConeT_f32,
+  SecondOrderConeT_f32,
+  ExponentialConeT_f32,
+  PowerConeT_f32,
+} SupportedConeT_f32_Tag;
+
+typedef struct ExponentialConeT_Body_f32 {
+
+} ExponentialConeT_Body_f32;
+
+typedef struct SupportedConeT_f32 {
+  SupportedConeT_f32_Tag tag;
+  union {
+    struct {
+      uintptr_t zero_cone_t;
+    };
+    struct {
+      uintptr_t nonnegative_cone_t;
+    };
+    struct {
+      uintptr_t second_order_cone_t;
+    };
+    ExponentialConeT_Body_f32 exponential_cone_t;
+    struct {
+      float power_cone_t;
+    };
+  };
+} SupportedConeT_f32;
+
 typedef struct DefaultSolution_f64 {
   double *x;
   uintptr_t x_length;
@@ -178,6 +211,21 @@ typedef struct DefaultSolution_f64 {
   double r_prim;
   double r_dual;
 } DefaultSolution_f64;
+
+typedef struct DefaultSolution_f32 {
+  float *x;
+  uintptr_t x_length;
+  float *z;
+  uintptr_t z_length;
+  float *s;
+  uintptr_t s_length;
+  enum SolverStatus status;
+  float obj_val;
+  double solve_time;
+  uint32_t iterations;
+  float r_prim;
+  float r_dual;
+} DefaultSolution_f32;
 
 struct CscMatrix_f64 *CscMatrix_f64_from(uintptr_t m, uintptr_t n, const double *matrix);
 
@@ -199,18 +247,32 @@ struct DefaultSettings_f64 DefaultSettingsBuilder_f64_default(void);
 
 struct DefaultSettings_f32 DefaultSettingsBuilder_f32_default(void);
 
-DefaultSolver *DefaultSolver_f64_new(const struct CscMatrix_f64 *P,
-                                     const double *q,
-                                     const struct CscMatrix_f64 *A,
-                                     const double *b,
-                                     uintptr_t n_cones,
-                                     const struct SupportedConeT_f64 *cones,
-                                     const struct DefaultSettings_f64 *settings);
+DefaultSolver_f64 *DefaultSolver_f64_new(const struct CscMatrix_f64 *P,
+                                         const double *q,
+                                         const struct CscMatrix_f64 *A,
+                                         const double *b,
+                                         uintptr_t n_cones,
+                                         const struct SupportedConeT_f64 *cones,
+                                         const struct DefaultSettings_f64 *settings);
 
-void DefaultSolver_solve(DefaultSolver *solver);
+DefaultSolver_f32 *DefaultSolver_f32_new(const struct CscMatrix_f32 *P,
+                                         const float *q,
+                                         const struct CscMatrix_f32 *A,
+                                         const float *b,
+                                         uintptr_t n_cones,
+                                         const struct SupportedConeT_f32 *cones,
+                                         const struct DefaultSettings_f32 *settings);
 
-void free_DefaultSolver(DefaultSolver *solver);
+void DefaultSolver_f64_solve(DefaultSolver_f64 *solver);
 
-struct DefaultSolution_f64 DefaultSolver_f64_solution(DefaultSolver *solver);
+void DefaultSolver_f32_solve(DefaultSolver_f32 *solver);
+
+void free_DefaultSolver_f64(DefaultSolver_f64 *solver);
+
+void free_DefaultSolver_f32(DefaultSolver_f32 *solver);
+
+struct DefaultSolution_f64 DefaultSolver_f64_solution(DefaultSolver_f64 *solver);
+
+struct DefaultSolution_f32 DefaultSolver_f32_solution(DefaultSolver_f32 *solver);
 
 #endif /* CLARABEL_H */
