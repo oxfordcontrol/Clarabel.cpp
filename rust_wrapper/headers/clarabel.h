@@ -42,6 +42,15 @@ typedef struct CscMatrix_f64 {
   bool owns_matrix_data;
 } CscMatrix_f64;
 
+typedef struct CscMatrix_f32 {
+  uintptr_t m;
+  uintptr_t n;
+  const uintptr_t *colptr;
+  const uintptr_t *rowval;
+  const float *nzval;
+  bool owns_matrix_data;
+} CscMatrix_f32;
+
 typedef struct DefaultSettings_f64 {
   uint32_t max_iter;
   double time_limit;
@@ -132,11 +141,19 @@ typedef struct DefaultSolution_f64 {
 
 struct CscMatrix_f64 *CscMatrix_f64_from(uintptr_t m, uintptr_t n, const double *matrix);
 
+struct CscMatrix_f32 *CscMatrix_f32_from(uintptr_t m, uintptr_t n, const float *matrix);
+
 struct CscMatrix_f64 *CscMatrix_f64_zeros(uintptr_t rows, uintptr_t cols);
+
+struct CscMatrix_f32 *CscMatrix_f32_zeros(uintptr_t rows, uintptr_t cols);
 
 struct CscMatrix_f64 *CscMatrix_f64_identity(uintptr_t n);
 
+struct CscMatrix_f32 *CscMatrix_f32_identity(uintptr_t n);
+
 void delete_CscMatrix_f64(struct CscMatrix_f64 *matrix);
+
+void delete_CscMatrix_f32(struct CscMatrix_f32 *matrix);
 
 struct DefaultSettings_f64 DefaultSettingsBuilder_f64_default(void);
 

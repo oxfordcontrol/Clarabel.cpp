@@ -149,11 +149,19 @@ extern "C" {
 
 CscMatrix<double> *CscMatrix_f64_from(uintptr_t m, uintptr_t n, const double *matrix);
 
+CscMatrix<float> *CscMatrix_f32_from(uintptr_t m, uintptr_t n, const float *matrix);
+
 CscMatrix<double> *CscMatrix_f64_zeros(uintptr_t rows, uintptr_t cols);
+
+CscMatrix<float> *CscMatrix_f32_zeros(uintptr_t rows, uintptr_t cols);
 
 CscMatrix<double> *CscMatrix_f64_identity(uintptr_t n);
 
+CscMatrix<float> *CscMatrix_f32_identity(uintptr_t n);
+
 void delete_CscMatrix_f64(CscMatrix<double> *matrix);
+
+void delete_CscMatrix_f32(CscMatrix<float> *matrix);
 
 DefaultSettings<double> DefaultSettingsBuilder_f64_default();
 
