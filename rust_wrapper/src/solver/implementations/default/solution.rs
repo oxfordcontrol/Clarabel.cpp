@@ -1,8 +1,9 @@
 use super::solver::SolverStatus;
-use clarabel::{algebra::FloatT, solver as lib};
+use clarabel::algebra::FloatT;
+use clarabel::solver as lib;
 
 #[repr(C)]
-pub struct DefaultSolution<T> {
+pub struct DefaultSolution<T: FloatT> {
     pub x: *mut T,
     pub x_length: usize,
 
