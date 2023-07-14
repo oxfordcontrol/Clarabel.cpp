@@ -80,11 +80,43 @@ typedef struct SupportedConeT_f64
 
 typedef enum SupportedConeT_f32_Tag
 {
-    ZeroConeT_f32,
-    NonnegativeConeT_f32,
-    SecondOrderConeT_f32,
-    ExponentialConeT_f32,
-    PowerConeT_f32,
+    /**
+     * The zero cone (used for equality constraints).
+     *
+     * The parameter indicates the cones dimension.
+     */
+    ZeroConeT_f32_Tag,
+    /**
+     * The nonnegative orthant.
+     *
+     * The parameter indicates the cones dimension.
+     */
+    NonnegativeConeT_f32_Tag,
+    /**
+     * The second order cone / Lorenz cone / ice-cream cone.
+     *
+     * The parameter indicates the cones dimension.
+     */
+    SecondOrderConeT_f32_Tag,
+    /**
+     * The exponential cone in R^3.
+     *
+     * This cone takes no parameters
+     */
+    ExponentialConeT_f32_Tag,
+    /**
+     * The power cone in R^3.
+     *
+     * The parameter indicates the power.
+     */
+    PowerConeT_f32_Tag,
+    /**
+     * The positive semidefinite cone in triangular form.
+     *
+     * The parameter indicates the matrix dimension, i.e. size = n
+     * means that the variable is the upper triangle of an nxn matrix.
+     */
+    PSDTriangleConeT_f32_Tag,
 } SupportedConeT_f32_Tag;
 
 typedef struct ExponentialConeT_Body_f32
