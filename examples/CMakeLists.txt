@@ -4,6 +4,7 @@ set(C_EXAMPLES
   example_lp
   example_powcone
   example_qp
+  example_qp_f32
   example_socp
   )
 

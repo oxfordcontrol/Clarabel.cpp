@@ -87,7 +87,7 @@ struct DefaultSettings {
   bool presolve_enable;
 };
 
-using DefaultSolver = void;
+using DefaultSolver_f64 = void;
 
 template<typename T>
 struct SupportedConeT {
@@ -129,6 +129,8 @@ struct SupportedConeT {
   };
 };
 
+using DefaultSolver_f32 = void;
+
 template<typename T>
 struct DefaultSolution {
   T *x;
@@ -149,27 +151,51 @@ extern "C" {
 
 CscMatrix<double> *CscMatrix_f64_from(uintptr_t m, uintptr_t n, const double *matrix);
 
+CscMatrix<float> *CscMatrix_f32_from(uintptr_t m, uintptr_t n, const float *matrix);
+
 CscMatrix<double> *CscMatrix_f64_zeros(uintptr_t rows, uintptr_t cols);
+
+CscMatrix<float> *CscMatrix_f32_zeros(uintptr_t rows, uintptr_t cols);
 
 CscMatrix<double> *CscMatrix_f64_identity(uintptr_t n);
 
+CscMatrix<float> *CscMatrix_f32_identity(uintptr_t n);
+
 void delete_CscMatrix_f64(CscMatrix<double> *matrix);
+
+void delete_CscMatrix_f32(CscMatrix<float> *matrix);
 
 DefaultSettings<double> DefaultSettingsBuilder_f64_default();
 
-DefaultSolver *DefaultSolver_f64_new(const CscMatrix<double> *P,
-                                     const double *q,
-                                     const CscMatrix<double> *A,
-                                     const double *b,
-                                     uintptr_t n_cones,
-                                     const SupportedConeT<double> *cones,
-                                     const DefaultSettings<double> *settings);
+DefaultSettings<float> DefaultSettingsBuilder_f32_default();
 
-void DefaultSolver_solve(DefaultSolver *solver);
+DefaultSolver_f64 *DefaultSolver_f64_new(const CscMatrix<double> *P,
+                                         const double *q,
+                                         const CscMatrix<double> *A,
+                                         const double *b,
+                                         uintptr_t n_cones,
+                                         const SupportedConeT<double> *cones,
+                                         const DefaultSettings<double> *settings);
 
-void free_DefaultSolver(DefaultSolver *solver);
+DefaultSolver_f32 *DefaultSolver_f32_new(const CscMatrix<float> *P,
+                                         const float *q,
+                                         const CscMatrix<float> *A,
+                                         const float *b,
+                                         uintptr_t n_cones,
+                                         const SupportedConeT<float> *cones,
+                                         const DefaultSettings<float> *settings);
 
-DefaultSolution<double> DefaultSolver_f64_solution(DefaultSolver *solver);
+void DefaultSolver_f64_solve(DefaultSolver_f64 *solver);
+
+void DefaultSolver_f32_solve(DefaultSolver_f32 *solver);
+
+void free_DefaultSolver_f64(DefaultSolver_f64 *solver);
+
+void free_DefaultSolver_f32(DefaultSolver_f32 *solver);
+
+DefaultSolution<double> DefaultSolver_f64_solution(DefaultSolver_f64 *solver);
+
+DefaultSolution<float> DefaultSolver_f32_solution(DefaultSolver_f32 *solver);
 
 } // extern "C"
 

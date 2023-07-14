@@ -37,7 +37,7 @@ int main(void)
     DefaultSettings_f64 settings = DefaultSettingsBuilder_f64_default();
 
     // Build solver
-    DefaultSolver *solver = DefaultSolver_f64_new(
+    DefaultSolver_f64 *solver = DefaultSolver_f64_new(
         P, // P
         q, // q
         A, // A
@@ -48,14 +48,14 @@ int main(void)
     );
 
     // Solve
-    DefaultSolver_solve(solver);
+    DefaultSolver_f64_solve(solver);
 
     // Get solution
     DefaultSolution_f64 solution = DefaultSolver_f64_solution(solver);
-    print_solution(&solution);
+    print_solution_f64(&solution);
 
     // Free the matrices and the solver
-    free_DefaultSolver(solver);
+    free_DefaultSolver_f64(solver);
     free_CscMatrix_f64(P);
     free_CscMatrix_f64(A);
 

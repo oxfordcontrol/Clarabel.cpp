@@ -9,39 +9,39 @@ int main(void)
     // let P = CscMatrix::zeros((2,2));   // For P = 0
 
     // direct from sparse data
-    CscMatrix_f64 *_P = CscMatrix_f64_new(
+    CscMatrix_f32 *_P = CscMatrix_f32_new(
         2,                      // m
         2,                      // n
         (uintptr_t[]){0, 1, 2}, // colptr
         (uintptr_t[]){0, 1},    // rowval
-        (double[]){6., 4.}      // nzval
+        (float[]){6., 4.}      // nzval
     );
 
     // or an easier way for small problems...
-    CscMatrix_f64 *P = CscMatrix_f64_from(
+    CscMatrix_f32 *P = CscMatrix_f32_from(
         2, 2,
-        (double[2][2])
+        (float[2][2])
         {
             {6., 0.},
             {0., 4.}
         }
     );
 
-    double q[2] = {-1., -4.};
+    float q[2] = {-1., -4.};
 
     // direct from sparse data
-    CscMatrix_f64 *_A = CscMatrix_f64_new(
+    CscMatrix_f32 *_A = CscMatrix_f32_new(
         5,                                    // m
         2,                                    // n
         (uintptr_t[]){0, 3, 6},               // colptr
         (uintptr_t[]){0, 1, 3, 0, 2, 4},      // rowval
-        (double[]){1., 1., -1., -2., 1., -1.} // nzval
+        (float[]){1., 1., -1., -2., 1., -1.} // nzval
     );
 
     // or an easier way for small problems...
-    CscMatrix_f64 *A = CscMatrix_f64_from(
+    CscMatrix_f32 *A = CscMatrix_f32_from(
         5, 2,
-        (double[5][2])
+        (float[5][2])
         {
             { 1., -2.}, // <-- LHS of equality constraint (lower bound)
             { 1.,  0.}, // <-- LHS of inequality constraint (upper bound)
@@ -51,19 +51,19 @@ int main(void)
         }
     );
 
-    double b[5] = {0., 1., 1., 1., 1.};
+    float b[5] = {0., 1., 1., 1., 1.};
 
-    SupportedConeT_f64 cones[2] =
+    SupportedConeT_f32 cones[2] =
     {
-        ZeroConeT_f64(1),
-        NonnegativeConeT_f64(4)
+        ZeroConeT_f32(1),
+        NonnegativeConeT_f32(4)
     };
 
     // Settings
-    DefaultSettings_f64 settings = DefaultSettingsBuilder_f64_default();
+    DefaultSettings_f32 settings = DefaultSettingsBuilder_f32_default();
 
     // Build solver
-    DefaultSolver_f64 *solver = DefaultSolver_f64_new(
+    DefaultSolver_f32 *solver = DefaultSolver_f32_new(
         P, // P
         q, // q
         A, // A
@@ -74,18 +74,18 @@ int main(void)
     );
 
     // Solve
-    DefaultSolver_f64_solve(solver);
+    DefaultSolver_f32_solve(solver);
 
     // Get solution
-    DefaultSolution_f64 solution = DefaultSolver_f64_solution(solver);
-    print_solution_f64(&solution);
+    DefaultSolution_f32 solution = DefaultSolver_f32_solution(solver);
+    print_solution_f32(&solution);
 
     // Free the matrices and the solver
-    free_DefaultSolver_f64(solver);
-    free_CscMatrix_f64(_P);
-    free_CscMatrix_f64(P);
-    free_CscMatrix_f64(_A);
-    free_CscMatrix_f64(A);
+    free_DefaultSolver_f32(solver);
+    free_CscMatrix_f32(_P);
+    free_CscMatrix_f32(P);
+    free_CscMatrix_f32(_A);
+    free_CscMatrix_f32(A);
 
     return 0;
 }

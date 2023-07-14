@@ -42,6 +42,15 @@ typedef struct CscMatrix_f64 {
   bool owns_matrix_data;
 } CscMatrix_f64;
 
+typedef struct CscMatrix_f32 {
+  uintptr_t m;
+  uintptr_t n;
+  const uintptr_t *colptr;
+  const uintptr_t *rowval;
+  const float *nzval;
+  bool owns_matrix_data;
+} CscMatrix_f32;
+
 typedef struct DefaultSettings_f64 {
   uint32_t max_iter;
   double time_limit;
@@ -82,7 +91,47 @@ typedef struct DefaultSettings_f64 {
   bool presolve_enable;
 } DefaultSettings_f64;
 
-typedef void DefaultSolver;
+typedef struct DefaultSettings_f32 {
+  uint32_t max_iter;
+  double time_limit;
+  bool verbose;
+  float max_step_fraction;
+  float tol_gap_abs;
+  float tol_gap_rel;
+  float tol_feas;
+  float tol_infeas_abs;
+  float tol_infeas_rel;
+  float tol_ktratio;
+  float reduced_tol_gap_abs;
+  float reduced_tol_gap_rel;
+  float reduced_tol_feas;
+  float reduced_tol_infeas_abs;
+  float reduced_tol_infeas_rel;
+  float reduced_tol_ktratio;
+  bool equilibrate_enable;
+  uint32_t equilibrate_max_iter;
+  float equilibrate_min_scaling;
+  float equilibrate_max_scaling;
+  float linesearch_backtrack_step;
+  float min_switch_step_length;
+  float min_terminate_step_length;
+  bool direct_kkt_solver;
+  enum DirectSolveMethods direct_solve_method;
+  bool static_regularization_enable;
+  float static_regularization_constant;
+  float static_regularization_proportional;
+  bool dynamic_regularization_enable;
+  float dynamic_regularization_eps;
+  float dynamic_regularization_delta;
+  bool iterative_refinement_enable;
+  float iterative_refinement_reltol;
+  float iterative_refinement_abstol;
+  uint32_t iterative_refinement_max_iter;
+  float iterative_refinement_stop_ratio;
+  bool presolve_enable;
+} DefaultSettings_f32;
+
+typedef void DefaultSolver_f64;
 
 typedef enum SupportedConeT_f64_Tag {
   ZeroConeT_f64,
@@ -115,6 +164,39 @@ typedef struct SupportedConeT_f64 {
   };
 } SupportedConeT_f64;
 
+typedef void DefaultSolver_f32;
+
+typedef enum SupportedConeT_f32_Tag {
+  ZeroConeT_f32,
+  NonnegativeConeT_f32,
+  SecondOrderConeT_f32,
+  ExponentialConeT_f32,
+  PowerConeT_f32,
+} SupportedConeT_f32_Tag;
+
+typedef struct ExponentialConeT_Body_f32 {
+
+} ExponentialConeT_Body_f32;
+
+typedef struct SupportedConeT_f32 {
+  SupportedConeT_f32_Tag tag;
+  union {
+    struct {
+      uintptr_t zero_cone_t;
+    };
+    struct {
+      uintptr_t nonnegative_cone_t;
+    };
+    struct {
+      uintptr_t second_order_cone_t;
+    };
+    ExponentialConeT_Body_f32 exponential_cone_t;
+    struct {
+      float power_cone_t;
+    };
+  };
+} SupportedConeT_f32;
+
 typedef struct DefaultSolution_f64 {
   double *x;
   uintptr_t x_length;
@@ -130,28 +212,67 @@ typedef struct DefaultSolution_f64 {
   double r_dual;
 } DefaultSolution_f64;
 
+typedef struct DefaultSolution_f32 {
+  float *x;
+  uintptr_t x_length;
+  float *z;
+  uintptr_t z_length;
+  float *s;
+  uintptr_t s_length;
+  enum SolverStatus status;
+  float obj_val;
+  double solve_time;
+  uint32_t iterations;
+  float r_prim;
+  float r_dual;
+} DefaultSolution_f32;
+
 struct CscMatrix_f64 *CscMatrix_f64_from(uintptr_t m, uintptr_t n, const double *matrix);
+
+struct CscMatrix_f32 *CscMatrix_f32_from(uintptr_t m, uintptr_t n, const float *matrix);
 
 struct CscMatrix_f64 *CscMatrix_f64_zeros(uintptr_t rows, uintptr_t cols);
 
+struct CscMatrix_f32 *CscMatrix_f32_zeros(uintptr_t rows, uintptr_t cols);
+
 struct CscMatrix_f64 *CscMatrix_f64_identity(uintptr_t n);
+
+struct CscMatrix_f32 *CscMatrix_f32_identity(uintptr_t n);
 
 void delete_CscMatrix_f64(struct CscMatrix_f64 *matrix);
 
+void delete_CscMatrix_f32(struct CscMatrix_f32 *matrix);
+
 struct DefaultSettings_f64 DefaultSettingsBuilder_f64_default(void);
 
-DefaultSolver *DefaultSolver_f64_new(const struct CscMatrix_f64 *P,
-                                     const double *q,
-                                     const struct CscMatrix_f64 *A,
-                                     const double *b,
-                                     uintptr_t n_cones,
-                                     const struct SupportedConeT_f64 *cones,
-                                     const struct DefaultSettings_f64 *settings);
+struct DefaultSettings_f32 DefaultSettingsBuilder_f32_default(void);
 
-void DefaultSolver_solve(DefaultSolver *solver);
+DefaultSolver_f64 *DefaultSolver_f64_new(const struct CscMatrix_f64 *P,
+                                         const double *q,
+                                         const struct CscMatrix_f64 *A,
+                                         const double *b,
+                                         uintptr_t n_cones,
+                                         const struct SupportedConeT_f64 *cones,
+                                         const struct DefaultSettings_f64 *settings);
 
-void free_DefaultSolver(DefaultSolver *solver);
+DefaultSolver_f32 *DefaultSolver_f32_new(const struct CscMatrix_f32 *P,
+                                         const float *q,
+                                         const struct CscMatrix_f32 *A,
+                                         const float *b,
+                                         uintptr_t n_cones,
+                                         const struct SupportedConeT_f32 *cones,
+                                         const struct DefaultSettings_f32 *settings);
 
-struct DefaultSolution_f64 DefaultSolver_f64_solution(DefaultSolver *solver);
+void DefaultSolver_f64_solve(DefaultSolver_f64 *solver);
+
+void DefaultSolver_f32_solve(DefaultSolver_f32 *solver);
+
+void free_DefaultSolver_f64(DefaultSolver_f64 *solver);
+
+void free_DefaultSolver_f32(DefaultSolver_f32 *solver);
+
+struct DefaultSolution_f64 DefaultSolver_f64_solution(DefaultSolver_f64 *solver);
+
+struct DefaultSolution_f32 DefaultSolver_f32_solution(DefaultSolver_f32 *solver);
 
 #endif /* CLARABEL_H */

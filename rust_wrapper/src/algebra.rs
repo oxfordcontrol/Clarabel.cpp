@@ -1,4 +1,5 @@
 use clarabel::algebra as lib;
+use clarabel::algebra::FloatT;
 use std::slice;
 
 #[repr(C)]
@@ -23,20 +24,14 @@ pub struct CscMatrix<T = f64> {
 }
 
 /// Wrapper function for CscMatrix::from()
-/// 
+///
 /// Creates a CscMatrix object from C using dynamic memory allocation.
 /// Values in the dense matrix are copied into the CSC matrix. Therefore, values in the CSC matrix are owned by the struct itself.
-#[no_mangle]
-pub extern "C" fn CscMatrix_f64_from(
-    m: usize,
-    n: usize,
-    matrix: *const f64,
-) -> *mut CscMatrix<f64> {
+#[allow(non_snake_case)]
+fn CscMatrix_from<T: FloatT>(m: usize, n: usize, matrix: *const T) -> *mut CscMatrix<T> {
     // Check if the pointer is null
+    debug_assert!(!matrix.is_null(), "matrix must not be a null pointer");
     if matrix.is_null() {
-        #[cfg(debug_assertions)]
-        println!("Null pointer received");
-
         return std::ptr::null_mut();
     }
 
@@ -52,10 +47,10 @@ pub extern "C" fn CscMatrix_f64_from(
     }
 
     // Call the function that constructs the CscMatrix
-    let csc_matrix = lib::CscMatrix::<f64>::from(matrix_slice);
+    let csc_matrix = lib::CscMatrix::<T>::from(matrix_slice);
 
     // Build the C struct
-    let c_struct = CscMatrix::<f64> {
+    let c_struct = CscMatrix::<T> {
         m: csc_matrix.m,
         n: csc_matrix.n,
         colptr: csc_matrix.colptr.as_ptr(),
@@ -70,20 +65,38 @@ pub extern "C" fn CscMatrix_f64_from(
     std::mem::forget(csc_matrix.nzval);
 
     // Box the C struct and return its pointer
-    Box::into_raw(Box::new(c_struct)) as *mut CscMatrix<f64>
+    Box::into_raw(Box::new(c_struct)) as *mut CscMatrix<T>
+}
+
+#[no_mangle]
+pub extern "C" fn CscMatrix_f64_from(
+    m: usize,
+    n: usize,
+    matrix: *const f64,
+) -> *mut CscMatrix<f64> {
+    CscMatrix_from(m, n, matrix)
+}
+
+#[no_mangle]
+pub extern "C" fn CscMatrix_f32_from(
+    m: usize,
+    n: usize,
+    matrix: *const f32,
+) -> *mut CscMatrix<f32> {
+    CscMatrix_from(m, n, matrix)
 }
 
 /// Wrapper function for CscMatrix::zeros()
-/// 
+///
 /// Creates a CscMatrix object from C using dynamic memory allocation.
 /// Values are owned by the matrix.
-#[no_mangle]
-pub extern "C" fn CscMatrix_f64_zeros(rows: usize, cols: usize) -> *mut CscMatrix<f64> {
+#[allow(non_snake_case)]
+fn CscMatrix_zeros<T: FloatT>(rows: usize, cols: usize) -> *mut CscMatrix<T> {
     // Call the function that constructs the CscMatrix
-    let csc_matrix = lib::CscMatrix::<f64>::zeros((rows, cols));
+    let csc_matrix = lib::CscMatrix::<T>::zeros((rows, cols));
 
     // Build the C struct
-    let c_struct = CscMatrix::<f64> {
+    let c_struct = CscMatrix::<T> {
         m: csc_matrix.m,
         n: csc_matrix.n,
         colptr: csc_matrix.colptr.as_ptr(),
@@ -98,20 +111,30 @@ pub extern "C" fn CscMatrix_f64_zeros(rows: usize, cols: usize) -> *mut CscMatri
     std::mem::forget(csc_matrix.nzval);
 
     // Box the C struct and return its pointer
-    Box::into_raw(Box::new(c_struct)) as *mut CscMatrix<f64>
+    Box::into_raw(Box::new(c_struct)) as *mut CscMatrix<T>
+}
+
+#[no_mangle]
+pub extern "C" fn CscMatrix_f64_zeros(rows: usize, cols: usize) -> *mut CscMatrix<f64> {
+    CscMatrix_zeros(rows, cols)
+}
+
+#[no_mangle]
+pub extern "C" fn CscMatrix_f32_zeros(rows: usize, cols: usize) -> *mut CscMatrix<f32> {
+    CscMatrix_zeros(rows, cols)
 }
 
 /// Wrapper function for CscMatrix::identity()
-/// 
+///
 /// Creates a CscMatrix object from C using dynamic memory allocation.
 /// Values are owned by the matrix.
-#[no_mangle]
-pub extern "C" fn CscMatrix_f64_identity(n: usize) -> *mut CscMatrix<f64> {
+#[allow(non_snake_case)]
+fn CscMatrix_identity<T: FloatT>(n: usize) -> *mut CscMatrix<T> {
     // Call the function that constructs the CscMatrix
-    let csc_matrix = lib::CscMatrix::<f64>::identity(n);
+    let csc_matrix = lib::CscMatrix::<T>::identity(n);
 
     // Build the C struct
-    let c_struct = CscMatrix::<f64> {
+    let c_struct = CscMatrix::<T> {
         m: csc_matrix.m,
         n: csc_matrix.n,
         colptr: csc_matrix.colptr.as_ptr(),
@@ -126,15 +149,25 @@ pub extern "C" fn CscMatrix_f64_identity(n: usize) -> *mut CscMatrix<f64> {
     std::mem::forget(csc_matrix.nzval);
 
     // Box the C struct and return its pointer
-    Box::into_raw(Box::new(c_struct)) as *mut CscMatrix<f64>
+    Box::into_raw(Box::new(c_struct)) as *mut CscMatrix<T>
+}
+
+#[no_mangle]
+pub extern "C" fn CscMatrix_f64_identity(n: usize) -> *mut CscMatrix<f64> {
+    CscMatrix_identity(n)
+}
+
+#[no_mangle]
+pub extern "C" fn CscMatrix_f32_identity(n: usize) -> *mut CscMatrix<f32> {
+    CscMatrix_identity(n)
 }
 
 /// Function for freeing the memory of a Rust CscMatrix object.
-/// 
+///
 /// This also frees all the memory of the matrix data.
 /// DO NOT use this function if the matrix data is managed by the C side.
-#[no_mangle]
-pub unsafe extern "C" fn delete_CscMatrix_f64(matrix: *mut CscMatrix<f64>) {
+#[allow(non_snake_case)]
+unsafe fn delete_CscMatrix<T: FloatT>(matrix: *mut CscMatrix<T>) {
     if matrix.is_null() || !(*matrix).owns_matrix_data {
         return;
     }
@@ -145,4 +178,14 @@ pub unsafe extern "C" fn delete_CscMatrix_f64(matrix: *mut CscMatrix<f64>) {
 
     // Free the memory of the C struct
     drop(Box::from_raw(matrix));
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn delete_CscMatrix_f64(matrix: *mut CscMatrix<f64>) {
+    delete_CscMatrix(matrix);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn delete_CscMatrix_f32(matrix: *mut CscMatrix<f32>) {
+    delete_CscMatrix(matrix);
 }

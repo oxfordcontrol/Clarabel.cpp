@@ -70,11 +70,11 @@ pub struct DefaultSettings<T: FloatT> {
 }
 
 /// Wrapper function for DefaultSettings::default()
-/// 
+///
 /// Get the default settings for the solver
-#[no_mangle]
-pub extern "C" fn DefaultSettingsBuilder_f64_default() -> DefaultSettings<f64> {
-    let default = clarabel::solver::DefaultSettings::<f64>::default();
+#[allow(non_snake_case)]
+fn DefaultSettingsBuilder_default<T: FloatT>() -> DefaultSettings<T> {
+    let default = clarabel::solver::DefaultSettings::<T>::default();
     let default_direct_solver_setting = match default.direct_solve_method.as_str() {
         "qdldl" => DirectSolveMethods::QDLDL,
         "mkl" => DirectSolveMethods::MKL,
@@ -83,7 +83,7 @@ pub extern "C" fn DefaultSettingsBuilder_f64_default() -> DefaultSettings<f64> {
     };
 
     // Assign all fields to the C struct
-    DefaultSettings::<f64> {
+    DefaultSettings::<T> {
         max_iter: default.max_iter,
         time_limit: default.time_limit,
         verbose: default.verbose,
@@ -122,4 +122,14 @@ pub extern "C" fn DefaultSettingsBuilder_f64_default() -> DefaultSettings<f64> {
         iterative_refinement_stop_ratio: default.iterative_refinement_stop_ratio,
         presolve_enable: default.presolve_enable,
     }
+}
+
+#[no_mangle]
+pub extern "C" fn DefaultSettingsBuilder_f64_default() -> DefaultSettings<f64> {
+    DefaultSettingsBuilder_default::<f64>()
+}
+
+#[no_mangle]
+pub extern "C" fn DefaultSettingsBuilder_f32_default() -> DefaultSettings<f32> {
+    DefaultSettingsBuilder_default::<f32>()
 }
