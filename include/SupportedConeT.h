@@ -44,11 +44,6 @@ typedef enum SupportedConeT_f64_Tag
     PSDTriangleConeT_f64_Tag,
 } SupportedConeT_f64_Tag;
 
-typedef struct ExponentialConeT_Body_f64
-{
-
-} ExponentialConeT_Body_f64;
-
 typedef struct SupportedConeT_f64
 {
     SupportedConeT_f64_Tag tag;
@@ -66,7 +61,7 @@ typedef struct SupportedConeT_f64
         {
             uintptr_t second_order_cone_t;
         };
-        ExponentialConeT_Body_f64 exponential_cone_t;
+        // exponential_cone_t (empty)
         struct
         {
             double power_cone_t;
@@ -119,11 +114,6 @@ typedef enum SupportedConeT_f32_Tag
     PSDTriangleConeT_f32_Tag,
 } SupportedConeT_f32_Tag;
 
-typedef struct ExponentialConeT_Body_f32
-{
-
-} ExponentialConeT_Body_f32;
-
 typedef struct SupportedConeT_f32
 {
     SupportedConeT_f32_Tag tag;
@@ -141,7 +131,7 @@ typedef struct SupportedConeT_f32
         {
             uintptr_t second_order_cone_t;
         };
-        ExponentialConeT_Body_f32 exponential_cone_t;
+        // exponential_cone_t (empty)
         struct
         {
             float power_cone_t;

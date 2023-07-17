@@ -16,8 +16,8 @@ target_link_libraries(utils_c PUBLIC libclarabel_c_shared)
 foreach(EXAMPLE_NAME ${C_EXAMPLES})
   add_executable(${EXAMPLE_NAME} c/${EXAMPLE_NAME}.c)
   
-  # Use C99
-  target_compile_features(${EXAMPLE_NAME} PRIVATE c_std_99)
+  # Use C11
+  target_compile_features(${EXAMPLE_NAME} PRIVATE c_std_11)
 
   # Link to the static clarabel library built from the Rust wrapper
   target_link_libraries(${EXAMPLE_NAME} PUBLIC libclarabel_c_shared)
