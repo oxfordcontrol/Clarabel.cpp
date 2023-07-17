@@ -10,16 +10,16 @@
 #include "SolverSettings.h"
 #include "SupportedConeT.h"
 
-typedef void DefaultSolver_f64;
+typedef void DefaultSolver;
 typedef void DefaultSolver_f32;
 
-DefaultSolver_f64 *DefaultSolver_f64_new(const CscMatrix_f64 *P,
-                                         const double *q,
-                                         const CscMatrix_f64 *A,
-                                         const double *b,
-                                         uintptr_t n_cones,
-                                         const SupportedConeT_f64 *cones,
-                                         const DefaultSettings_f64 *settings);
+DefaultSolver *DefaultSolver_new(const CscMatrix *P,
+                                 const double *q,
+                                 const CscMatrix *A,
+                                 const double *b,
+                                 uintptr_t n_cones,
+                                 const SupportedConeT_f64 *cones,
+                                 const DefaultSettings_f64 *settings);
 
 DefaultSolver_f32 *DefaultSolver_f32_new(const CscMatrix_f32 *P,
                                          const float *q,
@@ -29,13 +29,13 @@ DefaultSolver_f32 *DefaultSolver_f32_new(const CscMatrix_f32 *P,
                                          const SupportedConeT_f32 *cones,
                                          const DefaultSettings_f32 *settings);
 
-void DefaultSolver_f64_solve(DefaultSolver_f64 *solver);
+void DefaultSolver_solve(DefaultSolver *solver);
 
 void DefaultSolver_f32_solve(DefaultSolver_f32 *solver);
 
-void free_DefaultSolver_f64(DefaultSolver_f64 *solver);
+void DefaultSolver_free(DefaultSolver *solver);
 
-void free_DefaultSolver_f32(DefaultSolver_f32 *solver);
+void DefaultSolver_f32_free(DefaultSolver_f32 *solver);
 
 typedef enum SolverStatus
 {
@@ -52,7 +52,7 @@ typedef enum SolverStatus
     InsufficientProgress,
 } SolverStatus;
 
-typedef struct DefaultSolution_f64
+typedef struct DefaultSolution
 {
     double *x;
     uintptr_t x_length;
@@ -66,7 +66,7 @@ typedef struct DefaultSolution_f64
     uint32_t iterations;
     double r_prim;
     double r_dual;
-} DefaultSolution_f64;
+} DefaultSolution;
 
 typedef struct DefaultSolution_f32
 {
@@ -84,7 +84,7 @@ typedef struct DefaultSolution_f32
     float r_dual;
 } DefaultSolution_f32;
 
-DefaultSolution_f64 DefaultSolver_f64_solution(DefaultSolver_f64 *solver);
+DefaultSolution DefaultSolver_f64_solution(DefaultSolver *solver);
 
 DefaultSolution_f32 DefaultSolver_f32_solution(DefaultSolver_f32 *solver);
 
