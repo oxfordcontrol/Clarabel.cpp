@@ -37,16 +37,6 @@ enum class SolverStatus {
 };
 
 template<typename T>
-struct CscMatrix {
-  uintptr_t m;
-  uintptr_t n;
-  const uintptr_t *colptr;
-  const uintptr_t *rowval;
-  const T *nzval;
-  bool owns_matrix_data;
-};
-
-template<typename T>
 struct DefaultSettings {
   uint32_t max_iter;
   double time_limit;
@@ -88,6 +78,15 @@ struct DefaultSettings {
 };
 
 using DefaultSolver_f64 = void;
+
+template<typename T>
+struct CscMatrix {
+  uintptr_t m;
+  uintptr_t n;
+  const uintptr_t *colptr;
+  const uintptr_t *rowval;
+  const T *nzval;
+};
 
 template<typename T>
 struct SupportedConeT {
@@ -148,22 +147,6 @@ struct DefaultSolution {
 };
 
 extern "C" {
-
-CscMatrix<double> *CscMatrix_f64_from(uintptr_t m, uintptr_t n, const double *matrix);
-
-CscMatrix<float> *CscMatrix_f32_from(uintptr_t m, uintptr_t n, const float *matrix);
-
-CscMatrix<double> *CscMatrix_f64_zeros(uintptr_t rows, uintptr_t cols);
-
-CscMatrix<float> *CscMatrix_f32_zeros(uintptr_t rows, uintptr_t cols);
-
-CscMatrix<double> *CscMatrix_f64_identity(uintptr_t n);
-
-CscMatrix<float> *CscMatrix_f32_identity(uintptr_t n);
-
-void delete_CscMatrix_f64(CscMatrix<double> *matrix);
-
-void delete_CscMatrix_f32(CscMatrix<float> *matrix);
 
 DefaultSettings<double> DefaultSettingsBuilder_f64_default();
 
