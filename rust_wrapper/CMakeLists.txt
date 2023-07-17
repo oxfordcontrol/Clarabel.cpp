@@ -1,4 +1,9 @@
 # Build Clarabel.rs (Rust library)
+project(clarabel_c VERSION ${CLARABEL_PROJECT_VERSION})
+
+# Define interface targets for the imported Rust library
+add_library(libclarabel_c_static INTERFACE)
+add_library(libclarabel_c_shared INTERFACE)
 
 # Set the build flags and output directory
 if(CMAKE_BUILD_TYPE MATCHES Release)
@@ -30,11 +35,11 @@ elseif(UNIX)
     set(LIBCLARABEL_C_SHARED_PATH "${clarabel_c_output_directory}/libclarabel_c.so")
     set(LIBCLARABEL_C_STATIC_PATH "${clarabel_c_output_directory}/libclarabel_c.a")
 elseif(WIN32)
-    set(LIBCLARABEL_C_SHARED_PATH "${clarabel_c_output_directory}/clarabel_c.dll")
+    set(LIBCLARABEL_C_SHARED_PATH "${clarabel_c_output_directory}/clarabel_c.dll.lib")
     set(LIBCLARABEL_C_STATIC_PATH "${clarabel_c_output_directory}/libclarabel_c.lib")
 endif()
 
-# Configure the wrapper targets defined in the root folder
+# Wrap the Rust library in a CMake library target
 
 # Static library
 target_link_libraries(libclarabel_c_static INTERFACE ${LIBCLARABEL_C_STATIC_PATH})
@@ -45,4 +50,3 @@ add_dependencies(libclarabel_c_static libclarabel_c)
 target_link_libraries(libclarabel_c_shared INTERFACE ${LIBCLARABEL_C_SHARED_PATH})
 target_include_directories(libclarabel_c_shared INTERFACE ${CMAKE_SOURCE_DIR}/include)
 add_dependencies(libclarabel_c_shared libclarabel_c)
-

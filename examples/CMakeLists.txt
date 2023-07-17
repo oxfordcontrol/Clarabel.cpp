@@ -1,3 +1,5 @@
+project(clarabel_examples VERSION ${CLARABEL_PROJECT_VERSION})
+
 # Define a list of target names
 set(C_EXAMPLES 
   example_expcone
@@ -6,7 +8,7 @@ set(C_EXAMPLES
   example_qp
   example_qp_f32
   example_socp
-  )
+)
 
 # Compile utils.c as a library
 add_library(utils_c STATIC c/utils.c)
@@ -20,7 +22,7 @@ foreach(EXAMPLE_NAME ${C_EXAMPLES})
   target_compile_features(${EXAMPLE_NAME} PRIVATE c_std_11)
 
   # Link to the static clarabel library built from the Rust wrapper
-  target_link_libraries(${EXAMPLE_NAME} PUBLIC libclarabel_c_shared)
+  target_link_libraries(${EXAMPLE_NAME} PRIVATE libclarabel_c_shared)
 
   # Link to the utils library
   target_link_libraries(${EXAMPLE_NAME} PRIVATE utils_c)
