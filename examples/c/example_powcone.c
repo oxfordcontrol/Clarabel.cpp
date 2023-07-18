@@ -15,10 +15,10 @@
 
 int main(void)
 {
-    CscMatrix_f64 *P = CscMatrix_f64_zeros(6, 6);
+    CscMatrix *P = CscMatrix_zeros(6, 6);
     double q[6] = {0., 0., -1., 0., 0., -1.};
 
-    CscMatrix_f64 *A = CscMatrix_f64_from(
+    CscMatrix *A = CscMatrix_from(
         8, 6,
         (double[8][6])
         {
@@ -35,21 +35,21 @@ int main(void)
 
     double b[8] = {0., 0., 0., 0., 0., 0., 3., 1.};
 
-    SupportedConeT_f64 cones[4] =
+    SupportedConeT cones[4] =
     {
-        PowerConeT_f64(0.6),
-        PowerConeT_f64(0.1),
-        ZeroConeT_f64(1),
-        ZeroConeT_f64(1)
+        PowerConeT(0.6),
+        PowerConeT(0.1),
+        ZeroConeT(1),
+        ZeroConeT(1)
     };
 
     // Settings
-    DefaultSettings_f64 settings = DefaultSettingsBuilder_f64_default();
+    DefaultSettings settings = DefaultSettingsBuilder_default();
     settings.verbose = true;
     settings.max_iter = 100;
 
     // Build solver
-    DefaultSolver_f64 *solver = DefaultSolver_f64_new(
+    DefaultSolver *solver = DefaultSolver_new(
         P, // P
         q, // q
         A, // A
@@ -60,16 +60,16 @@ int main(void)
     );
 
     // Solve
-    DefaultSolver_f64_solve(solver);
+    DefaultSolver_solve(solver);
 
     // Get solution
-    DefaultSolution_f64 solution = DefaultSolver_f64_solution(solver);
-    print_solution_f64(&solution);
+    DefaultSolution solution = DefaultSolver_solution(solver);
+    print_solution(&solution);
 
     // Free the matrices and the solver
-    free_DefaultSolver_f64(solver);
-    free_CscMatrix_f64(P);
-    free_CscMatrix_f64(A);
+    DefaultSolver_free(solver);
+    CscMatrix_free(P);
+    CscMatrix_free(A);
 
     return 0;
 }

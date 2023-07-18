@@ -16,7 +16,7 @@ static void print_array_double(double *array, size_t n)
     printf("]\n");
 }
 
-void print_solution_f64(DefaultSolution_f64 *solution)
+void print_solution(DefaultSolution *solution)
 {
     printf("Solution (x)\t = ");
     print_array_double(solution->x, solution->x_length);

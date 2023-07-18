@@ -9,7 +9,7 @@ int main(void)
     // let P = CscMatrix::zeros((2,2));   // For P = 0
 
     // direct from sparse data
-    CscMatrix_f64 *_P = CscMatrix_f64_new(
+    CscMatrix *_P = CscMatrix_new(
         2,                      // m
         2,                      // n
         (uintptr_t[]){0, 1, 2}, // colptr
@@ -18,7 +18,7 @@ int main(void)
     );
 
     // or an easier way for small problems...
-    CscMatrix_f64 *P = CscMatrix_f64_from(
+    CscMatrix *P = CscMatrix_from(
         2, 2,
         (double[2][2])
         {
@@ -30,7 +30,7 @@ int main(void)
     double q[2] = {-1., -4.};
 
     // direct from sparse data
-    CscMatrix_f64 *_A = CscMatrix_f64_new(
+    CscMatrix *_A = CscMatrix_new(
         5,                                    // m
         2,                                    // n
         (uintptr_t[]){0, 3, 6},               // colptr
@@ -39,7 +39,7 @@ int main(void)
     );
 
     // or an easier way for small problems...
-    CscMatrix_f64 *A = CscMatrix_f64_from(
+    CscMatrix *A = CscMatrix_from(
         5, 2,
         (double[5][2])
         {
@@ -53,17 +53,17 @@ int main(void)
 
     double b[5] = {0., 1., 1., 1., 1.};
 
-    SupportedConeT_f64 cones[2] =
+    SupportedConeT cones[2] =
     {
-        ZeroConeT_f64(1),
-        NonnegativeConeT_f64(4)
+        ZeroConeT(1),
+        NonnegativeConeT(4)
     };
 
     // Settings
-    DefaultSettings_f64 settings = DefaultSettingsBuilder_f64_default();
+    DefaultSettings settings = DefaultSettingsBuilder_default();
 
     // Build solver
-    DefaultSolver_f64 *solver = DefaultSolver_f64_new(
+    DefaultSolver *solver = DefaultSolver_new(
         P, // P
         q, // q
         A, // A
@@ -74,18 +74,18 @@ int main(void)
     );
 
     // Solve
-    DefaultSolver_f64_solve(solver);
+    DefaultSolver_solve(solver);
 
     // Get solution
-    DefaultSolution_f64 solution = DefaultSolver_f64_solution(solver);
-    print_solution_f64(&solution);
+    DefaultSolution solution = DefaultSolver_solution(solver);
+    print_solution(&solution);
 
     // Free the matrices and the solver
-    free_DefaultSolver_f64(solver);
-    free_CscMatrix_f64(_P);
-    free_CscMatrix_f64(P);
-    free_CscMatrix_f64(_A);
-    free_CscMatrix_f64(A);
+    DefaultSolver_free(solver);
+    CscMatrix_free(_P);
+    CscMatrix_free(P);
+    CscMatrix_free(_A);
+    CscMatrix_free(A);
 
     return 0;
 }

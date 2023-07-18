@@ -81,11 +81,11 @@ int main(void)
     print_solution_f32(&solution);
 
     // Free the matrices and the solver
-    free_DefaultSolver_f32(solver);
-    free_CscMatrix_f32(_P);
-    free_CscMatrix_f32(P);
-    free_CscMatrix_f32(_A);
-    free_CscMatrix_f32(A);
+    DefaultSolver_f32_free(solver);
+    CscMatrix_f32_free(_P);
+    CscMatrix_f32_free(P);
+    CscMatrix_f32_free(_A);
+    CscMatrix_f32_free(A);
 
     return 0;
 }

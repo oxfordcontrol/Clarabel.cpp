@@ -3,12 +3,12 @@
 
 int main(void)
 {
-    CscMatrix_f64 *P = CscMatrix_f64_zeros(2, 2);
+    CscMatrix *P = CscMatrix_zeros(2, 2);
     double q[2] = {1.0, -1.0};
 
     // a 2-d box constraint, separated into 4 inequalities.
     // A = [I; -I]
-    CscMatrix_f64 *_A = CscMatrix_f64_new(
+    CscMatrix *_A = CscMatrix_new(
         4, 2,                            // row, col
         (uintptr_t[]){0, 2, 4},          // colptr
         (uintptr_t[]){0, 2, 1, 3},       // rowval
@@ -16,7 +16,7 @@ int main(void)
     );
 
     // easier way - construct A from a dense matrix
-    CscMatrix_f64 *A = CscMatrix_f64_from(
+    CscMatrix *A = CscMatrix_from(
         4, 2,
         (double[4][2])
         {
@@ -29,18 +29,18 @@ int main(void)
 
     double b[4] = {1.0, 1.0, 1.0, 1.0};
 
-    SupportedConeT_f64 cones[1] =
+    SupportedConeT cones[1] =
     {
-        NonnegativeConeT_f64(4)
+        NonnegativeConeT(4)
     };
 
     // Settings
-    DefaultSettings_f64 settings = DefaultSettingsBuilder_f64_default();
+    DefaultSettings settings = DefaultSettingsBuilder_default();
     settings.equilibrate_enable = true;
     settings.equilibrate_max_iter = 50;
 
     // Build solver
-    DefaultSolver_f64 *solver = DefaultSolver_f64_new(
+    DefaultSolver *solver = DefaultSolver_new(
         P, // P
         q, // q
         A, // A
@@ -50,17 +50,17 @@ int main(void)
         &settings);
 
     // Solve
-    DefaultSolver_f64_solve(solver);
+    DefaultSolver_solve(solver);
 
     // Get solution
-    DefaultSolution_f64 solution = DefaultSolver_f64_solution(solver);
-    print_solution_f64(&solution);
+    DefaultSolution solution = DefaultSolver_solution(solver);
+    print_solution(&solution);
 
     // Free the matrices and the solver
-    free_DefaultSolver_f64(solver);
-    free_CscMatrix_f64(P);
-    free_CscMatrix_f64(A);
-    free_CscMatrix_f64(_A);
+    DefaultSolver_free(solver);
+    CscMatrix_free(P);
+    CscMatrix_free(A);
+    CscMatrix_free(_A);
 
     return 0;
 }

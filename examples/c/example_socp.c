@@ -5,7 +5,7 @@ int main(void)
 {
     // SOCP Example
 
-    CscMatrix_f64 *P = CscMatrix_f64_from(
+    CscMatrix *P = CscMatrix_from(
         2, 2,
         (double[2][2])
         {
@@ -16,7 +16,7 @@ int main(void)
 
     double q[2] = {0., 0.};
 
-    CscMatrix_f64 *A = CscMatrix_f64_from(
+    CscMatrix *A = CscMatrix_from(
         3, 2,
         (double[3][2])
         {
@@ -28,16 +28,16 @@ int main(void)
 
     double b[3] = {1., -2., -2.};
 
-    SupportedConeT_f64 cones[1] =
+    SupportedConeT cones[1] =
     {
-        SecondOrderConeT_f64(3)
+        SecondOrderConeT(3)
     };
 
     // Settings
-    DefaultSettings_f64 settings = DefaultSettingsBuilder_f64_default();
+    DefaultSettings settings = DefaultSettingsBuilder_default();
 
     // Build solver
-    DefaultSolver_f64 *solver = DefaultSolver_f64_new(
+    DefaultSolver *solver = DefaultSolver_new(
         P, // P
         q, // q
         A, // A
@@ -48,16 +48,16 @@ int main(void)
     );
 
     // Solve
-    DefaultSolver_f64_solve(solver);
+    DefaultSolver_solve(solver);
 
     // Get solution
-    DefaultSolution_f64 solution = DefaultSolver_f64_solution(solver);
-    print_solution_f64(&solution);
+    DefaultSolution solution = DefaultSolver_solution(solver);
+    print_solution(&solution);
 
     // Free the matrices and the solver
-    free_DefaultSolver_f64(solver);
-    free_CscMatrix_f64(P);
-    free_CscMatrix_f64(A);
+    DefaultSolver_free(solver);
+    CscMatrix_free(P);
+    CscMatrix_free(A);
 
     return 0;
 }
