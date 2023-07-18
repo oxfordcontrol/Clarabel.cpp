@@ -2,7 +2,7 @@ pub mod cones {
 
     #[allow(dead_code)] // Suppress warnings for unused code
     #[repr(C)]
-    pub enum SupportedConeT<T> {
+    pub enum ClarabelSupportedConeT<T> {
         /// The zero cone (used for equality constraints).
         ///
         /// The parameter indicates the cones dimension.

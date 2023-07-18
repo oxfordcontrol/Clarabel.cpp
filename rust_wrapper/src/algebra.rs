@@ -1,6 +1,6 @@
 #[repr(C)]
 // This struct is for interfacing with C only and should be synched with clarabel::algebra::CscMatrix
-pub struct CscMatrix<T = f64> {
+pub struct ClarabelCscMatrix<T = f64> {
     /// number of rows
     pub m: usize,
     /// number of columns

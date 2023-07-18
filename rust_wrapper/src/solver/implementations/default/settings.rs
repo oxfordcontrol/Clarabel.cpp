@@ -2,15 +2,15 @@ use clarabel::algebra::FloatT;
 
 /// Used to replace the String type in the DefaultSettings struct
 #[repr(C)]
-pub enum DirectSolveMethods {
+pub enum ClarabelDirectSolveMethods {
     QDLDL,
-    MKL,
-    CHOLMOD,
+    // MKL, (not supported yet)
+    // CHOLMOD, (not supported yet)
 }
 
 /// DefaultSettings struct used by the C side
 #[repr(C)]
-pub struct DefaultSettings<T: FloatT> {
+pub struct ClarabelDefaultSettings<T: FloatT> {
     // Main algorithm settings
     pub max_iter: u32,
     pub time_limit: f64,
@@ -46,7 +46,7 @@ pub struct DefaultSettings<T: FloatT> {
 
     // Linear solver settings
     pub direct_kkt_solver: bool,
-    pub direct_solve_method: DirectSolveMethods,
+    pub direct_solve_method: ClarabelDirectSolveMethods,
 
     // static regularization parameters
     pub static_regularization_enable: bool,
@@ -73,17 +73,17 @@ pub struct DefaultSettings<T: FloatT> {
 ///
 /// Get the default settings for the solver
 #[allow(non_snake_case)]
-fn _internal_DefaultSettingsBuilder_default<T: FloatT>() -> DefaultSettings<T> {
+fn _internal_DefaultSettingsBuilder_default<T: FloatT>() -> ClarabelDefaultSettings<T> {
     let default = clarabel::solver::DefaultSettings::<T>::default();
     let default_direct_solver_setting = match default.direct_solve_method.as_str() {
-        "qdldl" => DirectSolveMethods::QDLDL,
-        "mkl" => DirectSolveMethods::MKL,
-        "cholmod" => DirectSolveMethods::CHOLMOD,
-        _ => DirectSolveMethods::QDLDL, // Default
+        "qdldl" => ClarabelDirectSolveMethods::QDLDL,
+        //"mkl" => ClarabelDirectSolveMethods::MKL,
+        //"cholmod" => ClarabelDirectSolveMethods::CHOLMOD,
+        _ => ClarabelDirectSolveMethods::QDLDL, // Default
     };
 
     // Assign all fields to the C struct
-    DefaultSettings::<T> {
+    ClarabelDefaultSettings::<T> {
         max_iter: default.max_iter,
         time_limit: default.time_limit,
         verbose: default.verbose,
@@ -125,11 +125,11 @@ fn _internal_DefaultSettingsBuilder_default<T: FloatT>() -> DefaultSettings<T> {
 }
 
 #[no_mangle]
-pub extern "C" fn DefaultSettingsBuilder_default() -> DefaultSettings<f64> {
+pub extern "C" fn DefaultSettingsBuilder_default() -> ClarabelDefaultSettings<f64> {
     _internal_DefaultSettingsBuilder_default::<f64>()
 }
 
 #[no_mangle]
-pub extern "C" fn DefaultSettingsBuilder_f32_default() -> DefaultSettings<f32> {
+pub extern "C" fn DefaultSettingsBuilder_f32_default() -> ClarabelDefaultSettings<f32> {
     _internal_DefaultSettingsBuilder_default::<f32>()
 }

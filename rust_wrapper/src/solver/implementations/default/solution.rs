@@ -1,4 +1,4 @@
-use super::solver::SolverStatus;
+use super::solver::ClarabelSolverStatus;
 use clarabel::algebra::FloatT;
 use clarabel::solver as lib;
 
@@ -13,7 +13,7 @@ pub struct DefaultSolution<T: FloatT> {
     pub s: *mut T,
     pub s_length: usize,
 
-    pub status: SolverStatus,
+    pub status: ClarabelSolverStatus,
     pub obj_val: T,
     pub solve_time: f64,
     pub iterations: u32,
@@ -31,17 +31,17 @@ impl<T: FloatT> DefaultSolution<T> {
             s: solution.s.as_mut_ptr(),
             s_length: solution.s.len(),
             status: match solution.status {
-                lib::SolverStatus::Unsolved => SolverStatus::Unsolved,
-                lib::SolverStatus::Solved => SolverStatus::Solved,
-                lib::SolverStatus::PrimalInfeasible => SolverStatus::PrimalInfeasible,
-                lib::SolverStatus::DualInfeasible => SolverStatus::DualInfeasible,
-                lib::SolverStatus::AlmostSolved => SolverStatus::AlmostSolved,
-                lib::SolverStatus::AlmostPrimalInfeasible => SolverStatus::AlmostPrimalInfeasible,
-                lib::SolverStatus::AlmostDualInfeasible => SolverStatus::AlmostDualInfeasible,
-                lib::SolverStatus::MaxIterations => SolverStatus::MaxIterations,
-                lib::SolverStatus::MaxTime => SolverStatus::MaxTime,
-                lib::SolverStatus::NumericalError => SolverStatus::NumericalError,
-                lib::SolverStatus::InsufficientProgress => SolverStatus::InsufficientProgress,
+                lib::SolverStatus::Unsolved => ClarabelSolverStatus::ClarabelUnsolved,
+                lib::SolverStatus::Solved => ClarabelSolverStatus::ClarabelSolved,
+                lib::SolverStatus::PrimalInfeasible => ClarabelSolverStatus::ClarabelPrimalInfeasible,
+                lib::SolverStatus::DualInfeasible => ClarabelSolverStatus::ClarabelDualInfeasible,
+                lib::SolverStatus::AlmostSolved => ClarabelSolverStatus::ClarabelAlmostSolved,
+                lib::SolverStatus::AlmostPrimalInfeasible => ClarabelSolverStatus::ClarabelAlmostPrimalInfeasible,
+                lib::SolverStatus::AlmostDualInfeasible => ClarabelSolverStatus::ClarabelAlmostDualInfeasible,
+                lib::SolverStatus::MaxIterations => ClarabelSolverStatus::ClarabelMaxIterations,
+                lib::SolverStatus::MaxTime => ClarabelSolverStatus::ClarabelMaxTime,
+                lib::SolverStatus::NumericalError => ClarabelSolverStatus::ClarabelNumericalError,
+                lib::SolverStatus::InsufficientProgress => ClarabelSolverStatus::ClarabelInsufficientProgress,
             },
             obj_val: solution.obj_val,
             solve_time: solution.solve_time,

@@ -1,5 +1,5 @@
-use crate::algebra::CscMatrix;
-use crate::core::cones::SupportedConeT;
+use crate::algebra::ClarabelCscMatrix;
+use crate::core::cones::ClarabelSupportedConeT;
 use crate::solver::implementations::default::settings::*;
 use crate::utils;
 use clarabel::algebra::FloatT;
@@ -10,9 +10,9 @@ use std::{ffi::c_void, mem::forget};
 use super::solution::DefaultSolution;
 
 #[allow(non_camel_case_types)]
-pub type DefaultSolver_f32 = c_void;
+pub type ClarabelDefaultSolver_f32 = c_void;
 #[allow(non_camel_case_types)]
-pub type DefaultSolver = c_void;
+pub type ClarabelDefaultSolver = c_void;
 
 // Wrapper function to create a DefaultSolver object from C using dynamic memory allocation
 // - Matrices and vectors are constructed from raw pointers
@@ -20,13 +20,13 @@ pub type DefaultSolver = c_void;
 // - Settings are converted from C struct to Rust struct
 #[allow(non_snake_case)]
 unsafe fn _internal_DefaultSolver_new<T: FloatT>(
-    P: *const CscMatrix<T>, // Matrix P
+    P: *const ClarabelCscMatrix<T>, // Matrix P
     q: *const T,            // Array of double from C
-    A: *const CscMatrix<T>, // Matrix A
+    A: *const ClarabelCscMatrix<T>, // Matrix A
     b: *const T,            // Array of double from C
     n_cones: usize,         // Number of cones
-    cones: *const SupportedConeT<T>,
-    settings: *const DefaultSettings<T>,
+    cones: *const ClarabelSupportedConeT<T>,
+    settings: *const ClarabelDefaultSettings<T>,
 ) -> *mut c_void {
     // Check null pointers
     debug_assert!(!P.is_null(), "Pointer P must not be null");
@@ -46,7 +46,7 @@ unsafe fn _internal_DefaultSolver_new<T: FloatT>(
     let b = Vec::from_raw_parts(b as *mut T, A.m, A.m);
 
     // Get a reference to the DefaultSettings struct from the pointer passed from C
-    let settings_struct = &*(settings as *const DefaultSettings<T>);
+    let settings_struct = &*(settings as *const ClarabelDefaultSettings<T>);
     let settings = utils::get_solver_settings_from_c::<T>(settings_struct);
 
     // Convert the cones from C to Rust
@@ -73,28 +73,28 @@ unsafe fn _internal_DefaultSolver_new<T: FloatT>(
 #[no_mangle]
 #[allow(non_snake_case)]
 pub unsafe extern "C" fn DefaultSolver_new(
-    P: *const CscMatrix<f64>,
+    P: *const ClarabelCscMatrix<f64>,
     q: *const f64,
-    A: *const CscMatrix<f64>,
+    A: *const ClarabelCscMatrix<f64>,
     b: *const f64,
     n_cones: usize,
-    cones: *const SupportedConeT<f64>,
-    settings: *const DefaultSettings<f64>,
-) -> *mut DefaultSolver {
+    cones: *const ClarabelSupportedConeT<f64>,
+    settings: *const ClarabelDefaultSettings<f64>,
+) -> *mut ClarabelDefaultSolver {
     _internal_DefaultSolver_new(P, q, A, b, n_cones, cones, settings)
 }
 
 #[no_mangle]
 #[allow(non_snake_case)]
 pub unsafe extern "C" fn DefaultSolver_f32_new(
-    P: *const CscMatrix<f32>,
+    P: *const ClarabelCscMatrix<f32>,
     q: *const f32,
-    A: *const CscMatrix<f32>,
+    A: *const ClarabelCscMatrix<f32>,
     b: *const f32,
     n_cones: usize,
-    cones: *const SupportedConeT<f32>,
-    settings: *const DefaultSettings<f32>,
-) -> *mut DefaultSolver_f32 {
+    cones: *const ClarabelSupportedConeT<f32>,
+    settings: *const ClarabelDefaultSettings<f32>,
+) -> *mut ClarabelDefaultSolver_f32 {
     _internal_DefaultSolver_new(P, q, A, b, n_cones, cones, settings)
 }
 
@@ -112,12 +112,12 @@ fn _internal_DefaultSolver_solve<T: FloatT>(solver: *mut c_void) {
 }
 
 #[no_mangle]
-pub extern "C" fn DefaultSolver_solve(solver: *mut DefaultSolver) {
+pub extern "C" fn DefaultSolver_solve(solver: *mut ClarabelDefaultSolver) {
     _internal_DefaultSolver_solve::<f64>(solver);
 }
 
 #[no_mangle]
-pub extern "C" fn DefaultSolver_f32_solve(solver: *mut DefaultSolver_f32) {
+pub extern "C" fn DefaultSolver_f32_solve(solver: *mut ClarabelDefaultSolver_f32) {
     _internal_DefaultSolver_solve::<f32>(solver);
 }
 
@@ -132,40 +132,40 @@ unsafe fn _internal_DefaultSolver_free<T: FloatT>(solver: *mut c_void) {
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn DefaultSolver_free(solver: *mut DefaultSolver) {
+pub unsafe extern "C" fn DefaultSolver_free(solver: *mut ClarabelDefaultSolver) {
     _internal_DefaultSolver_free::<f64>(solver);
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn DefaultSolver_f32_free(solver: *mut DefaultSolver_f32) {
+pub unsafe extern "C" fn DefaultSolver_f32_free(solver: *mut ClarabelDefaultSolver_f32) {
     _internal_DefaultSolver_free::<f32>(solver);
 }
 
 #[repr(C)]
 #[allow(dead_code)]
-pub enum SolverStatus {
+pub enum ClarabelSolverStatus {
     /// Problem is not solved (solver hasn't run).
-    Unsolved,
+    ClarabelUnsolved,
     /// Solver terminated with a solution.
-    Solved,
+    ClarabelSolved,
     /// Problem is primal infeasible.  Solution returned is a certificate of primal infeasibility.
-    PrimalInfeasible,
+    ClarabelPrimalInfeasible,
     /// Problem is dual infeasible.  Solution returned is a certificate of dual infeasibility.
-    DualInfeasible,
+    ClarabelDualInfeasible,
     /// Solver terminated with a solution (reduced accuracy)
-    AlmostSolved,
+    ClarabelAlmostSolved,
     /// Problem is primal infeasible.  Solution returned is a certificate of primal infeasibility (reduced accuracy).
-    AlmostPrimalInfeasible,
+    ClarabelAlmostPrimalInfeasible,
     /// Problem is dual infeasible.  Solution returned is a certificate of dual infeasibility (reduced accuracy).
-    AlmostDualInfeasible,
+    ClarabelAlmostDualInfeasible,
     /// Iteration limit reached before solution or infeasibility certificate found.
-    MaxIterations,
+    ClarabelMaxIterations,
     /// Time limit reached before solution or infeasibility certificate found.
-    MaxTime,
+    ClarabelMaxTime,
     /// Solver terminated with a numerical error
-    NumericalError,
+    ClarabelNumericalError,
     /// Solver terminated due to lack of progress.
-    InsufficientProgress,
+    ClarabelInsufficientProgress,
 }
 
 /// Get the solution field from a DefaultSolver object.
@@ -188,14 +188,14 @@ fn _internal_DefaultSolver_solution<T: FloatT>(solver: *mut c_void) -> DefaultSo
 
 #[no_mangle]
 pub extern "C" fn DefaultSolver_solution(
-    solver: *mut DefaultSolver,
+    solver: *mut ClarabelDefaultSolver,
 ) -> DefaultSolution<f64> {
     _internal_DefaultSolver_solution::<f64>(solver)
 }
 
 #[no_mangle]
 pub extern "C" fn DefaultSolver_f32_solution(
-    solver: *mut DefaultSolver_f32,
+    solver: *mut ClarabelDefaultSolver_f32,
 ) -> DefaultSolution<f32> {
     _internal_DefaultSolver_solution::<f32>(solver)
 }
