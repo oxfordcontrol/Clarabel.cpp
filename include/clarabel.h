@@ -19,7 +19,7 @@ DefaultSolver *DefaultSolver_new(const CscMatrix *P,
                                  const double *b,
                                  uintptr_t n_cones,
                                  const SupportedConeT_f64 *cones,
-                                 const DefaultSettings_f64 *settings);
+                                 const DefaultSettings *settings);
 
 DefaultSolver_f32 *DefaultSolver_f32_new(const CscMatrix_f32 *P,
                                          const float *q,
@@ -84,7 +84,7 @@ typedef struct DefaultSolution_f32
     float r_dual;
 } DefaultSolution_f32;
 
-DefaultSolution DefaultSolver_f64_solution(DefaultSolver *solver);
+DefaultSolution DefaultSolver_solution(DefaultSolver *solver);
 
 DefaultSolution_f32 DefaultSolver_f32_solution(DefaultSolver_f32 *solver);
 

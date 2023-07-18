@@ -1,7 +1,3 @@
-use clarabel::algebra as lib;
-use clarabel::algebra::FloatT;
-use std::slice;
-
 #[repr(C)]
 // This struct is for interfacing with C only and should be synched with clarabel::algebra::CscMatrix
 pub struct CscMatrix<T = f64> {
