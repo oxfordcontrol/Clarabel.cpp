@@ -18,7 +18,7 @@ DefaultSolver *DefaultSolver_new(const CscMatrix *P,
                                  const CscMatrix *A,
                                  const double *b,
                                  uintptr_t n_cones,
-                                 const SupportedConeT_f64 *cones,
+                                 const SupportedConeT *cones,
                                  const DefaultSettings *settings);
 
 DefaultSolver_f32 *DefaultSolver_f32_new(const CscMatrix_f32 *P,
