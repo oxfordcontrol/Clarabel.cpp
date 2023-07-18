@@ -5,25 +5,31 @@ int main(void)
 {
     // SOCP Example
 
-    CscMatrix *P = CscMatrix_from(
-        2, 2,
-        (double[2][2])
-        {
-            {0., 0.},
-            {0., 2.}
-        }
+    /* From dense matrix:
+     * [[0., 0.],
+     *  [0., 2.]]
+     */
+    CscMatrix *P = CscMatrix_new(
+        2,
+        2,
+        (uintptr_t[]){0, 0, 1},
+        (uintptr_t[]){1},
+        (double[]){2.0}
     );
 
     double q[2] = {0., 0.};
 
-    CscMatrix *A = CscMatrix_from(
-        3, 2,
-        (double[3][2])
-        {
-            { 0.,  0.},  
-            {-2.,  0.}, 
-            { 0., -1.}, 
-        }
+    /* From dense matrix:
+     * [[ 0.,  0.],
+     *  [-2.,  0.],
+     *  [ 0., -1.]]
+     */
+    CscMatrix *A = CscMatrix_new(
+        3,
+        2,
+        (uintptr_t[]){0, 1, 2},
+        (uintptr_t[]){1, 2},
+        (double[]){-2.0, -1.0}
     );
 
     double b[3] = {1., -2., -2.};

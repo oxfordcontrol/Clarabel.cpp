@@ -11,6 +11,7 @@ set(C_EXAMPLES
 # Compile utils.c as a library
 add_library(utils_c STATIC utils.c)
 target_link_libraries(utils_c PUBLIC libclarabel_c_shared)
+target_include_directories(utils_c INTERFACE .) # utils.h
 
 # Define an executable target for each example
 foreach(EXAMPLE_NAME ${C_EXAMPLES})

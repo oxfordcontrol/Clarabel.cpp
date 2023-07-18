@@ -23,10 +23,18 @@ typedef struct CscMatrix
      */
     const uintptr_t *colptr;
 
-    /// @brief Vector of row indices
+    /**
+     * @brief Vector of row indices
+     *
+     * If this is a zero matrix, use `NULL` for this field.
+     */
     const uintptr_t *rowval;
 
-    /// @brief Vector of non-zero matrix elements
+    /**
+     * @brief Vector of non-zero matrix elements
+     * 
+     * If this is a zero matrix, use `NULL` for this field.
+     */
     const double *nzval;
 } CscMatrix;
 
