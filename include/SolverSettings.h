@@ -8,11 +8,11 @@
 typedef enum DirectSolveMethods
 {
     QDLDL,
-    MKL,
-    CHOLMOD,
+    // MKL, (not supported in Rust yet)
+    // CHOLMOD, (not supported in Rust yet)
 } DirectSolveMethods;
 
-typedef struct DefaultSettings_f64
+typedef struct DefaultSettings
 {
     uint32_t max_iter;
     double time_limit;
@@ -51,7 +51,7 @@ typedef struct DefaultSettings_f64
     uint32_t iterative_refinement_max_iter;
     double iterative_refinement_stop_ratio;
     bool presolve_enable;
-} DefaultSettings_f64;
+} DefaultSettings;
 
 typedef struct DefaultSettings_f32
 {
@@ -94,7 +94,7 @@ typedef struct DefaultSettings_f32
     bool presolve_enable;
 } DefaultSettings_f32;
 
-DefaultSettings_f64 DefaultSettingsBuilder_f64_default(void);
+DefaultSettings DefaultSettingsBuilder_default(void);
 
 DefaultSettings_f32 DefaultSettingsBuilder_f32_default(void);
 

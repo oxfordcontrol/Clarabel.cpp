@@ -12,14 +12,14 @@ use super::solution::DefaultSolution;
 #[allow(non_camel_case_types)]
 pub type DefaultSolver_f32 = c_void;
 #[allow(non_camel_case_types)]
-pub type DefaultSolver_f64 = c_void;
+pub type DefaultSolver = c_void;
 
 // Wrapper function to create a DefaultSolver object from C using dynamic memory allocation
 // - Matrices and vectors are constructed from raw pointers
 // - Cones are converted from C struct to Rust struct
 // - Settings are converted from C struct to Rust struct
 #[allow(non_snake_case)]
-unsafe fn DefaultSolver_new<T: FloatT>(
+unsafe fn _internal_DefaultSolver_new<T: FloatT>(
     P: *const CscMatrix<T>, // Matrix P
     q: *const T,            // Array of double from C
     A: *const CscMatrix<T>, // Matrix A
@@ -60,12 +60,8 @@ unsafe fn DefaultSolver_new<T: FloatT>(
     let solver = lib::DefaultSolver::<T>::new(&P, &q, &A, &b, cones, settings);
 
     // Ensure Rust does not free the memory of arrays managed by C
-    forget(P.colptr);
-    forget(P.rowval);
-    forget(P.nzval);
-    forget(A.colptr);
-    forget(A.rowval);
-    forget(A.nzval);
+    forget(P);
+    forget(A);
     forget(q);
     forget(b);
 
@@ -76,7 +72,7 @@ unsafe fn DefaultSolver_new<T: FloatT>(
 
 #[no_mangle]
 #[allow(non_snake_case)]
-pub unsafe extern "C" fn DefaultSolver_f64_new(
+pub unsafe extern "C" fn DefaultSolver_new(
     P: *const CscMatrix<f64>,
     q: *const f64,
     A: *const CscMatrix<f64>,
@@ -84,8 +80,8 @@ pub unsafe extern "C" fn DefaultSolver_f64_new(
     n_cones: usize,
     cones: *const SupportedConeT<f64>,
     settings: *const DefaultSettings<f64>,
-) -> *mut DefaultSolver_f64 {
-    DefaultSolver_new(P, q, A, b, n_cones, cones, settings)
+) -> *mut DefaultSolver {
+    _internal_DefaultSolver_new(P, q, A, b, n_cones, cones, settings)
 }
 
 #[no_mangle]
@@ -99,12 +95,12 @@ pub unsafe extern "C" fn DefaultSolver_f32_new(
     cones: *const SupportedConeT<f32>,
     settings: *const DefaultSettings<f32>,
 ) -> *mut DefaultSolver_f32 {
-    DefaultSolver_new(P, q, A, b, n_cones, cones, settings)
+    _internal_DefaultSolver_new(P, q, A, b, n_cones, cones, settings)
 }
 
 // Wrapper function to call DefaultSolver.solve() from C
 #[allow(non_snake_case)]
-fn DefaultSolver_solve<T: FloatT>(solver: *mut c_void) {
+fn _internal_DefaultSolver_solve<T: FloatT>(solver: *mut c_void) {
     // Recover the solver object from the opaque pointer
     let mut solver = unsafe { Box::from_raw(solver as *mut lib::DefaultSolver<T>) };
 
@@ -116,18 +112,18 @@ fn DefaultSolver_solve<T: FloatT>(solver: *mut c_void) {
 }
 
 #[no_mangle]
-pub extern "C" fn DefaultSolver_f64_solve(solver: *mut DefaultSolver_f64) {
-    DefaultSolver_solve::<f64>(solver);
+pub extern "C" fn DefaultSolver_solve(solver: *mut DefaultSolver) {
+    _internal_DefaultSolver_solve::<f64>(solver);
 }
 
 #[no_mangle]
 pub extern "C" fn DefaultSolver_f32_solve(solver: *mut DefaultSolver_f32) {
-    DefaultSolver_solve::<f32>(solver);
+    _internal_DefaultSolver_solve::<f32>(solver);
 }
 
 // Function to free the memory of the solver object
 #[allow(non_snake_case)]
-unsafe fn free_DefaultSolver<T: FloatT>(solver: *mut c_void) {
+unsafe fn _internal_DefaultSolver_free<T: FloatT>(solver: *mut c_void) {
     if !solver.is_null() {
         // Reconstruct the box to drop the solver object
         let boxed = Box::from_raw(solver as *mut lib::DefaultSolver<T>);
@@ -136,13 +132,13 @@ unsafe fn free_DefaultSolver<T: FloatT>(solver: *mut c_void) {
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn free_DefaultSolver_f64(solver: *mut DefaultSolver_f64) {
-    free_DefaultSolver::<f64>(solver);
+pub unsafe extern "C" fn DefaultSolver_free(solver: *mut DefaultSolver) {
+    _internal_DefaultSolver_free::<f64>(solver);
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn free_DefaultSolver_f32(solver: *mut DefaultSolver_f32) {
-    free_DefaultSolver::<f32>(solver);
+pub unsafe extern "C" fn DefaultSolver_f32_free(solver: *mut DefaultSolver_f32) {
+    _internal_DefaultSolver_free::<f32>(solver);
 }
 
 #[repr(C)]
@@ -176,7 +172,7 @@ pub enum SolverStatus {
 ///
 /// The solution is returned as a C struct.
 #[allow(non_snake_case)]
-fn DefaultSolver_solution<T: FloatT>(solver: *mut c_void) -> DefaultSolution<T> {
+fn _internal_DefaultSolver_solution<T: FloatT>(solver: *mut c_void) -> DefaultSolution<T> {
     // Recover the solver object from the opaque pointer
     let mut solver = unsafe { Box::from_raw(solver as *mut lib::DefaultSolver<T>) };
 
@@ -191,15 +187,15 @@ fn DefaultSolver_solution<T: FloatT>(solver: *mut c_void) -> DefaultSolution<T> 
 }
 
 #[no_mangle]
-pub extern "C" fn DefaultSolver_f64_solution(
-    solver: *mut DefaultSolver_f64,
+pub extern "C" fn DefaultSolver_solution(
+    solver: *mut DefaultSolver,
 ) -> DefaultSolution<f64> {
-    DefaultSolver_solution::<f64>(solver)
+    _internal_DefaultSolver_solution::<f64>(solver)
 }
 
 #[no_mangle]
 pub extern "C" fn DefaultSolver_f32_solution(
     solver: *mut DefaultSolver_f32,
 ) -> DefaultSolution<f32> {
-    DefaultSolver_solution::<f32>(solver)
+    _internal_DefaultSolver_solution::<f32>(solver)
 }
