@@ -28,14 +28,6 @@ typedef struct CscMatrix
 
     /// @brief Vector of non-zero matrix elements
     const double *nzval;
-
-    /**
-     * @brief Indicates whether the memory of colptr, rowval and nzval is owned by this struct.
-     *
-     * Should never be changed by the user.
-     */
-    bool owns_matrix_data;
-
 } CscMatrix;
 
 typedef struct CscMatrix_f32
@@ -45,7 +37,6 @@ typedef struct CscMatrix_f32
     const uintptr_t *colptr;
     const uintptr_t *rowval;
     const float *nzval;
-    bool owns_matrix_data;
 } CscMatrix_f32;
 
 /// @brief Create a sparse matrix in Compressed Sparse Column format
@@ -73,7 +64,6 @@ static inline CscMatrix *CscMatrix_new(
     ptr->colptr = colptr;
     ptr->rowval = rowval;
     ptr->nzval = nzval;
-    ptr->owns_matrix_data = false;
 
     return ptr;
 }
@@ -96,9 +86,18 @@ static inline CscMatrix_f32 *CscMatrix_f32_new(
     ptr->colptr = colptr;
     ptr->rowval = rowval;
     ptr->nzval = nzval;
-    ptr->owns_matrix_data = false;
 
     return ptr;
+}
+
+static inline void CscMatrix_free(CscMatrix *ptr)
+{
+    free(ptr);
+}
+
+static inline void CscMatrix_f32_free(CscMatrix_f32 *ptr)
+{
+    free(ptr);
 }
 
 #endif
