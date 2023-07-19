@@ -3,50 +3,50 @@
 
 #include <stdint.h>
 
-typedef enum SupportedConeT_Tag
+typedef enum ClarabelSupportedConeT_Tag
 {
     /**
      * The zero cone (used for equality constraints).
      *
      * The parameter indicates the cones dimension.
      */
-    ZeroConeT_Tag,
+    ClarabelZeroConeT_Tag,
     /**
      * The nonnegative orthant.
      *
      * The parameter indicates the cones dimension.
      */
-    NonnegativeConeT_Tag,
+    ClarabelNonnegativeConeT_Tag,
     /**
      * The second order cone / Lorenz cone / ice-cream cone.
      *
      * The parameter indicates the cones dimension.
      */
-    SecondOrderConeT_Tag,
+    ClarabelSecondOrderConeT_Tag,
     /**
      * The exponential cone in R^3.
      *
      * This cone takes no parameters
      */
-    ExponentialConeT_Tag,
+    ClarabelExponentialConeT_Tag,
     /**
      * The power cone in R^3.
      *
      * The parameter indicates the power.
      */
-    PowerConeT_Tag,
+    ClarabelPowerConeT_Tag,
     /**
      * The positive semidefinite cone in triangular form.
      *
      * The parameter indicates the matrix dimension, i.e. size = n
      * means that the variable is the upper triangle of an nxn matrix.
      */
-    PSDTriangleConeT_Tag,
-} SupportedConeT_Tag;
+    ClarabelPSDTriangleConeT_Tag,
+} ClarabelSupportedConeT_Tag;
 
-typedef struct SupportedConeT
+typedef struct ClarabelSupportedConeT
 {
-    SupportedConeT_Tag tag;
+    ClarabelSupportedConeT_Tag tag;
     union
     {
         struct
@@ -71,52 +71,11 @@ typedef struct SupportedConeT
             uintptr_t psd_triangle_cone_t;
         };
     };
-} SupportedConeT;
+} ClarabelSupportedConeT;
 
-typedef enum SupportedConeT_f32_Tag
+typedef struct ClarabelSupportedConeT_f32
 {
-    /**
-     * The zero cone (used for equality constraints).
-     *
-     * The parameter indicates the cones dimension.
-     */
-    ZeroConeT_f32_Tag,
-    /**
-     * The nonnegative orthant.
-     *
-     * The parameter indicates the cones dimension.
-     */
-    NonnegativeConeT_f32_Tag,
-    /**
-     * The second order cone / Lorenz cone / ice-cream cone.
-     *
-     * The parameter indicates the cones dimension.
-     */
-    SecondOrderConeT_f32_Tag,
-    /**
-     * The exponential cone in R^3.
-     *
-     * This cone takes no parameters
-     */
-    ExponentialConeT_f32_Tag,
-    /**
-     * The power cone in R^3.
-     *
-     * The parameter indicates the power.
-     */
-    PowerConeT_f32_Tag,
-    /**
-     * The positive semidefinite cone in triangular form.
-     *
-     * The parameter indicates the matrix dimension, i.e. size = n
-     * means that the variable is the upper triangle of an nxn matrix.
-     */
-    PSDTriangleConeT_f32_Tag,
-} SupportedConeT_f32_Tag;
-
-typedef struct SupportedConeT_f32
-{
-    SupportedConeT_f32_Tag tag;
+    ClarabelSupportedConeT_Tag tag;
     union
     {
         struct
@@ -137,41 +96,41 @@ typedef struct SupportedConeT_f32
             float power_cone_t;
         };
     };
-} SupportedConeT_f32;
+} ClarabelSupportedConeT_f32;
 
 // Enum constructors
 
 // f64
-#define ZeroConeT(size) \
-    ((SupportedConeT){.tag = ZeroConeT_Tag, .zero_cone_t = (uintptr_t)(size)})
+#define ClarabelZeroConeT(size) \
+    ((ClarabelSupportedConeT){.tag = ClarabelZeroConeT_Tag, .zero_cone_t = (uintptr_t)(size)})
 
-#define NonnegativeConeT(size) \
-    (SupportedConeT){.tag = NonnegativeConeT_Tag, .nonnegative_cone_t = (uintptr_t)(size)}
+#define ClarabelNonnegativeConeT(size) \
+    (ClarabelSupportedConeT){.tag = ClarabelNonnegativeConeT_Tag, .nonnegative_cone_t = (uintptr_t)(size)}
 
-#define SecondOrderConeT(size) \
-    ((SupportedConeT){.tag = SecondOrderConeT_Tag, .second_order_cone_t = (uintptr_t)(size)})
+#define ClarabelSecondOrderConeT(size) \
+    ((ClarabelSupportedConeT){.tag = ClarabelSecondOrderConeT_Tag, .second_order_cone_t = (uintptr_t)(size)})
 
-#define ExponentialConeT() \
-    ((SupportedConeT){.tag = ExponentialConeT_Tag})
+#define ClarabelExponentialConeT() \
+    ((ClarabelSupportedConeT){.tag = ClarabelExponentialConeT_Tag})
 
-#define PowerConeT(power) \
-    ((SupportedConeT){.tag = PowerConeT_Tag, .power_cone_t = (double)(power)})
+#define ClarabelPowerConeT(power) \
+    ((ClarabelSupportedConeT){.tag = ClarabelPowerConeT_Tag, .power_cone_t = (double)(power)})
 
 // f32
-#define ZeroConeT_f32(size) \
-    ((SupportedConeT_f32){.tag = ZeroConeT_f32_Tag, .zero_cone_t = (uintptr_t)(size)})
+#define ClarabelZeroConeT_f32(size) \
+    ((ClarabelSupportedConeT_f32){.tag = ClarabelZeroConeT_Tag, .zero_cone_t = (uintptr_t)(size)})
 
-#define NonnegativeConeT_f32(size) \
-    (SupportedConeT_f32) { .tag = NonnegativeConeT_f32_Tag, .nonnegative_cone_t = (uintptr_t)(size) }
+#define ClarabelNonnegativeConeT_f32(size) \
+    (ClarabelSupportedConeT_f32) { .tag = ClarabelNonnegativeConeT_Tag, .nonnegative_cone_t = (uintptr_t)(size) }
 
-#define SecondOrderConeT_f32(size) \
-    ((SupportedConeT_f32){.tag = SecondOrderConeT_f32_Tag, .second_order_cone_t = (uintptr_t)(size)})
+#define ClarabelSecondOrderConeT_f32(size) \
+    ((ClarabelSupportedConeT_f32){.tag = ClarabelSecondOrderConeT_Tag, .second_order_cone_t = (uintptr_t)(size)})
 
-#define ExponentialConeT_f32() \
-    ((SupportedConeT_f32){.tag = ExponentialConeT_f32_Tag})
+#define ClarabelExponentialConeT_f32() \
+    ((ClarabelSupportedConeT_f32){.tag = ClarabelExponentialConeT_Tag})
 
-#define PowerConeT_f32(power) \
-    ((SupportedConeT_f32){.tag = PowerConeT_f32_Tag, .power_cone_t = (double)(power)})
+#define ClarabelPowerConeT_f32(power) \
+    ((ClarabelSupportedConeT_f32){.tag = ClarabelPowerConeT_Tag, .power_cone_t = (double)(power)})
 
 // TODO: PSDTriangleConeT
 

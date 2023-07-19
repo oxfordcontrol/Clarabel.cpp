@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include "clarabel.h"
 
-typedef struct CscMatrix
+typedef struct ClarabelCscMatrix
 {
     /// @brief Number of rows
     uintptr_t m;
@@ -36,16 +36,16 @@ typedef struct CscMatrix
      * If this is a zero matrix, use `NULL` for this field.
      */
     const double *nzval;
-} CscMatrix;
+} ClarabelCscMatrix;
 
-typedef struct CscMatrix_f32
+typedef struct ClarabelCscMatrix_f32
 {
     uintptr_t m;
     uintptr_t n;
     const uintptr_t *colptr;
     const uintptr_t *rowval;
     const float *nzval;
-} CscMatrix_f32;
+} ClarabelCscMatrix_f32;
 
 /// @brief Create a sparse matrix in Compressed Sparse Column format
 /// @param m Number of rows
@@ -54,14 +54,14 @@ typedef struct CscMatrix_f32
 /// @param rowval Array of row indices (always have length colptr[n])
 /// @param nzval Array of nonzero values (always have length colptr[n])
 /// @return Pointer to a new CscMatrix_f64 object allocated on the heap
-static inline CscMatrix *CscMatrix_new(
+static inline ClarabelCscMatrix *CscMatrix_new(
     uintptr_t m,
     uintptr_t n,
     const uintptr_t *colptr,
     const uintptr_t *rowval,
     const double *nzval)
 {
-    CscMatrix *ptr = malloc(sizeof(CscMatrix));
+    ClarabelCscMatrix *ptr = malloc(sizeof(ClarabelCscMatrix));
 
     if (ptr == NULL) // Failed to allocate memory
         return NULL;
@@ -76,14 +76,14 @@ static inline CscMatrix *CscMatrix_new(
     return ptr;
 }
 
-static inline CscMatrix_f32 *CscMatrix_f32_new(
+static inline ClarabelCscMatrix_f32 *CscMatrix_f32_new(
     uintptr_t m,
     uintptr_t n,
     const uintptr_t *colptr,
     const uintptr_t *rowval,
     const float *nzval)
 {
-    CscMatrix_f32 *ptr = malloc(sizeof(CscMatrix_f32));
+    ClarabelCscMatrix_f32 *ptr = malloc(sizeof(ClarabelCscMatrix_f32));
 
     if (ptr == NULL) // Failed to allocate memory
         return NULL;
@@ -98,12 +98,12 @@ static inline CscMatrix_f32 *CscMatrix_f32_new(
     return ptr;
 }
 
-static inline void CscMatrix_free(CscMatrix *ptr)
+static inline void CscMatrix_free(ClarabelCscMatrix *ptr)
 {
     free(ptr);
 }
 
-static inline void CscMatrix_f32_free(CscMatrix_f32 *ptr)
+static inline void CscMatrix_f32_free(ClarabelCscMatrix_f32 *ptr)
 {
     free(ptr);
 }
