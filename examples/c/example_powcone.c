@@ -16,7 +16,7 @@
 int main(void)
 {
     // 6 x 6 zero matrix
-    CscMatrix *P = CscMatrix_new(
+    ClarabelCscMatrix *P = CscMatrix_new(
         6,
         6,
         (uintptr_t[]){0, 0, 0, 0, 0, 0, 0},
@@ -36,7 +36,7 @@ int main(void)
     *  [1., 2., 0., 3., 0., 0.],
     *  [0., 0., 0., 0., 1., 0.]]
     */
-    CscMatrix *A = CscMatrix_new(
+    ClarabelCscMatrix *A = CscMatrix_new(
         8,
         6,
         (uintptr_t[]){0, 2, 4, 5, 7, 9, 10},
@@ -46,21 +46,21 @@ int main(void)
 
     double b[8] = {0., 0., 0., 0., 0., 0., 3., 1.};
 
-    SupportedConeT cones[4] =
+    ClarabelSupportedConeT cones[4] =
     {
-        PowerConeT(0.6),
-        PowerConeT(0.1),
-        ZeroConeT(1),
-        ZeroConeT(1)
+        ClarabelPowerConeT(0.6),
+        ClarabelPowerConeT(0.1),
+        ClarabelZeroConeT(1),
+        ClarabelZeroConeT(1)
     };
 
     // Settings
-    DefaultSettings settings = DefaultSettingsBuilder_default();
+    ClarabelDefaultSettings settings = DefaultSettingsBuilder_default();
     settings.verbose = true;
     settings.max_iter = 100;
 
     // Build solver
-    DefaultSolver *solver = DefaultSolver_new(
+    ClarabelDefaultSolver *solver = DefaultSolver_new(
         P, // P
         q, // q
         A, // A
@@ -74,7 +74,7 @@ int main(void)
     DefaultSolver_solve(solver);
 
     // Get solution
-    DefaultSolution solution = DefaultSolver_solution(solver);
+    ClarabelDefaultSolution solution = DefaultSolver_solution(solver);
     print_solution(&solution);
 
     // Free the matrices and the solver

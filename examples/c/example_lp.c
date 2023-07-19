@@ -4,7 +4,7 @@
 int main(void)
 {
     // 2 x 2 zero matrix
-    CscMatrix *P = CscMatrix_new(
+    ClarabelCscMatrix *P = CscMatrix_new(
         2,
         2,
         (uintptr_t[]){0, 0, 0},
@@ -16,7 +16,7 @@ int main(void)
 
     // a 2-d box constraint, separated into 4 inequalities.
     // A = [I; -I]
-    CscMatrix *A = CscMatrix_new(
+    ClarabelCscMatrix *A = CscMatrix_new(
         4,
         2,                            // row, col
         (uintptr_t[]){0, 2, 4},          // colptr
@@ -26,18 +26,18 @@ int main(void)
 
     double b[4] = {1.0, 1.0, 1.0, 1.0};
 
-    SupportedConeT cones[1] =
+    ClarabelSupportedConeT cones[1] =
     {
-        NonnegativeConeT(4)
+        ClarabelNonnegativeConeT(4)
     };
 
     // Settings
-    DefaultSettings settings = DefaultSettingsBuilder_default();
+    ClarabelDefaultSettings settings = DefaultSettingsBuilder_default();
     settings.equilibrate_enable = true;
     settings.equilibrate_max_iter = 50;
 
     // Build solver
-    DefaultSolver *solver = DefaultSolver_new(
+    ClarabelDefaultSolver *solver = DefaultSolver_new(
         P, // P
         q, // q
         A, // A
@@ -51,7 +51,7 @@ int main(void)
     DefaultSolver_solve(solver);
 
     // Get solution
-    DefaultSolution solution = DefaultSolver_solution(solver);
+    ClarabelDefaultSolution solution = DefaultSolver_solution(solver);
     print_solution(&solution);
 
     // Free the matrices and the solver

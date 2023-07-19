@@ -9,7 +9,7 @@ int main(void)
      * [[6., 0.],
      *  [0., 4.]]
      */
-    CscMatrix *P = CscMatrix_new(
+    ClarabelCscMatrix *P = CscMatrix_new(
         2,                      // m
         2,                      // n
         (uintptr_t[]){0, 1, 2}, // colptr
@@ -26,7 +26,7 @@ int main(void)
      *  [-1.,  0.], // <-- LHS of inequality constraint (lower bound)
      *  [ 0., -1.]] // <-- LHS of inequality constraint (lower bound)
      */
-    CscMatrix *A = CscMatrix_new(
+    ClarabelCscMatrix *A = CscMatrix_new(
         5,                                    // m
         2,                                    // n
         (uintptr_t[]){0, 3, 6},               // colptr
@@ -36,17 +36,17 @@ int main(void)
 
     double b[5] = {0., 1., 1., 1., 1.};
 
-    SupportedConeT cones[2] =
+    ClarabelSupportedConeT cones[2] =
     {
-        ZeroConeT(1),
-        NonnegativeConeT(4)
+        ClarabelZeroConeT(1),
+        ClarabelNonnegativeConeT(4)
     };
 
     // Settings
-    DefaultSettings settings = DefaultSettingsBuilder_default();
+    ClarabelDefaultSettings settings = DefaultSettingsBuilder_default();
 
     // Build solver
-    DefaultSolver *solver = DefaultSolver_new(
+    ClarabelDefaultSolver *solver = DefaultSolver_new(
         P, // P
         q, // q
         A, // A
@@ -60,7 +60,7 @@ int main(void)
     DefaultSolver_solve(solver);
 
     // Get solution
-    DefaultSolution solution = DefaultSolver_solution(solver);
+    ClarabelDefaultSolution solution = DefaultSolver_solution(solver);
     print_solution(&solution);
 
     // Free the matrices and the solver
