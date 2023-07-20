@@ -12,6 +12,16 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED True)
 
+# SDP feature configuration
+set(FEATURE_SDP "none" CACHE STRING "Package for SDP to be selected")
+set_property(CACHE FEATURE_SDP PROPERTY STRINGS 
+    none
+    sdp-accelerate
+    sdp-netlib
+    sdp-openblas
+    sdp-mkl
+    sdp-r
+)
 
 # Build the Rust library
 add_subdirectory(rust_wrapper)
