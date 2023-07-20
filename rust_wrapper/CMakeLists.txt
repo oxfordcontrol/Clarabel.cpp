@@ -17,9 +17,9 @@ else()
 endif()
 
 # SDP feature flag
-if(NOT SDP_PACKAGE STREQUAL "none")
+if(NOT FEATURE_SDP STREQUAL "none")
     # Set the Rust feature flag
-    set(clarabel_c_build_flags "${clarabel_c_build_flags} --features ${SDP_PACKAGE}")
+    set(clarabel_c_build_flags "${clarabel_c_build_flags};--features;${FEATURE_SDP}")
     
     # Define the FEATURE_SDP flag for all targets that link against clarabel_c
     target_compile_definitions(libclarabel_c_static INTERFACE FEATURE_SDP)

@@ -31,6 +31,6 @@ pub fn convert_from_C_cone<T: FloatT>(cone: &SupportedConeT<T>) -> lib::Supporte
         SupportedConeT::ExponentialConeT() => lib::SupportedConeT::ExponentialConeT(),
         SupportedConeT::PowerConeT(payload) => lib::SupportedConeT::PowerConeT(*payload),
         #[cfg(feature = "sdp")]
-        SupportedConeT::PSDTriangleConeT(payload) => lib::SupportedConeT::PSDTriangleConeT(payload),
+        SupportedConeT::PSDTriangleConeT(payload) => lib::SupportedConeT::PSDTriangleConeT(*payload),
     }
 }
