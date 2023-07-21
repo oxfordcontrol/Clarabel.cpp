@@ -94,8 +94,8 @@ typedef struct ClarabelDefaultSettings_f32
     bool presolve_enable;
 } ClarabelDefaultSettings_f32;
 
-ClarabelDefaultSettings_f64 DefaultSettingsBuilder_default(void);
+ClarabelDefaultSettings_f64 clarabel_DefaultSettingsBuilder_f64_default(void);
 
-ClarabelDefaultSettings_f32 DefaultSettingsBuilder_f32_default(void);
+ClarabelDefaultSettings_f32 clarabel_DefaultSettingsBuilder_f32_default(void);
 
 #endif
