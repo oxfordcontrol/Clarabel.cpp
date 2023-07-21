@@ -72,7 +72,7 @@ unsafe fn _internal_DefaultSolver_new<T: FloatT>(
 
 #[no_mangle]
 #[allow(non_snake_case)]
-pub unsafe extern "C" fn DefaultSolver_new(
+pub unsafe extern "C" fn clarabel_DefaultSolver_f64_new(
     P: *const ClarabelCscMatrix<f64>,
     q: *const f64,
     A: *const ClarabelCscMatrix<f64>,
@@ -86,7 +86,7 @@ pub unsafe extern "C" fn DefaultSolver_new(
 
 #[no_mangle]
 #[allow(non_snake_case)]
-pub unsafe extern "C" fn DefaultSolver_f32_new(
+pub unsafe extern "C" fn clarabel_DefaultSolver_f32_new(
     P: *const ClarabelCscMatrix<f32>,
     q: *const f32,
     A: *const ClarabelCscMatrix<f32>,
@@ -112,12 +112,12 @@ fn _internal_DefaultSolver_solve<T: FloatT>(solver: *mut c_void) {
 }
 
 #[no_mangle]
-pub extern "C" fn DefaultSolver_solve(solver: *mut ClarabelDefaultSolver) {
+pub extern "C" fn clarabel_DefaultSolver_f64_solve(solver: *mut ClarabelDefaultSolver) {
     _internal_DefaultSolver_solve::<f64>(solver);
 }
 
 #[no_mangle]
-pub extern "C" fn DefaultSolver_f32_solve(solver: *mut ClarabelDefaultSolver_f32) {
+pub extern "C" fn clarabel_DefaultSolver_f32_solve(solver: *mut ClarabelDefaultSolver_f32) {
     _internal_DefaultSolver_solve::<f32>(solver);
 }
 
@@ -132,12 +132,12 @@ unsafe fn _internal_DefaultSolver_free<T: FloatT>(solver: *mut c_void) {
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn DefaultSolver_free(solver: *mut ClarabelDefaultSolver) {
+pub unsafe extern "C" fn clarabel_DefaultSolver_f64_free(solver: *mut ClarabelDefaultSolver) {
     _internal_DefaultSolver_free::<f64>(solver);
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn DefaultSolver_f32_free(solver: *mut ClarabelDefaultSolver_f32) {
+pub unsafe extern "C" fn clarabel_DefaultSolver_f32_free(solver: *mut ClarabelDefaultSolver_f32) {
     _internal_DefaultSolver_free::<f32>(solver);
 }
 
@@ -187,14 +187,14 @@ fn _internal_DefaultSolver_solution<T: FloatT>(solver: *mut c_void) -> DefaultSo
 }
 
 #[no_mangle]
-pub extern "C" fn DefaultSolver_solution(
+pub extern "C" fn clarabel_DefaultSolver_f64_solution(
     solver: *mut ClarabelDefaultSolver,
 ) -> DefaultSolution<f64> {
     _internal_DefaultSolver_solution::<f64>(solver)
 }
 
 #[no_mangle]
-pub extern "C" fn DefaultSolver_f32_solution(
+pub extern "C" fn clarabel_DefaultSolver_f32_solution(
     solver: *mut ClarabelDefaultSolver_f32,
 ) -> DefaultSolution<f32> {
     _internal_DefaultSolver_solution::<f32>(solver)

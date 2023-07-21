@@ -125,11 +125,11 @@ fn _internal_DefaultSettingsBuilder_default<T: FloatT>() -> ClarabelDefaultSetti
 }
 
 #[no_mangle]
-pub extern "C" fn DefaultSettingsBuilder_default() -> ClarabelDefaultSettings<f64> {
+pub extern "C" fn clarabel_DefaultSettingsBuilder_f64_default() -> ClarabelDefaultSettings<f64> {
     _internal_DefaultSettingsBuilder_default::<f64>()
 }
 
 #[no_mangle]
-pub extern "C" fn DefaultSettingsBuilder_f32_default() -> ClarabelDefaultSettings<f32> {
+pub extern "C" fn clarabel_DefaultSettingsBuilder_f32_default() -> ClarabelDefaultSettings<f32> {
     _internal_DefaultSettingsBuilder_default::<f32>()
 }
