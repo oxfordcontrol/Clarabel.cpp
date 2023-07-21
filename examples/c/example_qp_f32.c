@@ -43,10 +43,10 @@ int main(void)
     };
 
     // Settings
-    ClarabelDefaultSettings_f32 settings = DefaultSettingsBuilder_f32_default();
+    ClarabelDefaultSettings_f32 settings = clarabel_DefaultSettingsBuilder_f32_default();
 
     // Build solver
-    ClarabelDefaultSolver_f32 *solver = DefaultSolver_f32_new(
+    ClarabelDefaultSolver_f32 *solver = clarabel_DefaultSolver_f32_new(
         P, // P
         q, // q
         A, // A
@@ -57,14 +57,14 @@ int main(void)
     );
 
     // Solve
-    DefaultSolver_f32_solve(solver);
+    clarabel_DefaultSolver_f32_solve(solver);
 
     // Get solution
-    ClarabelDefaultSolution_f32 solution = DefaultSolver_f32_solution(solver);
+    ClarabelDefaultSolution_f32 solution = clarabel_DefaultSolver_f32_solution(solver);
     print_solution_f32(&solution);
 
     // Free the matrices and the solver
-    DefaultSolver_f32_free(solver);
+    clarabel_DefaultSolver_f32_free(solver);
     clarabel_CscMatrix_f32_free(P);
     clarabel_CscMatrix_f32_free(A);
 
