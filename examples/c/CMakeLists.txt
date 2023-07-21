@@ -5,6 +5,7 @@ set(C_EXAMPLES
   example_powcone
   example_qp
   example_qp_f32
+  example_qp_f64
   example_socp
   example_sdp
 )
