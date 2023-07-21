@@ -50,4 +50,10 @@ typedef struct ClarabelDefaultSolution_f32
     float r_dual;
 } ClarabelDefaultSolution_f32;
 
+#ifdef CLARABEL_USE_FLOAT
+typedef ClarabelDefaultSolution_f32 ClarabelDefaultSolution;
+#else
+typedef ClarabelDefaultSolution_f64 ClarabelDefaultSolution;
+#endif /* CLARABEL_USE_FLOAT */
+
 #endif /* DEFAULT_SOLUTION_H */

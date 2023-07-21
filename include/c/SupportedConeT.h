@@ -121,7 +121,7 @@ typedef struct ClarabelSupportedConeT_f32
     ((ClarabelSupportedConeT_f64){.tag = ClarabelPowerConeT_Tag, .power_cone_t = (double)(power)})
 
 #ifdef FEATURE_SDP
-#define ClarabelPSDTriangleConeT(size) \
+#define ClarabelPSDTriangleConeT_f64(size) \
     ((ClarabelSupportedConeT_f64){.tag = ClarabelPSDTriangleConeT_Tag, .psd_triangle_cone_t = (uintptr_t)(size)})
 #endif
 
@@ -145,5 +145,32 @@ typedef struct ClarabelSupportedConeT_f32
 #define PSDTriangleConeT_f32(size) \
     ((ClarabelSupportedConeT_f32){.tag = ClarabelPSDTriangleConeT_Tag, .psd_triangle_cone_t = (uintptr_t)(size)})
 #endif
+
+// Choose float/double
+#ifdef CLARABEL_USE_FLOAT
+typedef ClarabelSupportedConeT_f32 ClarabelSupportedConeT;
+#define ClarabelZeroConeT(...) ClarabelZeroConeT_f32(__VA_ARGS__)
+#define ClarabelNonnegativeConeT(...) ClarabelNonnegativeConeT_f32(__VA_ARGS__)
+#define ClarabelSecondOrderConeT(...) ClarabelSecondOrderConeT_f32(__VA_ARGS__)
+#define ClarabelExponentialConeT(...) ClarabelExponentialConeT_f32(__VA_ARGS__)
+#define ClarabelPowerConeT(...) ClarabelPowerConeT_f32(__VA_ARGS__)
+
+#ifdef FEATURE_SDP
+#define ClarabelPSDTriangleConeT(...) ClarabelPSDTriangleConeT_f32(__VA_ARGS__)
+#endif
+
+#else
+typedef ClarabelSupportedConeT_f64 ClarabelSupportedConeT;
+#define ClarabelZeroConeT(...) ClarabelZeroConeT_f64(__VA_ARGS__)
+#define ClarabelNonnegativeConeT(...) ClarabelNonnegativeConeT_f64(__VA_ARGS__)
+#define ClarabelSecondOrderConeT(...) ClarabelSecondOrderConeT_f64(__VA_ARGS__)
+#define ClarabelExponentialConeT(...) ClarabelExponentialConeT_f64(__VA_ARGS__)
+#define ClarabelPowerConeT(...) ClarabelPowerConeT_f64(__VA_ARGS__)
+
+#ifdef FEATURE_SDP
+#define ClarabelPSDTriangleConeT(...) ClarabelPSDTriangleConeT_f64(__VA_ARGS__)
+#endif /* FEATURE_SDP */
+
+#endif /* CLARABEL_USE_FLOAT */
 
 #endif /* SUPPORTED_CONE_T_H */
