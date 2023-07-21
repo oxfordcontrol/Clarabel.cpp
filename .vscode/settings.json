@@ -4,9 +4,6 @@
         "${workspaceFolder}/rust_wrapper/Cargo.toml"
     ],
     "files.associations": {
-        "**/include/*.h": "c"
-    },
-    "C_Cpp.default.includePath": [
-        "${workspaceFolder}/c/include"
-    ]
+        "**/include/c/*.h": "c",
+    }
 }
