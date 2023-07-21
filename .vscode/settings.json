@@ -7,6 +7,6 @@
         "**/include/*.h": "c"
     },
     "C_Cpp.default.includePath": [
-        "${workspaceFolder}/include"
+        "${workspaceFolder}/c/include"
     ]
 }
