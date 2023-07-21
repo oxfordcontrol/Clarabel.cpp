@@ -1,5 +1,5 @@
-#ifndef DEFAULT_SOLUTION_H
-#define DEFAULT_SOLUTION_H
+#ifndef CLARABEL_DEFAULT_SOLUTION_H
+#define CLARABEL_DEFAULT_SOLUTION_H
 
 #include <stdint.h>
 
@@ -56,4 +56,4 @@ typedef ClarabelDefaultSolution_f32 ClarabelDefaultSolution;
 typedef ClarabelDefaultSolution_f64 ClarabelDefaultSolution;
 #endif /* CLARABEL_USE_FLOAT */
 
-#endif /* DEFAULT_SOLUTION_H */
+#endif /* CLARABEL_DEFAULT_SOLUTION_H */

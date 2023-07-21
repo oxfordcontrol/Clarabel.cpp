@@ -1,5 +1,5 @@
-#ifndef SUPPORTED_CONE_T_H
-#define SUPPORTED_CONE_T_H
+#ifndef CLARABEL_SUPPORTED_CONE_T_H
+#define CLARABEL_SUPPORTED_CONE_T_H
 
 #include <stdint.h>
 
@@ -173,4 +173,4 @@ typedef ClarabelSupportedConeT_f64 ClarabelSupportedConeT;
 
 #endif /* CLARABEL_USE_FLOAT */
 
-#endif /* SUPPORTED_CONE_T_H */
+#endif /* CLARABEL_SUPPORTED_CONE_T_H */

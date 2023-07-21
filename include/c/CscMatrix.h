@@ -1,5 +1,5 @@
-#ifndef CSC_MATRIX_H
-#define CSC_MATRIX_H
+#ifndef CLARABEL_CSC_MATRIX_H
+#define CLARABEL_CSC_MATRIX_H
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -118,4 +118,4 @@ typedef ClarabelCscMatrix_f64 ClarabelCscMatrix;
 #define clarabel_CscMatrix_free(...) clarabel_CscMatrix_f64_free(__VA_ARGS__)
 #endif /* CLARABEL_USE_FLOAT */
 
-#endif
+#endif /* CLARABEL_CSC_MATRIX_H */
