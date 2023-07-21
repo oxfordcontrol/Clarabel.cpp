@@ -41,7 +41,9 @@ typedef enum ClarabelSupportedConeT_Tag
      * The parameter indicates the matrix dimension, i.e. size = n
      * means that the variable is the upper triangle of an nxn matrix.
      */
+#ifdef FEATURE_SDP
     ClarabelPSDTriangleConeT_Tag,
+#endif
 } ClarabelSupportedConeT_Tag;
 
 typedef struct ClarabelSupportedConeT
@@ -66,10 +68,12 @@ typedef struct ClarabelSupportedConeT
         {
             double power_cone_t;
         };
+#ifdef FEATURE_SDP
         struct
         {
             uintptr_t psd_triangle_cone_t;
         };
+#endif
     };
 } ClarabelSupportedConeT;
 
@@ -99,6 +103,8 @@ typedef struct ClarabelSupportedConeT_f32
 } ClarabelSupportedConeT_f32;
 
 // Enum constructors
+#define ClarabelZeroConeT(size) \
+    ((ClarabelSupportedConeT){.tag = ClarabelZeroConeT_Tag, .zero_cone_t = (uintptr_t)(size)})
 
 // f64
 #define ClarabelZeroConeT(size) \
@@ -116,6 +122,11 @@ typedef struct ClarabelSupportedConeT_f32
 #define ClarabelPowerConeT(power) \
     ((ClarabelSupportedConeT){.tag = ClarabelPowerConeT_Tag, .power_cone_t = (double)(power)})
 
+#ifdef FEATURE_SDP
+#define ClarabelPSDTriangleConeT(size) \
+    ((ClarabelSupportedConeT){.tag = ClarabelPSDTriangleConeT_Tag, .psd_triangle_cone_t = (uintptr_t)(size)})
+#endif
+
 // f32
 #define ClarabelZeroConeT_f32(size) \
     ((ClarabelSupportedConeT_f32){.tag = ClarabelZeroConeT_Tag, .zero_cone_t = (uintptr_t)(size)})
@@ -132,6 +143,9 @@ typedef struct ClarabelSupportedConeT_f32
 #define ClarabelPowerConeT_f32(power) \
     ((ClarabelSupportedConeT_f32){.tag = ClarabelPowerConeT_Tag, .power_cone_t = (double)(power)})
 
-// TODO: PSDTriangleConeT
+#ifdef FEATURE_SDP
+#define PSDTriangleConeT_f32(size) \
+    ((ClarabelSupportedConeT_f32){.tag = ClarabelPSDTriangleConeT_Tag, .psd_triangle_cone_t = (uintptr_t)(size)})
+#endif
 
 #endif /* SUPPORTED_CONE_T_H */

@@ -6,6 +6,7 @@ set(C_EXAMPLES
   example_qp
   example_qp_f32
   example_socp
+  example_sdp
 )
 
 # Compile utils.c as a library

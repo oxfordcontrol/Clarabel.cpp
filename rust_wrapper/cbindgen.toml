@@ -9,3 +9,6 @@ include_version = true
 
 namespace = "clarabel"
 documentation = false
+
+[defines]
+"feature = sdp" = "FEATURE_SDP"

@@ -23,13 +23,11 @@ pub mod cones {
         ///
         /// The parameter indicates the power.
         PowerConeT(T),
-        /*
         /// The positive semidefinite cone in triangular form.
         ///
         /// The parameter indicates the matrix dimension, i.e. size = n
         /// means that the variable is the upper triangle of an nxn matrix.
-        // TODO: Add config for #[cfg(feature = "sdp")]
-        // PSDTriangleConeT(usize),
-         */
+        #[cfg(feature = "sdp")]
+        PSDTriangleConeT(usize),
     }
 }
