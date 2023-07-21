@@ -1,5 +1,5 @@
-#ifndef SOLVER_SETTINGS_H
-#define SOLVER_SETTINGS_H
+#ifndef DEFAULT_SETTINGS_H
+#define DEFAULT_SETTINGS_H
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -98,4 +98,4 @@ ClarabelDefaultSettings_f64 clarabel_DefaultSettingsBuilder_f64_default(void);
 
 ClarabelDefaultSettings_f32 clarabel_DefaultSettingsBuilder_f32_default(void);
 
-#endif
+#endif /* DEFAULT_SETTINGS_H */
