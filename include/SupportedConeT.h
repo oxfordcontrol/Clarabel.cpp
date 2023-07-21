@@ -46,7 +46,7 @@ typedef enum ClarabelSupportedConeT_Tag
 #endif
 } ClarabelSupportedConeT_Tag;
 
-typedef struct ClarabelSupportedConeT
+typedef struct ClarabelSupportedConeT_f64
 {
     ClarabelSupportedConeT_Tag tag;
     union
@@ -75,7 +75,7 @@ typedef struct ClarabelSupportedConeT
         };
 #endif
     };
-} ClarabelSupportedConeT;
+} ClarabelSupportedConeT_f64;
 
 typedef struct ClarabelSupportedConeT_f32
 {
@@ -103,28 +103,26 @@ typedef struct ClarabelSupportedConeT_f32
 } ClarabelSupportedConeT_f32;
 
 // Enum constructors
-#define ClarabelZeroConeT(size) \
-    ((ClarabelSupportedConeT){.tag = ClarabelZeroConeT_Tag, .zero_cone_t = (uintptr_t)(size)})
 
 // f64
-#define ClarabelZeroConeT(size) \
-    ((ClarabelSupportedConeT){.tag = ClarabelZeroConeT_Tag, .zero_cone_t = (uintptr_t)(size)})
+#define ClarabelZeroConeT_f64(size) \
+    ((ClarabelSupportedConeT_f64){.tag = ClarabelZeroConeT_Tag, .zero_cone_t = (uintptr_t)(size)})
 
-#define ClarabelNonnegativeConeT(size) \
-    (ClarabelSupportedConeT){.tag = ClarabelNonnegativeConeT_Tag, .nonnegative_cone_t = (uintptr_t)(size)}
+#define ClarabelNonnegativeConeT_f64(size) \
+    (ClarabelSupportedConeT_f64) { .tag = ClarabelNonnegativeConeT_Tag, .nonnegative_cone_t = (uintptr_t)(size) }
 
-#define ClarabelSecondOrderConeT(size) \
-    ((ClarabelSupportedConeT){.tag = ClarabelSecondOrderConeT_Tag, .second_order_cone_t = (uintptr_t)(size)})
+#define ClarabelSecondOrderConeT_f64(size) \
+    ((ClarabelSupportedConeT_f64){.tag = ClarabelSecondOrderConeT_Tag, .second_order_cone_t = (uintptr_t)(size)})
 
-#define ClarabelExponentialConeT() \
-    ((ClarabelSupportedConeT){.tag = ClarabelExponentialConeT_Tag})
+#define ClarabelExponentialConeT_f64() \
+    ((ClarabelSupportedConeT_f64){.tag = ClarabelExponentialConeT_Tag})
 
-#define ClarabelPowerConeT(power) \
-    ((ClarabelSupportedConeT){.tag = ClarabelPowerConeT_Tag, .power_cone_t = (double)(power)})
+#define ClarabelPowerConeT_f64(power) \
+    ((ClarabelSupportedConeT_f64){.tag = ClarabelPowerConeT_Tag, .power_cone_t = (double)(power)})
 
 #ifdef FEATURE_SDP
 #define ClarabelPSDTriangleConeT(size) \
-    ((ClarabelSupportedConeT){.tag = ClarabelPSDTriangleConeT_Tag, .psd_triangle_cone_t = (uintptr_t)(size)})
+    ((ClarabelSupportedConeT_f64){.tag = ClarabelPSDTriangleConeT_Tag, .psd_triangle_cone_t = (uintptr_t)(size)})
 #endif
 
 // f32

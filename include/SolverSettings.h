@@ -12,7 +12,7 @@ typedef enum ClarabelDirectSolveMethods
     // CHOLMOD, (not supported in Rust yet)
 } ClarabelDirectSolveMethods;
 
-typedef struct ClarabelDefaultSettings
+typedef struct ClarabelDefaultSettings_f64
 {
     uint32_t max_iter;
     double time_limit;
@@ -51,7 +51,7 @@ typedef struct ClarabelDefaultSettings
     uint32_t iterative_refinement_max_iter;
     double iterative_refinement_stop_ratio;
     bool presolve_enable;
-} ClarabelDefaultSettings;
+} ClarabelDefaultSettings_f64;
 
 typedef struct ClarabelDefaultSettings_f32
 {
@@ -94,7 +94,7 @@ typedef struct ClarabelDefaultSettings_f32
     bool presolve_enable;
 } ClarabelDefaultSettings_f32;
 
-ClarabelDefaultSettings DefaultSettingsBuilder_default(void);
+ClarabelDefaultSettings_f64 DefaultSettingsBuilder_default(void);
 
 ClarabelDefaultSettings_f32 DefaultSettingsBuilder_f32_default(void);
 

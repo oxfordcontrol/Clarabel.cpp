@@ -16,7 +16,7 @@ static void print_array_double(double *array, size_t n)
     printf("]\n");
 }
 
-void print_solution(ClarabelDefaultSolution *solution)
+void print_solution_f64(ClarabelDefaultSolution_f64 *solution)
 {
     printf("Solution (x)\t = ");
     print_array_double(solution->x, solution->x_length);

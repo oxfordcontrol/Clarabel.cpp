@@ -16,7 +16,7 @@ int main(void)
     // SDP Example
 
     // 6 x 6 zero matrix
-    CscMatrix *P = CscMatrix_new(
+    CscMatrix_f64 *P = CscMatrix_new(
         6,
         6,
         (uintptr_t[]){0, 0, 0, 0, 0, 0, 0},
@@ -36,7 +36,7 @@ int main(void)
      *  [0., 0., 0., 0., 0., -1.],
      *  [1., 4., 3., 8., 10., 6.]]
      */
-    CscMatrix *A = CscMatrix_new(
+    CscMatrix_f64 *A = CscMatrix_new(
         7,
         6,
         (uintptr_t[]){0, 2, 4, 6, 8, 10, 12},
@@ -46,31 +46,32 @@ int main(void)
 
     double b[7] = {0., 0., 0., 0., 0., 0., 1.};
 
-    SupportedConeT cones[2] =
+    SupportedConeT_f64 cones[2] =
     {
-        PSDTriangleConeT(n),
-        ZeroConeT(1),
+        PSDTriangleConeT_f64(n),
+        ZeroConeT_f64(1),
     };
 
     // Settings
-    DefaultSettings settings = DefaultSettingsBuilder_default();
+    DefaultSettings_f64 settings = DefaultSettingsBuilder_default();
 
     // Build solver
-    DefaultSolver *solver = DefaultSolver_new(
+    DefaultSolver_f64 *solver = DefaultSolver_new(
         P, // P
         c, // q
         A, // A
         b, // b
         2, // n_cones
         cones,
-        &settings);
+        &settings
+    );
 
     // Solve
     DefaultSolver_solve(solver);
 
     // Get solution
-    DefaultSolution solution = DefaultSolver_solution(solver);
-    print_solution(&solution);
+    DefaultSolution_f64 solution = DefaultSolver_solution(solver);
+    print_solution_f64(&solution);
 
     // Free the matrices and the solver
     DefaultSolver_free(solver);

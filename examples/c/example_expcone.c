@@ -5,7 +5,7 @@
 int main(void)
 {
     // 3 x 3 zero matrix
-    ClarabelCscMatrix *P = CscMatrix_new(
+    ClarabelCscMatrix_f64 *P = CscMatrix_new(
         3,
         3,
         (uintptr_t[]){0, 0, 0, 0},
@@ -22,7 +22,7 @@ int main(void)
      * [0., 1., 0.],
      * [0., 0., 1.],
      */
-    ClarabelCscMatrix *A = CscMatrix_new(
+    ClarabelCscMatrix_f64 *A = CscMatrix_new(
         5,
         3,
         (uintptr_t[]){0, 1, 3, 5},
@@ -32,18 +32,18 @@ int main(void)
 
     double b[5] = {0., 0., 0., 1., exp(5.0)};
 
-    ClarabelSupportedConeT cones[2] =
+    ClarabelSupportedConeT_f64 cones[2] =
     {
-        ClarabelExponentialConeT(),
-        ClarabelZeroConeT(2)
+        ClarabelExponentialConeT_f64(),
+        ClarabelZeroConeT_f64(2)
     };
 
     // Settings
-    ClarabelDefaultSettings settings = DefaultSettingsBuilder_default();
+    ClarabelDefaultSettings_f64 settings = DefaultSettingsBuilder_default();
     settings.verbose = true;
 
     // Build solver
-    ClarabelDefaultSolver *solver = DefaultSolver_new(
+    ClarabelDefaultSolver_f64 *solver = DefaultSolver_new(
         P, // P
         q, // q
         A, // A
@@ -57,8 +57,8 @@ int main(void)
     DefaultSolver_solve(solver);
 
     // Get solution
-    ClarabelDefaultSolution solution = DefaultSolver_solution(solver);
-    print_solution(&solution);
+    ClarabelDefaultSolution_f64 solution = DefaultSolver_solution(solver);
+    print_solution_f64(&solution);
 
     // Free the matrices and the solver
     DefaultSolver_free(solver);
