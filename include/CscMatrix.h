@@ -54,7 +54,7 @@ typedef struct ClarabelCscMatrix_f32
 /// @param rowval Array of row indices (always have length colptr[n])
 /// @param nzval Array of nonzero values (always have length colptr[n])
 /// @return Pointer to a new CscMatrix_f64 object allocated on the heap
-static inline ClarabelCscMatrix_f64 *CscMatrix_new(
+static inline ClarabelCscMatrix_f64 *clarabel_CscMatrix_f64_new(
     uintptr_t m,
     uintptr_t n,
     const uintptr_t *colptr,
@@ -76,7 +76,7 @@ static inline ClarabelCscMatrix_f64 *CscMatrix_new(
     return ptr;
 }
 
-static inline ClarabelCscMatrix_f32 *CscMatrix_f32_new(
+static inline ClarabelCscMatrix_f32 *clarabel_CscMatrix_f32_new(
     uintptr_t m,
     uintptr_t n,
     const uintptr_t *colptr,
@@ -98,12 +98,12 @@ static inline ClarabelCscMatrix_f32 *CscMatrix_f32_new(
     return ptr;
 }
 
-static inline void CscMatrix_free(ClarabelCscMatrix_f64 *ptr)
+static inline void clarabel_CscMatrix_f64_free(ClarabelCscMatrix_f64 *ptr)
 {
     free(ptr);
 }
 
-static inline void CscMatrix_f32_free(ClarabelCscMatrix_f32 *ptr)
+static inline void clarabel_CscMatrix_f32_free(ClarabelCscMatrix_f32 *ptr)
 {
     free(ptr);
 }

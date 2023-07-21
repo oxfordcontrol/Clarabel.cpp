@@ -5,7 +5,7 @@
 int main(void)
 {
     // 3 x 3 zero matrix
-    ClarabelCscMatrix_f64 *P = CscMatrix_new(
+    ClarabelCscMatrix_f64 *P = clarabel_CscMatrix_f64_new(
         3,
         3,
         (uintptr_t[]){0, 0, 0, 0},
@@ -22,7 +22,7 @@ int main(void)
      * [0., 1., 0.],
      * [0., 0., 1.],
      */
-    ClarabelCscMatrix_f64 *A = CscMatrix_new(
+    ClarabelCscMatrix_f64 *A = clarabel_CscMatrix_f64_new(
         5,
         3,
         (uintptr_t[]){0, 1, 3, 5},
@@ -62,8 +62,8 @@ int main(void)
 
     // Free the matrices and the solver
     DefaultSolver_free(solver);
-    CscMatrix_free(P);
-    CscMatrix_free(A);
+    clarabel_CscMatrix_f64_free(P);
+    clarabel_CscMatrix_f64_free(A);
 
     return 0;
 }

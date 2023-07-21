@@ -9,7 +9,7 @@ int main(void)
      * [[6., 0.],
      *  [0., 4.]]
      */
-    ClarabelCscMatrix_f32 *P = CscMatrix_f32_new(
+    ClarabelCscMatrix_f32 *P = clarabel_CscMatrix_f32_new(
         2,                      // m
         2,                      // n
         (uintptr_t[]){0, 1, 2}, // colptr
@@ -26,7 +26,7 @@ int main(void)
      *  [-1.,  0.], // <-- LHS of inequality constraint (lower bound)
      *  [ 0., -1.]] // <-- LHS of inequality constraint (lower bound)
      */
-    ClarabelCscMatrix_f32 *A = CscMatrix_f32_new(
+    ClarabelCscMatrix_f32 *A = clarabel_CscMatrix_f32_new(
         5,                                    // m
         2,                                    // n
         (uintptr_t[]){0, 3, 6},               // colptr
@@ -65,8 +65,8 @@ int main(void)
 
     // Free the matrices and the solver
     DefaultSolver_f32_free(solver);
-    CscMatrix_f32_free(P);
-    CscMatrix_f32_free(A);
+    clarabel_CscMatrix_f32_free(P);
+    clarabel_CscMatrix_f32_free(A);
 
     return 0;
 }

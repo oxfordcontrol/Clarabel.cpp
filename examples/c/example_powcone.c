@@ -16,7 +16,7 @@
 int main(void)
 {
     // 6 x 6 zero matrix
-    ClarabelCscMatrix_f64 *P = CscMatrix_new(
+    ClarabelCscMatrix_f64 *P = clarabel_CscMatrix_f64_new(
         6,
         6,
         (uintptr_t[]){0, 0, 0, 0, 0, 0, 0},
@@ -36,7 +36,7 @@ int main(void)
     *  [1., 2., 0., 3., 0., 0.],
     *  [0., 0., 0., 0., 1., 0.]]
     */
-    ClarabelCscMatrix_f64 *A = CscMatrix_new(
+    ClarabelCscMatrix_f64 *A = clarabel_CscMatrix_f64_new(
         8,
         6,
         (uintptr_t[]){0, 2, 4, 5, 7, 9, 10},
@@ -79,8 +79,8 @@ int main(void)
 
     // Free the matrices and the solver
     DefaultSolver_free(solver);
-    CscMatrix_free(P);
-    CscMatrix_free(A);
+    clarabel_CscMatrix_f64_free(P);
+    clarabel_CscMatrix_f64_free(A);
 
     return 0;
 }

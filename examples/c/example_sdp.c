@@ -16,7 +16,7 @@ int main(void)
     // SDP Example
 
     // 6 x 6 zero matrix
-    CscMatrix_f64 *P = CscMatrix_new(
+    CscMatrix_f64 *P = clarabel_CscMatrix_f64_new(
         6,
         6,
         (uintptr_t[]){0, 0, 0, 0, 0, 0, 0},
@@ -36,7 +36,7 @@ int main(void)
      *  [0., 0., 0., 0., 0., -1.],
      *  [1., 4., 3., 8., 10., 6.]]
      */
-    CscMatrix_f64 *A = CscMatrix_new(
+    CscMatrix_f64 *A = clarabel_CscMatrix_f64_new(
         7,
         6,
         (uintptr_t[]){0, 2, 4, 6, 8, 10, 12},
@@ -75,8 +75,8 @@ int main(void)
 
     // Free the matrices and the solver
     DefaultSolver_free(solver);
-    CscMatrix_free(P);
-    CscMatrix_free(A);
+    clarabel_CscMatrix_f64_free(P);
+    clarabel_CscMatrix_f64_free(A);
 
     return 0;
 #endif
