@@ -96,6 +96,9 @@ struct SupportedConeT {
     SecondOrderConeT,
     ExponentialConeT,
     PowerConeT,
+#if defined(FEATURE_SDP)
+    PSDTriangleConeT,
+#endif
   };
 
   struct ZeroConeT_Body {
@@ -118,6 +121,12 @@ struct SupportedConeT {
     T _0;
   };
 
+#if defined(FEATURE_SDP)
+  struct PSDTriangleConeT_Body {
+    uintptr_t _0;
+  };
+#endif
+
   Tag tag;
   union {
     ZeroConeT_Body zero_cone_t;
@@ -125,6 +134,9 @@ struct SupportedConeT {
     SecondOrderConeT_Body second_order_cone_t;
     ExponentialConeT_Body exponential_cone_t;
     PowerConeT_Body power_cone_t;
+#if defined(FEATURE_SDP)
+    PSDTriangleConeT_Body psd_triangle_cone_t;
+#endif
   };
 };
 

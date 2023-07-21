@@ -41,7 +41,9 @@ typedef enum SupportedConeT_Tag
      * The parameter indicates the matrix dimension, i.e. size = n
      * means that the variable is the upper triangle of an nxn matrix.
      */
+#ifdef FEATURE_SDP
     PSDTriangleConeT_Tag,
+#endif
 } SupportedConeT_Tag;
 
 typedef struct SupportedConeT
@@ -66,10 +68,12 @@ typedef struct SupportedConeT
         {
             double power_cone_t;
         };
+#ifdef FEATURE_SDP
         struct
         {
             uintptr_t psd_triangle_cone_t;
         };
+#endif
     };
 } SupportedConeT;
 
@@ -111,7 +115,9 @@ typedef enum SupportedConeT_f32_Tag
      * The parameter indicates the matrix dimension, i.e. size = n
      * means that the variable is the upper triangle of an nxn matrix.
      */
+#ifdef FEATURE_SDP
     PSDTriangleConeT_f32_Tag,
+#endif
 } SupportedConeT_f32_Tag;
 
 typedef struct SupportedConeT_f32
@@ -157,6 +163,11 @@ typedef struct SupportedConeT_f32
 #define PowerConeT(power) \
     ((SupportedConeT){.tag = PowerConeT_Tag, .power_cone_t = (double)(power)})
 
+#ifdef FEATURE_SDP
+#define PSDTriangleConeT(size) \
+    ((SupportedConeT){.tag = PSDTriangleConeT_Tag, .psd_triangle_cone_t = (uintptr_t)(size)})
+#endif
+
 // f32
 #define ZeroConeT_f32(size) \
     ((SupportedConeT_f32){.tag = ZeroConeT_f32_Tag, .zero_cone_t = (uintptr_t)(size)})
@@ -173,6 +184,9 @@ typedef struct SupportedConeT_f32
 #define PowerConeT_f32(power) \
     ((SupportedConeT_f32){.tag = PowerConeT_f32_Tag, .power_cone_t = (double)(power)})
 
-// TODO: PSDTriangleConeT
+#ifdef FEATURE_SDP
+#define PSDTriangleConeT_f32(size) \
+    ((SupportedConeT_f32){.tag = PSDTriangleConeT_f32_Tag, .psd_triangle_cone_t = (uintptr_t)(size)})
+#endif
 
 #endif /* SUPPORTED_CONE_T_H */

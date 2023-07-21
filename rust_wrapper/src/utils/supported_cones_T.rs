@@ -1,11 +1,12 @@
 use crate::core::cones::SupportedConeT;
-use clarabel::solver as lib;
 use clarabel::algebra::FloatT;
+use clarabel::solver as lib;
 
 /// Convert a slice of C SupportedConeT structs to a Vec of Rust SupportedCone<T> struct
 #[allow(non_snake_case)]
-pub fn convert_from_C_cones<T: FloatT>(c_cones: &[SupportedConeT<T>]) -> Vec<lib::SupportedConeT<T>>
-{
+pub fn convert_from_C_cones<T: FloatT>(
+    c_cones: &[SupportedConeT<T>],
+) -> Vec<lib::SupportedConeT<T>> {
     // Initialize the vector with the correct capacity
     let mut cones: Vec<lib::SupportedConeT<T>> = Vec::with_capacity(c_cones.len());
 
@@ -18,8 +19,7 @@ pub fn convert_from_C_cones<T: FloatT>(c_cones: &[SupportedConeT<T>]) -> Vec<lib
 
 /// Convert a single C SupportedConeT<T> struct to a Rust SupportedCone<T> struct
 #[allow(non_snake_case)]
-pub fn convert_from_C_cone<T: FloatT>(cone: &SupportedConeT<T>) -> lib::SupportedConeT<T>
-{
+pub fn convert_from_C_cone<T: FloatT>(cone: &SupportedConeT<T>) -> lib::SupportedConeT<T> {
     match cone {
         SupportedConeT::ZeroConeT(payload) => lib::SupportedConeT::ZeroConeT(*payload),
         SupportedConeT::NonnegativeConeT(payload) => {
@@ -30,11 +30,7 @@ pub fn convert_from_C_cone<T: FloatT>(cone: &SupportedConeT<T>) -> lib::Supporte
         }
         SupportedConeT::ExponentialConeT() => lib::SupportedConeT::ExponentialConeT(),
         SupportedConeT::PowerConeT(payload) => lib::SupportedConeT::PowerConeT(*payload),
-        // SupportedConeT::PSDTriangleConeT(payload) =>
-        // {
-        // // if sdp feature is enabled, then convert
-        //        lib::SupportedConeT::PSDTriangleConeT(payload)
-        // // else return an error
-        // },
+        #[cfg(feature = "sdp")]
+        SupportedConeT::PSDTriangleConeT(payload) => lib::SupportedConeT::PSDTriangleConeT(*payload),
     }
 }

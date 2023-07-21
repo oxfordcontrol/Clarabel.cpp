@@ -6,12 +6,24 @@ add_library(libclarabel_c_static INTERFACE)
 add_library(libclarabel_c_shared INTERFACE)
 
 # Set the build flags and output directory
+
+# Debug/Release flags
 if(CMAKE_BUILD_TYPE MATCHES Release)
    set(clarabel_c_build_flags "--release")
    set(clarabel_c_output_directory "${CMAKE_SOURCE_DIR}/rust_wrapper/target/release/")
 else()
     set(clarabel_c_build_flags "")
     set(clarabel_c_output_directory "${CMAKE_SOURCE_DIR}/rust_wrapper/target/debug/")
+endif()
+
+# SDP feature flag
+if(NOT FEATURE_SDP STREQUAL "none")
+    # Set the Rust feature flag
+    set(clarabel_c_build_flags "${clarabel_c_build_flags};--features;${FEATURE_SDP}")
+    
+    # Define the FEATURE_SDP flag for all targets that link against clarabel_c
+    target_compile_definitions(libclarabel_c_static INTERFACE FEATURE_SDP)
+    target_compile_definitions(libclarabel_c_shared INTERFACE FEATURE_SDP)
 endif()
 
 # Add the cargo project as a custom target
