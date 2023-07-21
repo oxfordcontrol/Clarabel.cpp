@@ -3,7 +3,7 @@
         "${workspaceFolder}/Clarabel.rs/Cargo.toml",
         "${workspaceFolder}/rust_wrapper/Cargo.toml"
     ],
-    "C_Cpp.default.includePath": [
-        "${workspaceFolder}/include"
-    ]
+    "files.associations": {
+        "**/include/c/*.h": "c",
+    }
 }

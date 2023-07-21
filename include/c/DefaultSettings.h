@@ -1,18 +1,18 @@
-#ifndef SOLVER_SETTINGS_H
-#define SOLVER_SETTINGS_H
+#ifndef DEFAULT_SETTINGS_H
+#define DEFAULT_SETTINGS_H
 
 #include <stdbool.h>
 #include <stdint.h>
 #include <math.h>
 
-typedef enum DirectSolveMethods
+typedef enum ClarabelDirectSolveMethods
 {
     QDLDL,
     // MKL, (not supported in Rust yet)
     // CHOLMOD, (not supported in Rust yet)
-} DirectSolveMethods;
+} ClarabelDirectSolveMethods;
 
-typedef struct DefaultSettings
+typedef struct ClarabelDefaultSettings_f64
 {
     uint32_t max_iter;
     double time_limit;
@@ -38,7 +38,7 @@ typedef struct DefaultSettings
     double min_switch_step_length;
     double min_terminate_step_length;
     bool direct_kkt_solver;
-    DirectSolveMethods direct_solve_method;
+    ClarabelDirectSolveMethods direct_solve_method;
     bool static_regularization_enable;
     double static_regularization_constant;
     double static_regularization_proportional;
@@ -51,9 +51,9 @@ typedef struct DefaultSettings
     uint32_t iterative_refinement_max_iter;
     double iterative_refinement_stop_ratio;
     bool presolve_enable;
-} DefaultSettings;
+} ClarabelDefaultSettings_f64;
 
-typedef struct DefaultSettings_f32
+typedef struct ClarabelDefaultSettings_f32
 {
     uint32_t max_iter;
     double time_limit;
@@ -79,7 +79,7 @@ typedef struct DefaultSettings_f32
     float min_switch_step_length;
     float min_terminate_step_length;
     bool direct_kkt_solver;
-    enum DirectSolveMethods direct_solve_method;
+    enum ClarabelDirectSolveMethods direct_solve_method;
     bool static_regularization_enable;
     float static_regularization_constant;
     float static_regularization_proportional;
@@ -92,10 +92,10 @@ typedef struct DefaultSettings_f32
     uint32_t iterative_refinement_max_iter;
     float iterative_refinement_stop_ratio;
     bool presolve_enable;
-} DefaultSettings_f32;
+} ClarabelDefaultSettings_f32;
 
-DefaultSettings DefaultSettingsBuilder_default(void);
+ClarabelDefaultSettings_f64 clarabel_DefaultSettingsBuilder_f64_default(void);
 
-DefaultSettings_f32 DefaultSettingsBuilder_f32_default(void);
+ClarabelDefaultSettings_f32 clarabel_DefaultSettingsBuilder_f32_default(void);
 
-#endif
+#endif /* DEFAULT_SETTINGS_H */

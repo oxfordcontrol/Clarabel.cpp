@@ -13,7 +13,7 @@ use clarabel::algebra::FloatT;
 
 /// Convert from the C struct to the Rust struct by copying the values
 pub fn get_solver_settings_from_c<T: FloatT>(
-    value: &DefaultSettings<T>,
+    value: &ClarabelDefaultSettings<T>,
 ) -> clarabel::solver::implementations::default::DefaultSettings<T> {
     clarabel::solver::implementations::default::DefaultSettings::<T> {
         max_iter: value.max_iter,
@@ -41,9 +41,10 @@ pub fn get_solver_settings_from_c<T: FloatT>(
         min_terminate_step_length: value.min_terminate_step_length,
         direct_kkt_solver: value.direct_kkt_solver,
         direct_solve_method: match value.direct_solve_method {
-            DirectSolveMethods::QDLDL => String::from("qdldl"),
-            DirectSolveMethods::MKL => String::from("mkl"),
-            DirectSolveMethods::CHOLMOD => String::from("cholmod"),
+            ClarabelDirectSolveMethods::QDLDL => String::from("qdldl"),
+            // Not supported yet
+            //ClarabelDirectSolveMethods::MKL => String::from("mkl"),
+            //ClarabelDirectSolveMethods::CHOLMOD => String::from("cholmod"),
         },
         static_regularization_enable: value.static_regularization_enable,
         static_regularization_constant: value.static_regularization_constant,

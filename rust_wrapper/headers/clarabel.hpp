@@ -16,28 +16,26 @@
 
 namespace clarabel {
 
-enum class DirectSolveMethods {
+enum class ClarabelDirectSolveMethods {
   QDLDL,
-  MKL,
-  CHOLMOD,
 };
 
-enum class SolverStatus {
-  Unsolved,
-  Solved,
-  PrimalInfeasible,
-  DualInfeasible,
-  AlmostSolved,
-  AlmostPrimalInfeasible,
-  AlmostDualInfeasible,
-  MaxIterations,
-  MaxTime,
-  NumericalError,
-  InsufficientProgress,
+enum class ClarabelSolverStatus {
+  ClarabelUnsolved,
+  ClarabelSolved,
+  ClarabelPrimalInfeasible,
+  ClarabelDualInfeasible,
+  ClarabelAlmostSolved,
+  ClarabelAlmostPrimalInfeasible,
+  ClarabelAlmostDualInfeasible,
+  ClarabelMaxIterations,
+  ClarabelMaxTime,
+  ClarabelNumericalError,
+  ClarabelInsufficientProgress,
 };
 
 template<typename T>
-struct DefaultSettings {
+struct ClarabelDefaultSettings {
   uint32_t max_iter;
   double time_limit;
   bool verbose;
@@ -62,7 +60,7 @@ struct DefaultSettings {
   T min_switch_step_length;
   T min_terminate_step_length;
   bool direct_kkt_solver;
-  DirectSolveMethods direct_solve_method;
+  ClarabelDirectSolveMethods direct_solve_method;
   bool static_regularization_enable;
   T static_regularization_constant;
   T static_regularization_proportional;
@@ -77,10 +75,10 @@ struct DefaultSettings {
   bool presolve_enable;
 };
 
-using DefaultSolver = void;
+using ClarabelDefaultSolver = void;
 
 template<typename T>
-struct CscMatrix {
+struct ClarabelCscMatrix {
   uintptr_t m;
   uintptr_t n;
   const uintptr_t *colptr;
@@ -89,7 +87,7 @@ struct CscMatrix {
 };
 
 template<typename T>
-struct SupportedConeT {
+struct ClarabelSupportedConeT {
   enum class Tag {
     ZeroConeT,
     NonnegativeConeT,
@@ -140,7 +138,7 @@ struct SupportedConeT {
   };
 };
 
-using DefaultSolver_f32 = void;
+using ClarabelDefaultSolver_f32 = void;
 
 template<typename T>
 struct DefaultSolution {
@@ -150,7 +148,7 @@ struct DefaultSolution {
   uintptr_t z_length;
   T *s;
   uintptr_t s_length;
-  SolverStatus status;
+  ClarabelSolverStatus status;
   T obj_val;
   double solve_time;
   uint32_t iterations;
@@ -160,37 +158,37 @@ struct DefaultSolution {
 
 extern "C" {
 
-DefaultSettings<double> DefaultSettingsBuilder_default();
+ClarabelDefaultSettings<double> clarabel_DefaultSettingsBuilder_f64_default();
 
-DefaultSettings<float> DefaultSettingsBuilder_f32_default();
+ClarabelDefaultSettings<float> clarabel_DefaultSettingsBuilder_f32_default();
 
-DefaultSolver *DefaultSolver_new(const CscMatrix<double> *P,
-                                 const double *q,
-                                 const CscMatrix<double> *A,
-                                 const double *b,
-                                 uintptr_t n_cones,
-                                 const SupportedConeT<double> *cones,
-                                 const DefaultSettings<double> *settings);
+ClarabelDefaultSolver *clarabel_DefaultSolver_f64_new(const ClarabelCscMatrix<double> *P,
+                                                      const double *q,
+                                                      const ClarabelCscMatrix<double> *A,
+                                                      const double *b,
+                                                      uintptr_t n_cones,
+                                                      const ClarabelSupportedConeT<double> *cones,
+                                                      const ClarabelDefaultSettings<double> *settings);
 
-DefaultSolver_f32 *DefaultSolver_f32_new(const CscMatrix<float> *P,
-                                         const float *q,
-                                         const CscMatrix<float> *A,
-                                         const float *b,
-                                         uintptr_t n_cones,
-                                         const SupportedConeT<float> *cones,
-                                         const DefaultSettings<float> *settings);
+ClarabelDefaultSolver_f32 *clarabel_DefaultSolver_f32_new(const ClarabelCscMatrix<float> *P,
+                                                          const float *q,
+                                                          const ClarabelCscMatrix<float> *A,
+                                                          const float *b,
+                                                          uintptr_t n_cones,
+                                                          const ClarabelSupportedConeT<float> *cones,
+                                                          const ClarabelDefaultSettings<float> *settings);
 
-void DefaultSolver_solve(DefaultSolver *solver);
+void clarabel_DefaultSolver_f64_solve(ClarabelDefaultSolver *solver);
 
-void DefaultSolver_f32_solve(DefaultSolver_f32 *solver);
+void clarabel_DefaultSolver_f32_solve(ClarabelDefaultSolver_f32 *solver);
 
-void DefaultSolver_free(DefaultSolver *solver);
+void clarabel_DefaultSolver_f64_free(ClarabelDefaultSolver *solver);
 
-void DefaultSolver_f32_free(DefaultSolver_f32 *solver);
+void clarabel_DefaultSolver_f32_free(ClarabelDefaultSolver_f32 *solver);
 
-DefaultSolution<double> DefaultSolver_solution(DefaultSolver *solver);
+DefaultSolution<double> clarabel_DefaultSolver_f64_solution(ClarabelDefaultSolver *solver);
 
-DefaultSolution<float> DefaultSolver_f32_solution(DefaultSolver_f32 *solver);
+DefaultSolution<float> clarabel_DefaultSolver_f32_solution(ClarabelDefaultSolver_f32 *solver);
 
 } // extern "C"
 

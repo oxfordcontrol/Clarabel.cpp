@@ -9,7 +9,7 @@ int main(void)
      * [[6., 0.],
      *  [0., 4.]]
      */
-    CscMatrix_f32 *P = CscMatrix_f32_new(
+    ClarabelCscMatrix_f32 *P = clarabel_CscMatrix_f32_new(
         2,                      // m
         2,                      // n
         (uintptr_t[]){0, 1, 2}, // colptr
@@ -26,7 +26,7 @@ int main(void)
      *  [-1.,  0.], // <-- LHS of inequality constraint (lower bound)
      *  [ 0., -1.]] // <-- LHS of inequality constraint (lower bound)
      */
-    CscMatrix_f32 *A = CscMatrix_f32_new(
+    ClarabelCscMatrix_f32 *A = clarabel_CscMatrix_f32_new(
         5,                                    // m
         2,                                    // n
         (uintptr_t[]){0, 3, 6},               // colptr
@@ -36,17 +36,17 @@ int main(void)
 
     float b[5] = {0., 1., 1., 1., 1.};
 
-    SupportedConeT_f32 cones[2] =
+    ClarabelSupportedConeT_f32 cones[2] =
     {
-        ZeroConeT_f32(1),
-        NonnegativeConeT_f32(4)
+        ClarabelZeroConeT_f32(1),
+        ClarabelNonnegativeConeT_f32(4)
     };
 
     // Settings
-    DefaultSettings_f32 settings = DefaultSettingsBuilder_f32_default();
+    ClarabelDefaultSettings_f32 settings = clarabel_DefaultSettingsBuilder_f32_default();
 
     // Build solver
-    DefaultSolver_f32 *solver = DefaultSolver_f32_new(
+    ClarabelDefaultSolver_f32 *solver = clarabel_DefaultSolver_f32_new(
         P, // P
         q, // q
         A, // A
@@ -57,16 +57,16 @@ int main(void)
     );
 
     // Solve
-    DefaultSolver_f32_solve(solver);
+    clarabel_DefaultSolver_f32_solve(solver);
 
     // Get solution
-    DefaultSolution_f32 solution = DefaultSolver_f32_solution(solver);
+    ClarabelDefaultSolution_f32 solution = clarabel_DefaultSolver_f32_solution(solver);
     print_solution_f32(&solution);
 
     // Free the matrices and the solver
-    DefaultSolver_f32_free(solver);
-    CscMatrix_f32_free(P);
-    CscMatrix_f32_free(A);
+    clarabel_DefaultSolver_f32_free(solver);
+    clarabel_CscMatrix_f32_free(P);
+    clarabel_CscMatrix_f32_free(A);
 
     return 0;
 }
