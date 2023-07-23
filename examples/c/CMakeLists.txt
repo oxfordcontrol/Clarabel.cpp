@@ -14,16 +14,16 @@ set(C_EXAMPLES
 add_library(utils_c STATIC utils.c)
 target_link_libraries(utils_c PUBLIC libclarabel_c_shared)
 target_include_directories(utils_c INTERFACE .) # utils.h
+target_include_directories(utils_c PRIVATE "${CMAKE_SOURCE_DIR}/include/c")
 
 # Define an executable target for each example
 foreach(EXAMPLE_NAME ${C_EXAMPLES})
   add_executable(${EXAMPLE_NAME} ${EXAMPLE_NAME}.c)
-  
-  # Use C11
-  target_compile_features(${EXAMPLE_NAME} PRIVATE c_std_11)
+  target_compile_features(${EXAMPLE_NAME} PRIVATE c_std_11) # Use C11
 
   # Link to the static clarabel library built from the Rust wrapper
   target_link_libraries(${EXAMPLE_NAME} PRIVATE libclarabel_c_shared)
+  target_include_directories(${EXAMPLE_NAME} PRIVATE "${CMAKE_SOURCE_DIR}/include/c")
 
   # Link to the utils library
   target_link_libraries(${EXAMPLE_NAME} PRIVATE utils_c)
