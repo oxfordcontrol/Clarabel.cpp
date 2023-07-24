@@ -1,5 +1,5 @@
-#ifndef DEFAULT_SETTINGS_H
-#define DEFAULT_SETTINGS_H
+#ifndef CLARABEL_DEFAULT_SETTINGS_H
+#define CLARABEL_DEFAULT_SETTINGS_H
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -98,4 +98,12 @@ ClarabelDefaultSettings_f64 clarabel_DefaultSettingsBuilder_f64_default(void);
 
 ClarabelDefaultSettings_f32 clarabel_DefaultSettingsBuilder_f32_default(void);
 
-#endif /* DEFAULT_SETTINGS_H */
+#ifdef CLARABEL_USE_FLOAT
+typedef ClarabelDefaultSettings_f32 ClarabelDefaultSettings;
+#define clarabel_DefaultSettingsBuilder_default(...) clarabel_DefaultSettingsBuilder_f32_default(__VA_ARGS__)
+#else
+typedef ClarabelDefaultSettings_f64 ClarabelDefaultSettings;
+#define clarabel_DefaultSettingsBuilder_default(...) clarabel_DefaultSettingsBuilder_f64_default(__VA_ARGS__)
+#endif /* CLARABEL_USE_FLOAT */
+
+#endif /* CLARABEL_DEFAULT_SETTINGS_H */

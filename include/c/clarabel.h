@@ -11,6 +11,12 @@
 #include "DefaultSolution.h"
 #include "SupportedConeT.h"
 
+#ifdef CLARABEL_USE_FLOAT
+typedef float ClarabelFloat;
+#else
+typedef double ClarabelFloat;
+#endif
+
 typedef void ClarabelDefaultSolver_f64;
 typedef void ClarabelDefaultSolver_f32;
 
@@ -43,5 +49,19 @@ void clarabel_DefaultSolver_f32_free(ClarabelDefaultSolver_f32 *solver);
 ClarabelDefaultSolution_f64 clarabel_DefaultSolver_f64_solution(ClarabelDefaultSolver_f64 *solver);
 
 ClarabelDefaultSolution_f32 clarabel_DefaultSolver_f32_solution(ClarabelDefaultSolver_f32 *solver);
+
+#ifdef CLARABEL_USE_FLOAT
+typedef ClarabelDefaultSolver_f32 ClarabelDefaultSolver;
+#define clarabel_DefaultSolver_new(...) clarabel_DefaultSolver_f32_new(__VA_ARGS__)
+#define clarabel_DefaultSolver_solve(...) clarabel_DefaultSolver_f32_solve(__VA_ARGS__)
+#define clarabel_DefaultSolver_free(...) clarabel_DefaultSolver_f32_free(__VA_ARGS__)
+#define clarabel_DefaultSolver_solution(...) clarabel_DefaultSolver_f32_solution(__VA_ARGS__)
+#else
+typedef ClarabelDefaultSolver_f64 ClarabelDefaultSolver;
+#define clarabel_DefaultSolver_new(...) clarabel_DefaultSolver_f64_new(__VA_ARGS__)
+#define clarabel_DefaultSolver_solve(...) clarabel_DefaultSolver_f64_solve(__VA_ARGS__)
+#define clarabel_DefaultSolver_free(...) clarabel_DefaultSolver_f64_free(__VA_ARGS__)
+#define clarabel_DefaultSolver_solution(...) clarabel_DefaultSolver_f64_solution(__VA_ARGS__)
+#endif /* CLARABEL_USE_FLOAT */
 
 #endif /* CLARABEL_H */

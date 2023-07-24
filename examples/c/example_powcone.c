@@ -16,7 +16,7 @@
 int main(void)
 {
     // 6 x 6 zero matrix
-    ClarabelCscMatrix_f64 *P = clarabel_CscMatrix_f64_new(
+    ClarabelCscMatrix *P = clarabel_CscMatrix_new(
         6,
         6,
         (uintptr_t[]){0, 0, 0, 0, 0, 0, 0},
@@ -24,7 +24,7 @@ int main(void)
         NULL
     );
 
-    double q[6] = {0., 0., -1., 0., 0., -1.};
+    ClarabelFloat q[6] = {0., 0., -1., 0., 0., -1.};
 
     /* From dense matrix:
     * [[-1., 0., 0., 0., 0., 0.],
@@ -36,31 +36,32 @@ int main(void)
     *  [1., 2., 0., 3., 0., 0.],
     *  [0., 0., 0., 0., 1., 0.]]
     */
-    ClarabelCscMatrix_f64 *A = clarabel_CscMatrix_f64_new(
+    ClarabelFloat A_nzvalues[] = {-1.0, 1.0, -1.0, 2.0, -1.0, -1.0, 3.0, -1.0, 1.0, -1.0};
+    ClarabelCscMatrix *A = clarabel_CscMatrix_new(
         8,
         6,
         (uintptr_t[]){0, 2, 4, 5, 7, 9, 10},
         (uintptr_t[]){0, 6, 1, 6, 2, 3, 6, 4, 7, 5},
-        (double[]){-1.0, 1.0, -1.0, 2.0, -1.0, -1.0, 3.0, -1.0, 1.0, -1.0}
+        A_nzvalues
     );
 
-    double b[8] = {0., 0., 0., 0., 0., 0., 3., 1.};
+    ClarabelFloat b[8] = {0., 0., 0., 0., 0., 0., 3., 1.};
 
-    ClarabelSupportedConeT_f64 cones[4] =
+    ClarabelSupportedConeT cones[4] =
     {
-        ClarabelPowerConeT_f64(0.6),
-        ClarabelPowerConeT_f64(0.1),
-        ClarabelZeroConeT_f64(1),
-        ClarabelZeroConeT_f64(1)
+        ClarabelPowerConeT(0.6),
+        ClarabelPowerConeT(0.1),
+        ClarabelZeroConeT(1),
+        ClarabelZeroConeT(1)
     };
 
     // Settings
-    ClarabelDefaultSettings_f64 settings = clarabel_DefaultSettingsBuilder_f64_default();
+    ClarabelDefaultSettings settings = clarabel_DefaultSettingsBuilder_default();
     settings.verbose = true;
     settings.max_iter = 100;
 
     // Build solver
-    ClarabelDefaultSolver_f64 *solver = clarabel_DefaultSolver_f64_new(
+    ClarabelDefaultSolver *solver = clarabel_DefaultSolver_new(
         P, // P
         q, // q
         A, // A
@@ -71,16 +72,16 @@ int main(void)
     );
 
     // Solve
-    clarabel_DefaultSolver_f64_solve(solver);
+    clarabel_DefaultSolver_solve(solver);
 
     // Get solution
-    ClarabelDefaultSolution_f64 solution = clarabel_DefaultSolver_f64_solution(solver);
-    print_solution_f64(&solution);
+    ClarabelDefaultSolution solution = clarabel_DefaultSolver_solution(solver);
+    print_solution(&solution);
 
     // Free the matrices and the solver
-    clarabel_DefaultSolver_f64_free(solver);
-    clarabel_CscMatrix_f64_free(P);
-    clarabel_CscMatrix_f64_free(A);
+    clarabel_DefaultSolver_free(solver);
+    clarabel_CscMatrix_free(P);
+    clarabel_CscMatrix_free(A);
 
     return 0;
 }
