@@ -12,7 +12,7 @@ use super::solution::DefaultSolution;
 #[allow(non_camel_case_types)]
 pub type ClarabelDefaultSolver_f32 = c_void;
 #[allow(non_camel_case_types)]
-pub type ClarabelDefaultSolver = c_void;
+pub type ClarabelDefaultSolver_f64 = c_void;
 
 // Wrapper function to create a DefaultSolver object from C using dynamic memory allocation
 // - Matrices and vectors are constructed from raw pointers
@@ -80,7 +80,7 @@ pub unsafe extern "C" fn clarabel_DefaultSolver_f64_new(
     n_cones: usize,
     cones: *const ClarabelSupportedConeT<f64>,
     settings: *const ClarabelDefaultSettings<f64>,
-) -> *mut ClarabelDefaultSolver {
+) -> *mut ClarabelDefaultSolver_f64 {
     _internal_DefaultSolver_new(P, q, A, b, n_cones, cones, settings)
 }
 
@@ -112,7 +112,7 @@ fn _internal_DefaultSolver_solve<T: FloatT>(solver: *mut c_void) {
 }
 
 #[no_mangle]
-pub extern "C" fn clarabel_DefaultSolver_f64_solve(solver: *mut ClarabelDefaultSolver) {
+pub extern "C" fn clarabel_DefaultSolver_f64_solve(solver: *mut ClarabelDefaultSolver_f64) {
     _internal_DefaultSolver_solve::<f64>(solver);
 }
 
@@ -132,7 +132,7 @@ unsafe fn _internal_DefaultSolver_free<T: FloatT>(solver: *mut c_void) {
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn clarabel_DefaultSolver_f64_free(solver: *mut ClarabelDefaultSolver) {
+pub unsafe extern "C" fn clarabel_DefaultSolver_f64_free(solver: *mut ClarabelDefaultSolver_f64) {
     _internal_DefaultSolver_free::<f64>(solver);
 }
 
@@ -188,7 +188,7 @@ fn _internal_DefaultSolver_solution<T: FloatT>(solver: *mut c_void) -> DefaultSo
 
 #[no_mangle]
 pub extern "C" fn clarabel_DefaultSolver_f64_solution(
-    solver: *mut ClarabelDefaultSolver,
+    solver: *mut ClarabelDefaultSolver_f64,
 ) -> DefaultSolution<f64> {
     _internal_DefaultSolver_solution::<f64>(solver)
 }

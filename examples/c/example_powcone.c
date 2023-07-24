@@ -16,15 +16,17 @@
 int main(void)
 {
     // 6 x 6 zero matrix
-    ClarabelCscMatrix *P = clarabel_CscMatrix_new(
-        6,
-        6,
-        (uintptr_t[]){0, 0, 0, 0, 0, 0, 0},
-        NULL,
-        NULL
+    ClarabelCscMatrix P;
+    clarabel_CscMatrix_init(
+        &P,
+        6,                                    // row
+        6,                                    // col
+        (uintptr_t[]){ 0, 0, 0, 0, 0, 0, 0 }, // colptr
+        NULL,                                 // rowval
+        NULL                                  // nzval
     );
 
-    ClarabelFloat q[6] = {0., 0., -1., 0., 0., -1.};
+    ClarabelFloat q[6] = { 0., 0., -1., 0., 0., -1. };
 
     /* From dense matrix:
     * [[-1., 0., 0., 0., 0., 0.],
@@ -36,16 +38,17 @@ int main(void)
     *  [1., 2., 0., 3., 0., 0.],
     *  [0., 0., 0., 0., 1., 0.]]
     */
-    ClarabelFloat A_nzvalues[] = {-1.0, 1.0, -1.0, 2.0, -1.0, -1.0, 3.0, -1.0, 1.0, -1.0};
-    ClarabelCscMatrix *A = clarabel_CscMatrix_new(
-        8,
-        6,
-        (uintptr_t[]){0, 2, 4, 5, 7, 9, 10},
-        (uintptr_t[]){0, 6, 1, 6, 2, 3, 6, 4, 7, 5},
-        A_nzvalues
+    ClarabelCscMatrix A;
+    clarabel_CscMatrix_init(
+        &A,
+        8,                                                                          // row
+        6,                                                                          // col
+        (uintptr_t[]){ 0, 2, 4, 5, 7, 9, 10 },                                      // colptr
+        (uintptr_t[]){ 0, 6, 1, 6, 2, 3, 6, 4, 7, 5 },                              // rowval
+        (ClarabelFloat[]){ -1.0, 1.0, -1.0, 2.0, -1.0, -1.0, 3.0, -1.0, 1.0, -1.0 } // nzval
     );
 
-    ClarabelFloat b[8] = {0., 0., 0., 0., 0., 0., 3., 1.};
+    ClarabelFloat b[8] = { 0., 0., 0., 0., 0., 0., 3., 1. };
 
     ClarabelSupportedConeT cones[4] =
     {
@@ -62,11 +65,11 @@ int main(void)
 
     // Build solver
     ClarabelDefaultSolver *solver = clarabel_DefaultSolver_new(
-        P, // P
-        q, // q
-        A, // A
-        b, // b
-        4, // n_cones
+        &P, // P
+        q,  // q
+        &A, // A
+        b,  // b
+        4,  // n_cones
         cones,
         &settings
     );
@@ -78,10 +81,8 @@ int main(void)
     ClarabelDefaultSolution solution = clarabel_DefaultSolver_solution(solver);
     print_solution(&solution);
 
-    // Free the matrices and the solver
+    // Free the solver
     clarabel_DefaultSolver_free(solver);
-    clarabel_CscMatrix_free(P);
-    clarabel_CscMatrix_free(A);
 
     return 0;
 }
