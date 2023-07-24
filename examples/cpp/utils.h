@@ -23,15 +23,18 @@ namespace // Hide print_array
     }
 }
 
-template<typename T>
-void print_solution(clarabel::DefaultSolution<T> &solution)
+namespace utils
 {
-    printf("Solution (x)\t = ");
-    print_array(solution.x, solution.x_length);
-    printf("Multipliers (z)\t = ");
-    print_array(solution.z, solution.z_length);
-    printf("Slacks (s)\t = ");
-    print_array(solution.s, solution.s_length);
+    template<typename T>
+    void print_solution(clarabel::DefaultSolution<T> &solution)
+    {
+        printf("Solution (x)\t = ");
+        print_array(solution.x, solution.x_length);
+        printf("Multipliers (z)\t = ");
+        print_array(solution.z, solution.z_length);
+        printf("Slacks (s)\t = ");
+        print_array(solution.s, solution.s_length);
+    }
 }
 
 #endif /* UTILS_H */

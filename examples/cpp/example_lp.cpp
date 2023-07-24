@@ -60,7 +60,7 @@ int main(void)
 
     // Get solution
     DefaultSolution<double> solution = solver.solution();
-    print_solution(solution);
+    utils::print_solution(solution);
 
     return 0;
 }
