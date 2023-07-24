@@ -98,16 +98,6 @@ static inline ClarabelCscMatrix_f32 *clarabel_CscMatrix_f32_new(
     return ptr;
 }
 
-static inline void clarabel_CscMatrix_f64_free(ClarabelCscMatrix_f64 *ptr)
-{
-    free(ptr);
-}
-
-static inline void clarabel_CscMatrix_f32_free(ClarabelCscMatrix_f32 *ptr)
-{
-    free(ptr);
-}
-
 #ifdef CLARABEL_USE_FLOAT
 typedef ClarabelCscMatrix_f32 ClarabelCscMatrix;
 #define clarabel_CscMatrix_new(...) clarabel_CscMatrix_f32_new(__VA_ARGS__)
