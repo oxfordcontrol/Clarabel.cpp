@@ -31,6 +31,22 @@ typedef enum ClarabelSolverStatus {
   ClarabelInsufficientProgress,
 } ClarabelSolverStatus;
 
+typedef struct ClarabelCscMatrix_f32 {
+  uintptr_t m;
+  uintptr_t n;
+  const uintptr_t *colptr;
+  const uintptr_t *rowval;
+  const float *nzval;
+} ClarabelCscMatrix_f32;
+
+typedef struct ClarabelCscMatrix_f64 {
+  uintptr_t m;
+  uintptr_t n;
+  const uintptr_t *colptr;
+  const uintptr_t *rowval;
+  const double *nzval;
+} ClarabelCscMatrix_f64;
+
 typedef struct ClarabelDefaultSettings_f64 {
   uint32_t max_iter;
   double time_limit;
@@ -111,15 +127,7 @@ typedef struct ClarabelDefaultSettings_f32 {
   bool presolve_enable;
 } ClarabelDefaultSettings_f32;
 
-typedef void ClarabelDefaultSolver;
-
-typedef struct ClarabelCscMatrix_f64 {
-  uintptr_t m;
-  uintptr_t n;
-  const uintptr_t *colptr;
-  const uintptr_t *rowval;
-  const double *nzval;
-} ClarabelCscMatrix_f64;
+typedef void ClarabelDefaultSolver_f64;
 
 typedef enum ClarabelSupportedConeT_f64_Tag {
   ZeroConeT_f64,
@@ -161,14 +169,6 @@ typedef struct ClarabelSupportedConeT_f64 {
 } ClarabelSupportedConeT_f64;
 
 typedef void ClarabelDefaultSolver_f32;
-
-typedef struct ClarabelCscMatrix_f32 {
-  uintptr_t m;
-  uintptr_t n;
-  const uintptr_t *colptr;
-  const uintptr_t *rowval;
-  const float *nzval;
-} ClarabelCscMatrix_f32;
 
 typedef enum ClarabelSupportedConeT_f32_Tag {
   ZeroConeT_f32,
@@ -239,17 +239,31 @@ typedef struct DefaultSolution_f32 {
   float r_dual;
 } DefaultSolution_f32;
 
+void clarabel_CscMatrix_f32_init(struct ClarabelCscMatrix_f32 *ptr,
+                                 uintptr_t m,
+                                 uintptr_t n,
+                                 const uintptr_t *colptr,
+                                 const uintptr_t *rowval,
+                                 const float *nzval);
+
+void clarabel_CscMatrix_f64_init(struct ClarabelCscMatrix_f64 *ptr,
+                                 uintptr_t m,
+                                 uintptr_t n,
+                                 const uintptr_t *colptr,
+                                 const uintptr_t *rowval,
+                                 const double *nzval);
+
 struct ClarabelDefaultSettings_f64 clarabel_DefaultSettingsBuilder_f64_default(void);
 
 struct ClarabelDefaultSettings_f32 clarabel_DefaultSettingsBuilder_f32_default(void);
 
-ClarabelDefaultSolver *clarabel_DefaultSolver_f64_new(const struct ClarabelCscMatrix_f64 *P,
-                                                      const double *q,
-                                                      const struct ClarabelCscMatrix_f64 *A,
-                                                      const double *b,
-                                                      uintptr_t n_cones,
-                                                      const struct ClarabelSupportedConeT_f64 *cones,
-                                                      const struct ClarabelDefaultSettings_f64 *settings);
+ClarabelDefaultSolver_f64 *clarabel_DefaultSolver_f64_new(const struct ClarabelCscMatrix_f64 *P,
+                                                          const double *q,
+                                                          const struct ClarabelCscMatrix_f64 *A,
+                                                          const double *b,
+                                                          uintptr_t n_cones,
+                                                          const struct ClarabelSupportedConeT_f64 *cones,
+                                                          const struct ClarabelDefaultSettings_f64 *settings);
 
 ClarabelDefaultSolver_f32 *clarabel_DefaultSolver_f32_new(const struct ClarabelCscMatrix_f32 *P,
                                                           const float *q,
@@ -259,15 +273,15 @@ ClarabelDefaultSolver_f32 *clarabel_DefaultSolver_f32_new(const struct ClarabelC
                                                           const struct ClarabelSupportedConeT_f32 *cones,
                                                           const struct ClarabelDefaultSettings_f32 *settings);
 
-void clarabel_DefaultSolver_f64_solve(ClarabelDefaultSolver *solver);
+void clarabel_DefaultSolver_f64_solve(ClarabelDefaultSolver_f64 *solver);
 
 void clarabel_DefaultSolver_f32_solve(ClarabelDefaultSolver_f32 *solver);
 
-void clarabel_DefaultSolver_f64_free(ClarabelDefaultSolver *solver);
+void clarabel_DefaultSolver_f64_free(ClarabelDefaultSolver_f64 *solver);
 
 void clarabel_DefaultSolver_f32_free(ClarabelDefaultSolver_f32 *solver);
 
-struct DefaultSolution_f64 clarabel_DefaultSolver_f64_solution(ClarabelDefaultSolver *solver);
+struct DefaultSolution_f64 clarabel_DefaultSolver_f64_solution(ClarabelDefaultSolver_f64 *solver);
 
 struct DefaultSolution_f32 clarabel_DefaultSolver_f32_solution(ClarabelDefaultSolver_f32 *solver);
 

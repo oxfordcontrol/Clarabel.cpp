@@ -9,15 +9,17 @@ int main(void)
      * [[6., 0.],
      *  [0., 4.]]
      */
-    ClarabelCscMatrix_f32 *P = clarabel_CscMatrix_f32_new(
-        2,                      // m
-        2,                      // n
-        (uintptr_t[]){0, 1, 2}, // colptr
-        (uintptr_t[]){0, 1},    // rowval
-        (float[]){6., 4.}       // nzval
+    ClarabelCscMatrix_f32 P;
+    clarabel_CscMatrix_f32_init(
+        &P,
+        2,                        // row
+        2,                        // col
+        (uintptr_t[]){ 0, 1, 2 }, // colptr
+        (uintptr_t[]){ 0, 1 },    // rowval
+        (float[]){ 6., 4. }       // nzval
     );
 
-    float q[2] = {-1., -4.};
+    float q[2] = { -1., -4. };
 
     /* From dense matrix:
      * [[ 1., -2.], // <-- LHS of equality constraint (lower bound)
@@ -26,15 +28,17 @@ int main(void)
      *  [-1.,  0.], // <-- LHS of inequality constraint (lower bound)
      *  [ 0., -1.]] // <-- LHS of inequality constraint (lower bound)
      */
-    ClarabelCscMatrix_f32 *A = clarabel_CscMatrix_f32_new(
-        5,                                    // m
-        2,                                    // n
-        (uintptr_t[]){0, 3, 6},               // colptr
-        (uintptr_t[]){0, 1, 3, 0, 2, 4},      // rowval
-        (float[]){1., 1., -1., -2., 1., -1.} // nzval
+    ClarabelCscMatrix_f32 A;
+    clarabel_CscMatrix_f32_init(
+        &A,
+        5,                                     // row
+        2,                                     // col
+        (uintptr_t[]){ 0, 3, 6 },              // colptr
+        (uintptr_t[]){ 0, 1, 3, 0, 2, 4 },     // rowval
+        (float[]){ 1., 1., -1., -2., 1., -1. } // nzval
     );
 
-    float b[5] = {0., 1., 1., 1., 1.};
+    float b[5] = { 0., 1., 1., 1., 1. };
 
     ClarabelSupportedConeT_f32 cones[2] =
     {
@@ -47,11 +51,11 @@ int main(void)
 
     // Build solver
     ClarabelDefaultSolver_f32 *solver = clarabel_DefaultSolver_f32_new(
-        P, // P
-        q, // q
-        A, // A
-        b, // b
-        2, // n_cones
+        &P, // P
+        q,  // q
+        &A, // A
+        b,  // b
+        2,  // n_cones
         cones,
         &settings
     );
@@ -63,10 +67,8 @@ int main(void)
     ClarabelDefaultSolution_f32 solution = clarabel_DefaultSolver_f32_solution(solver);
     print_solution_f32(&solution);
 
-    // Free the matrices and the solver
+    // Free the solver
     clarabel_DefaultSolver_f32_free(solver);
-    clarabel_CscMatrix_f32_free(P);
-    clarabel_CscMatrix_f32_free(A);
 
     return 0;
 }
