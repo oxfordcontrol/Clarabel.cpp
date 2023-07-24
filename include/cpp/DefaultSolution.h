@@ -20,7 +20,7 @@ namespace clarabel
         ClarabelInsufficientProgress,
     };
 
-    template<typename T>
+    template<typename T = double>
     struct DefaultSolution
     {
         static_assert(std::is_same<T, float>::value || std::is_same<T, double>::value, "T must be float or double");

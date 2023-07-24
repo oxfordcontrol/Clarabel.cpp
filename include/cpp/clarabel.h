@@ -11,7 +11,7 @@ namespace clarabel
     using RustDefaultSolverHandle_f64 = RustObjectHandle;
     using RustDefaultSolverHandle_f32 = RustObjectHandle;
 
-    template<typename T>
+    template<typename T = double>
     class DefaultSolver
     {
         static_assert(std::is_same<T, float>::value || std::is_same<T, double>::value, "T must be float or double");

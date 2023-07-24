@@ -12,7 +12,7 @@ namespace clarabel
         // CHOLMOD, (not supported in Rust yet)
     };
 
-    template<typename T>
+    template<typename T = double>
     struct ClarabelDefaultSettings
     {
         static_assert(std::is_same<T, float>::value || std::is_same<T, double>::value, "T must be float or double");
@@ -59,7 +59,7 @@ namespace clarabel
     class DefaultSettingsBuilder
     {
     public:
-        template<typename T>
+        template<typename T = double>
         static ClarabelDefaultSettings<T> default_settings();
 
         // TODO: builder pattern support for DefaultSettings

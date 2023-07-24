@@ -5,7 +5,7 @@
 
 namespace clarabel
 {
-    template<typename T>
+    template<typename T = double>
     struct ClarabelSupportedConeT
     {
         static_assert(std::is_same<T, float>::value || std::is_same<T, double>::value, "T must be float or double");
