@@ -1,5 +1,5 @@
 #include "clarabel.h"
-#include "utils.h"ClarabelCscMatrix 
+#include "utils.h"
 
 int main(void)
 {
@@ -7,29 +7,28 @@ int main(void)
     ClarabelCscMatrix P;
     clarabel_CscMatrix_init(
         &P,
-        2,
-        2,
-        (uintptr_t[]){0, 0, 0},
-        NULL,
-        NULL
+        2,                        // row
+        2,                        // col
+        (uintptr_t[]){ 0, 0, 0 }, // colptr
+        NULL,                     // rowval
+        NULL                      // nzval
     );
 
-    ClarabelFloat q[2] = {1.0, -1.0};
+    ClarabelFloat q[2] = { 1.0, -1.0 };
 
     // a 2-d box constraint, separated into 4 inequalities.
     // A = [I; -I]
-    ClarabelFloat A_nzvalues[] = {1.0, -1.0, 1.0, -1.0};
     ClarabelCscMatrix A;
     clarabel_CscMatrix_init(
         &A,
-        4,
-        2,                         // row, col
-        (uintptr_t[]){0, 2, 4},    // colptr
-        (uintptr_t[]){0, 2, 1, 3}, // rowval
-        A_nzvalues                 // nzval
+        4,                                        // row
+        2,                                        // col
+        (uintptr_t[]){ 0, 2, 4 },                 // colptr
+        (uintptr_t[]){ 0, 2, 1, 3 },              // rowval
+        (ClarabelFloat[]){ 1.0, -1.0, 1.0, -1.0 } // nzval
     );
 
-    ClarabelFloat b[4] = {1.0, 1.0, 1.0, 1.0};
+    ClarabelFloat b[4] = { 1.0, 1.0, 1.0, 1.0 };
 
     ClarabelSupportedConeT cones[1] =
     {

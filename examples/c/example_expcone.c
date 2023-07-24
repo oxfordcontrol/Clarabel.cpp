@@ -7,14 +7,14 @@ int main(void)
     // 3 x 3 zero matrix
     ClarabelCscMatrix P;
     clarabel_CscMatrix_init(&P,
-        3,
-        3,
-        (uintptr_t[]){0, 0, 0, 0},
-        NULL,
-        NULL
+        3,                           // row
+        3,                           // col
+        (uintptr_t[]){ 0, 0, 0, 0 }, // colptr
+        NULL,                        // rowval
+        NULL                         // nzval
     );
 
-    ClarabelFloat q[3] = {-1.0, 0.0, 0.0};
+    ClarabelFloat q[3] = { -1.0, 0.0, 0.0 };
 
     /* From dense matrix:
      * [-1.0, 0., 0.],
@@ -23,18 +23,17 @@ int main(void)
      * [0., 1., 0.],
      * [0., 0., 1.],
      */
-    ClarabelFloat A_nzvalues[] = {-1.0, -1.0, 1.0, -1.0, 1.0};
     ClarabelCscMatrix A;
     clarabel_CscMatrix_init(
         &A,
-        5,
-        3,
-        (uintptr_t[]){0, 1, 3, 5},
-        (uintptr_t[]){0, 1, 3, 2, 4},
-        A_nzvalues
+        5,                                              // row
+        3,                                              // col
+        (uintptr_t[]){ 0, 1, 3, 5 },                    // colptr
+        (uintptr_t[]){ 0, 1, 3, 2, 4 },                 // rowval
+        (ClarabelFloat[]){ -1.0, -1.0, 1.0, -1.0, 1.0 } // nzval
     );
 
-    ClarabelFloat b[5] = {0., 0., 0., 1., exp(5.0)};
+    ClarabelFloat b[5] = { 0., 0., 0., 1., exp(5.0) };
 
     ClarabelSupportedConeT cones[2] =
     {
@@ -49,10 +48,10 @@ int main(void)
     // Build solver
     ClarabelDefaultSolver *solver = clarabel_DefaultSolver_new(
         &P, // P
-        q, // q
+        q,  // q
         &A, // A
-        b, // b
-        2, // n_cones
+        b,  // b
+        2,  // n_cones
         cones,
         &settings
     );

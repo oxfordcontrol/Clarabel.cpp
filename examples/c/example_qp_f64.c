@@ -12,14 +12,14 @@ int main(void)
     ClarabelCscMatrix_f64 P;
     clarabel_CscMatrix_f64_init(
         &P,
-        2,                      // m
-        2,                      // n
-        (uintptr_t[]){0, 1, 2}, // colptr
-        (uintptr_t[]){0, 1},    // rowval
-        (double[]){6., 4.}      // nzval
+        2,                        // row
+        2,                        // col
+        (uintptr_t[]){ 0, 1, 2 }, // colptr
+        (uintptr_t[]){ 0, 1 },    // rowval
+        (double[]){ 6., 4. }      // nzval
     );
 
-    double q[2] = {-1., -4.};
+    double q[2] = { -1., -4. };
 
     /* From dense matrix:
      * [[ 1., -2.], // <-- LHS of equality constraint (lower bound)
@@ -31,14 +31,14 @@ int main(void)
     ClarabelCscMatrix_f64 A;
     clarabel_CscMatrix_f64_init(
         &A,
-        5,                                    // m
-        2,                                    // n
-        (uintptr_t[]){0, 3, 6},               // colptr
-        (uintptr_t[]){0, 1, 3, 0, 2, 4},      // rowval
-        (double[]){1., 1., -1., -2., 1., -1.} // nzval
+        5,                                      // row
+        2,                                      // col
+        (uintptr_t[]){ 0, 3, 6 },               // colptr
+        (uintptr_t[]){ 0, 1, 3, 0, 2, 4 },      // rowval
+        (double[]){ 1., 1., -1., -2., 1., -1. } // nzval
     );
 
-    double b[5] = {0., 1., 1., 1., 1.};
+    double b[5] = { 0., 1., 1., 1., 1. };
 
     ClarabelSupportedConeT_f64 cones[2] =
     {
@@ -52,10 +52,10 @@ int main(void)
     // Build solver
     ClarabelDefaultSolver_f64 *solver = clarabel_DefaultSolver_f64_new(
         &P, // P
-        q, // q
+        q,  // q
         &A, // A
-        b, // b
-        2, // n_cones
+        b,  // b
+        2,  // n_cones
         cones,
         &settings
     );
