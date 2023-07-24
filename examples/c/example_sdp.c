@@ -16,7 +16,9 @@ int main(void)
     // SDP Example
 
     // 6 x 6 zero matrix
-    CscMatrix *P = clarabel_CscMatrix_new(
+    CscMatrix P;
+    clarabel_CscMatrix_init(
+        &P,
         6,
         6,
         (uintptr_t[]){0, 0, 0, 0, 0, 0, 0},
@@ -37,7 +39,9 @@ int main(void)
      *  [1., 4., 3., 8., 10., 6.]]
      */
     ClarabelFloat A_nzvalues[] = {-1.0, 1.0, -sqrt2, 4.0, -1.0, 3.0, -sqrt2, 8.0, -sqrt2, 10.0, -1.0, 6.0};
-    CscMatrix *A = clarabel_CscMatrix_new(
+    CscMatrix A;
+    clarabel_CscMatrix_init(
+        &A,
         7,
         6,
         (uintptr_t[]){0, 2, 4, 6, 8, 10, 12},
@@ -58,9 +62,9 @@ int main(void)
 
     // Build solver
     DefaultSolver *solver = clarabel_DefaultSolver_new(
-        P, // P
+        &P, // P
         c, // q
-        A, // A
+        &A, // A
         b, // b
         2, // n_cones
         cones,
@@ -74,10 +78,8 @@ int main(void)
     DefaultSolution solution = clarabel_DefaultSolver_solution(solver);
     print_solution(&solution);
 
-    // Free the matrices and the solver
+    // Free the solver
     clarabel_DefaultSolver_free(solver);
-    clarabel_CscMatrix_free(P);
-    clarabel_CscMatrix_free(A);
 
     return 0;
 #endif

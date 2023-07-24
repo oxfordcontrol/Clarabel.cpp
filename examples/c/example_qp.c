@@ -13,7 +13,9 @@ int main(void)
      *  [0., 4.]]
      */
     ClarabelFloat A_nzvalues[] = {6., 4.};
-    ClarabelCscMatrix *P = clarabel_CscMatrix_new(
+    ClarabelCscMatrix P;
+    clarabel_CscMatrix_init(
+        &P,
         2,                      // m
         2,                      // n
         (uintptr_t[]){0, 1, 2}, // colptr
@@ -31,7 +33,9 @@ int main(void)
      *  [ 0., -1.]] // <-- LHS of inequality constraint (lower bound)
      */
     ClarabelFloat B_nzvalues[] = {1., 1., -1., -2., 1., -1.};
-    ClarabelCscMatrix *A = clarabel_CscMatrix_new(
+    ClarabelCscMatrix A;
+    clarabel_CscMatrix_init(
+        &A,
         5,                               // m
         2,                               // n
         (uintptr_t[]){0, 3, 6},          // colptr
@@ -52,9 +56,9 @@ int main(void)
 
     // Build solver
     ClarabelDefaultSolver *solver = clarabel_DefaultSolver_new(
-        P, // P
+        &P, // P
         q, // q
-        A, // A
+        &A, // A
         b, // b
         2, // n_cones
         cones,
@@ -70,8 +74,6 @@ int main(void)
 
     // Free the matrices and the solver
     clarabel_DefaultSolver_free(solver);
-    clarabel_CscMatrix_free(P);
-    clarabel_CscMatrix_free(A);
 
     return 0;
 }

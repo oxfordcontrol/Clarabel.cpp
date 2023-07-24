@@ -5,7 +5,8 @@
 int main(void)
 {
     // 3 x 3 zero matrix
-    ClarabelCscMatrix *P = clarabel_CscMatrix_new(
+    ClarabelCscMatrix P;
+    clarabel_CscMatrix_init(&P,
         3,
         3,
         (uintptr_t[]){0, 0, 0, 0},
@@ -23,7 +24,9 @@ int main(void)
      * [0., 0., 1.],
      */
     ClarabelFloat A_nzvalues[] = {-1.0, -1.0, 1.0, -1.0, 1.0};
-    ClarabelCscMatrix *A = clarabel_CscMatrix_new(
+    ClarabelCscMatrix A;
+    clarabel_CscMatrix_init(
+        &A,
         5,
         3,
         (uintptr_t[]){0, 1, 3, 5},
@@ -45,9 +48,9 @@ int main(void)
 
     // Build solver
     ClarabelDefaultSolver *solver = clarabel_DefaultSolver_new(
-        P, // P
+        &P, // P
         q, // q
-        A, // A
+        &A, // A
         b, // b
         2, // n_cones
         cones,
@@ -61,10 +64,8 @@ int main(void)
     ClarabelDefaultSolution solution = clarabel_DefaultSolver_solution(solver);
     print_solution(&solution);
 
-    // Free the matrices and the solver
+    // Free the solver
     clarabel_DefaultSolver_free(solver);
-    clarabel_CscMatrix_free(P);
-    clarabel_CscMatrix_free(A);
 
     return 0;
 }
