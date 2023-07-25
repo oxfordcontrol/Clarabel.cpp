@@ -1,6 +1,7 @@
 #include "clarabel.h"
 #include "utils.h"
 #include <cstdint>
+#include <vector>
 
 using namespace clarabel;
 
@@ -40,9 +41,10 @@ int main(void)
     };
 
     // Settings
-    DefaultSettings<double> settings = DefaultSettingsBuilder::default_settings<double>();
-    settings.equilibrate_enable = true;
-    settings.equilibrate_max_iter = 50;
+    DefaultSettings<double> settings = DefaultSettingsBuilder<double>::default_settings()
+        .equilibrate_enable(true)
+        .equilibrate_max_iter(50)
+        .build();
 
     // Build solver
     DefaultSolver<double> solver(

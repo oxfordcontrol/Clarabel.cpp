@@ -5,7 +5,7 @@
 #include <cstddef>
 #include <cstdio>
 
-namespace // Hide print_array
+namespace utils
 {
     template<typename T>
     void print_array(T *array, size_t n)
@@ -21,10 +21,7 @@ namespace // Hide print_array
         }
         printf("]\n");
     }
-}
 
-namespace utils
-{
     template<typename T>
     void print_solution(clarabel::DefaultSolution<T> &solution)
     {
