@@ -13,7 +13,7 @@ namespace clarabel
     };
 
     template<typename T = double>
-    struct ClarabelDefaultSettings
+    struct DefaultSettings
     {
         static_assert(std::is_same<T, float>::value || std::is_same<T, double>::value, "T must be float or double");
 
@@ -60,25 +60,25 @@ namespace clarabel
     {
     public:
         template<typename T = double>
-        static ClarabelDefaultSettings<T> default_settings();
+        static DefaultSettings<T> default_settings();
 
         // TODO: builder pattern support for DefaultSettings
     };
 
     extern "C"
     {
-        ClarabelDefaultSettings<double> clarabel_DefaultSettingsBuilder_f64_default();
-        ClarabelDefaultSettings<float> clarabel_DefaultSettingsBuilder_f32_default();
+        DefaultSettings<double> clarabel_DefaultSettingsBuilder_f64_default();
+        DefaultSettings<float> clarabel_DefaultSettingsBuilder_f32_default();
     }
 
     template<>
-    inline ClarabelDefaultSettings<double> DefaultSettingsBuilder::default_settings<double>()
+    inline DefaultSettings<double> DefaultSettingsBuilder::default_settings<double>()
     {
         return clarabel_DefaultSettingsBuilder_f64_default();
     }
 
     template<>
-    inline ClarabelDefaultSettings<float> DefaultSettingsBuilder::default_settings<float>()
+    inline DefaultSettings<float> DefaultSettingsBuilder::default_settings<float>()
     {
         return clarabel_DefaultSettingsBuilder_f32_default();
     }

@@ -6,11 +6,11 @@
 namespace clarabel
 {
     template<typename T = double>
-    struct ClarabelSupportedConeT
+    struct SupportedConeT
     {
         static_assert(std::is_same<T, float>::value || std::is_same<T, double>::value, "T must be float or double");
 
-        enum class Tag
+        enum class Tag // TODO: make this private or protected
         {
             ZeroConeT,
             NonnegativeConeT,

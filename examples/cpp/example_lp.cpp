@@ -8,7 +8,7 @@ int main(void)
 {
     // 2 x 2 zero matrix
     uintptr_t P_colptr[] = { 0, 0, 0 };
-    ClarabelCscMatrix<double> P(
+    CscMatrix<double> P(
         2,
         2,
         P_colptr,
@@ -23,7 +23,7 @@ int main(void)
     uintptr_t A_colptr[] = { 0, 2, 4 };
     uintptr_t A_rowptr[] = { 0, 2, 1, 3 };
     double A_nzvals[] = { 1.0, -1.0, 1.0, -1.0 };
-    ClarabelCscMatrix<double> A(
+    CscMatrix<double> A(
         4,
         2,        // row, col
         A_colptr, // colptr
@@ -31,16 +31,16 @@ int main(void)
         A_nzvals  // nzval
     );
 
-    double b[4] = {1.0, 1.0, 1.0, 1.0};
+    double b[4] = { 1.0, 1.0, 1.0, 1.0 };
 
-    ClarabelSupportedConeT<double> cones[1] =
+    SupportedConeT<double> cones[1] =
     {
         // NonnegativeConeT(4)
-        {.tag = ClarabelSupportedConeT<double>::Tag::NonnegativeConeT, .nonnegative_cone_t = {._0 = 4 }}
+        {.tag = SupportedConeT<double>::Tag::NonnegativeConeT, .nonnegative_cone_t = {._0 = 4 }}
     };
 
     // Settings
-    ClarabelDefaultSettings<double> settings = DefaultSettingsBuilder::default_settings<double>();
+    DefaultSettings<double> settings = DefaultSettingsBuilder::default_settings<double>();
     settings.equilibrate_enable = true;
     settings.equilibrate_max_iter = 50;
 

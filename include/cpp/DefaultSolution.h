@@ -5,19 +5,19 @@
 
 namespace clarabel
 {
-    enum class ClarabelSolverStatus
+    enum class SolverStatus
     {
-        ClarabelUnsolved,
-        ClarabelSolved,
-        ClarabelPrimalInfeasible,
-        ClarabelDualInfeasible,
-        ClarabelAlmostSolved,
-        ClarabelAlmostPrimalInfeasible,
-        ClarabelAlmostDualInfeasible,
-        ClarabelMaxIterations,
-        ClarabelMaxTime,
-        ClarabelNumericalError,
-        ClarabelInsufficientProgress,
+        Unsolved,
+        Solved,
+        PrimalInfeasible,
+        DualInfeasible,
+        AlmostSolved,
+        AlmostPrimalInfeasible,
+        AlmostDualInfeasible,
+        MaxIterations,
+        MaxTime,
+        NumericalError,
+        InsufficientProgress,
     };
 
     template<typename T = double>
@@ -31,7 +31,7 @@ namespace clarabel
         uintptr_t z_length;
         T* s;
         uintptr_t s_length;
-        ClarabelSolverStatus status;
+        SolverStatus status;
         T obj_val;
         double solve_time;
         uint32_t iterations;

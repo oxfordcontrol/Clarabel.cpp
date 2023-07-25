@@ -7,7 +7,7 @@
 namespace clarabel
 {
     template<typename T = double>
-    struct ClarabelCscMatrix
+    struct CscMatrix
     {
         static_assert(std::is_same<T, float>::value || std::is_same<T, double>::value, "T must be float or double");
 
@@ -17,7 +17,7 @@ namespace clarabel
         const uintptr_t* rowval;
         const T* nzval;
 
-        ClarabelCscMatrix(
+        CscMatrix(
             uintptr_t _m,
             uintptr_t _n,
             const uintptr_t *_colptr,

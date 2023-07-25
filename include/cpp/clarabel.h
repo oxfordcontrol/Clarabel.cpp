@@ -20,13 +20,13 @@ namespace clarabel
 
     public:
         DefaultSolver(
-            const ClarabelCscMatrix<T> *P,
+            const CscMatrix<T> *P,
             const T *q,
-            const ClarabelCscMatrix<T> *A,
+            const CscMatrix<T> *A,
             const T *b,
             uintptr_t n_cones,
-            const ClarabelSupportedConeT<T> *cones,
-            const ClarabelDefaultSettings<T> *settings);
+            const SupportedConeT<T> *cones,
+            const DefaultSettings<T> *settings);
 
         ~DefaultSolver();
 
@@ -37,22 +37,22 @@ namespace clarabel
     extern "C"
     {
         RustDefaultSolverHandle_f64 clarabel_DefaultSolver_f64_new(
-            const ClarabelCscMatrix<double> *P,
+            const CscMatrix<double> *P,
             const double *q,
-            const ClarabelCscMatrix<double> *A,
+            const CscMatrix<double> *A,
             const double *b,
             uintptr_t n_cones,
-            const ClarabelSupportedConeT<double> *cones,
-            const ClarabelDefaultSettings<double> *settings);
+            const SupportedConeT<double> *cones,
+            const DefaultSettings<double> *settings);
 
         RustDefaultSolverHandle_f32 clarabel_DefaultSolver_f32_new(
-            const ClarabelCscMatrix<float> *P,
+            const CscMatrix<float> *P,
             const float *q,
-            const ClarabelCscMatrix<float> *A,
+            const CscMatrix<float> *A,
             const float *b,
             uintptr_t n_cones,
-            const ClarabelSupportedConeT<float> *cones,
-            const ClarabelDefaultSettings<float> *settings);
+            const SupportedConeT<float> *cones,
+            const DefaultSettings<float> *settings);
 
         void clarabel_DefaultSolver_f64_solve(RustDefaultSolverHandle_f64 solver);
 
@@ -69,26 +69,26 @@ namespace clarabel
 
     template<>
     inline DefaultSolver<double>::DefaultSolver(
-        const ClarabelCscMatrix<double> *P,
+        const CscMatrix<double> *P,
         const double *q,
-        const ClarabelCscMatrix<double> *A,
+        const CscMatrix<double> *A,
         const double *b,
         uintptr_t n_cones,
-        const ClarabelSupportedConeT<double> *cones,
-        const ClarabelDefaultSettings<double> *settings)
+        const SupportedConeT<double> *cones,
+        const DefaultSettings<double> *settings)
     {
         handle = clarabel_DefaultSolver_f64_new(P, q, A, b, n_cones, cones, settings);
     }
 
     template<>
     inline DefaultSolver<float>::DefaultSolver(
-        const ClarabelCscMatrix<float> *P,
+        const CscMatrix<float> *P,
         const float *q,
-        const ClarabelCscMatrix<float> *A,
+        const CscMatrix<float> *A,
         const float *b,
         uintptr_t n_cones,
-        const ClarabelSupportedConeT<float> *cones,
-        const ClarabelDefaultSettings<float> *settings)
+        const SupportedConeT<float> *cones,
+        const DefaultSettings<float> *settings)
     {
         handle = clarabel_DefaultSolver_f32_new(P, q, A, b, n_cones, cones, settings);
     }
