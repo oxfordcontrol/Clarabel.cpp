@@ -20,6 +20,7 @@ target_include_directories(utils_cpp INTERFACE "${CMAKE_SOURCE_DIR}/include/cpp"
 foreach(EXAMPLE_NAME ${CPP_EXAMPLES})
   add_executable("cpp_${EXAMPLE_NAME}" ${EXAMPLE_NAME}.cpp)
   target_compile_features("cpp_${EXAMPLE_NAME}" PRIVATE cxx_std_11) # Use C++11
+  set_target_properties("cpp_${EXAMPLE_NAME}" PROPERTIES OUTPUT_NAME ${EXAMPLE_NAME})
 
   # Link to the static clarabel library built from the Rust wrapper
   target_link_libraries("cpp_${EXAMPLE_NAME}" PRIVATE libclarabel_c_shared)
