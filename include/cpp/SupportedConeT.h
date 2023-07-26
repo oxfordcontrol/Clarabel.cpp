@@ -70,7 +70,8 @@ namespace clarabel
     public:
         ZeroConeT(uintptr_t dimension)
         {
-            this->cone = { .tag = rust_ffi::C_SupportedConeT<double>::Tag::ZeroConeT, .nonnegative_cone_t = {._0 = dimension } };
+            this->cone.tag = rust_ffi::C_SupportedConeT<double>::Tag::ZeroConeT;
+            this->cone.nonnegative_cone_t = { dimension };
         }
 
         uintptr_t dimension() { return this->cone.nonnegative_cone_t._0; }
