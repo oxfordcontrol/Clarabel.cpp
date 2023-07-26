@@ -4,6 +4,8 @@
 #include "DefaultSettings.h"
 #include "DefaultSolution.h"
 #include "SupportedConeT.h"
+#include <vector>
+#include <memory>
 
 namespace clarabel
 {
@@ -17,6 +19,7 @@ namespace clarabel
         static_assert(std::is_same<T, float>::value || std::is_same<T, double>::value, "T must be float or double");
     private:
         RustObjectHandle handle;
+        std::vector<rust_ffi::C_SupportedConeT<T>> cones;
 
     public:
         DefaultSolver(
@@ -24,8 +27,7 @@ namespace clarabel
             const T *q,
             const CscMatrix<T> *A,
             const T *b,
-            uintptr_t n_cones,
-            const SupportedConeT<T> *cones,
+            const std::vector<SupportedConeT<T>> &cones,
             const DefaultSettings<T> *settings);
 
         ~DefaultSolver();
@@ -42,7 +44,7 @@ namespace clarabel
             const CscMatrix<double> *A,
             const double *b,
             uintptr_t n_cones,
-            const SupportedConeT<double> *cones,
+            const rust_ffi::C_SupportedConeT<double> *cones,
             const DefaultSettings<double> *settings);
 
         RustDefaultSolverHandle_f32 clarabel_DefaultSolver_f32_new(
@@ -51,7 +53,7 @@ namespace clarabel
             const CscMatrix<float> *A,
             const float *b,
             uintptr_t n_cones,
-            const SupportedConeT<float> *cones,
+            const rust_ffi::C_SupportedConeT<float> *cones,
             const DefaultSettings<float> *settings);
 
         void clarabel_DefaultSolver_f64_solve(RustDefaultSolverHandle_f64 solver);
@@ -73,11 +75,14 @@ namespace clarabel
         const double *q,
         const CscMatrix<double> *A,
         const double *b,
-        uintptr_t n_cones,
-        const SupportedConeT<double> *cones,
-        const DefaultSettings<double> *settings)
+        const std::vector<SupportedConeT<double>> &_cones,
+        const DefaultSettings<double> *settings) : cones()
     {
-        handle = clarabel_DefaultSolver_f64_new(P, q, A, b, n_cones, cones, settings);
+        for (auto &cone : _cones)
+        {
+            cones.push_back(cone.get_cone());
+        }
+        handle = clarabel_DefaultSolver_f64_new(P, q, A, b, cones.size(), cones.data(), settings);
     }
 
     template<>
@@ -86,11 +91,14 @@ namespace clarabel
         const float *q,
         const CscMatrix<float> *A,
         const float *b,
-        uintptr_t n_cones,
-        const SupportedConeT<float> *cones,
-        const DefaultSettings<float> *settings)
+        const std::vector<SupportedConeT<float>> &_cones,
+        const DefaultSettings<float> *settings) : cones()
     {
-        handle = clarabel_DefaultSolver_f32_new(P, q, A, b, n_cones, cones, settings);
+        for (auto &cone : _cones)
+        {
+            cones.push_back(cone.get_cone());
+        }
+        handle = clarabel_DefaultSolver_f32_new(P, q, A, b, cones.size(), cones.data(), settings);
     }
 
     template<>

@@ -2,8 +2,10 @@
 #include "utils.h"
 #include <cstdint>
 #include <vector>
+#include <memory>
 
 using namespace clarabel;
+using namespace std;
 
 int main(void)
 {
@@ -34,11 +36,16 @@ int main(void)
 
     double b[4] = { 1.0, 1.0, 1.0, 1.0 };
 
-    SupportedConeT<double> cones[1] =
-    {
-        // NonnegativeConeT(4)
-        {.tag = SupportedConeT<double>::Tag::NonnegativeConeT, .nonnegative_cone_t = {._0 = 4 }}
-    };
+    auto cone1 = NonnegativeConeT<double>(4);
+
+    vector<SupportedConeT<double>> cones;
+    cones.push_back(NonnegativeConeT<double>(4));
+    // Add more cones: // cones.push_back(ZeroConeT<double>(4));
+
+    // SupportedConeT<double> *cones[1] =
+    // {
+    //     {.tag = SupportedConeT<double>::Tag::NonnegativeConeT, .nonnegative_cone_t = {._0 = 4 }}
+    // };
 
     // Settings
     DefaultSettings<double> settings = DefaultSettingsBuilder<double>::default_settings()
@@ -49,10 +56,9 @@ int main(void)
     // Build solver
     DefaultSolver<double> solver(
         &P, // P
-        q, // q
+        q,  // q
         &A, // A
-        b, // b
-        1, // n_cones
+        b,  // b
         cones,
         &settings
     );
