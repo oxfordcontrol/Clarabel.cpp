@@ -82,7 +82,8 @@ namespace clarabel
     public:
         NonnegativeConeT(uintptr_t dimension)
         {
-            this->cone = { .tag = rust_ffi::C_SupportedConeT<double>::Tag::NonnegativeConeT, .zero_cone_t = {._0 = dimension } };
+            this->cone.tag = rust_ffi::C_SupportedConeT<double>::Tag::NonnegativeConeT;
+            this->cone.zero_cone_t = { dimension };
         }
 
         uintptr_t dimension() { return this->cone.zero_cone_t._0; }
@@ -94,7 +95,8 @@ namespace clarabel
     public:
         PowerConeT(T power)
         {
-            this->cone = { .tag = rust_ffi::C_SupportedConeT<double>::Tag::PowerConeT, .power_cone_t = {._0 = power } };
+            this->cone.tag = rust_ffi::C_SupportedConeT<double>::Tag::PowerConeT;
+            this->cone.power_cone_t = { power };
         }
 
         T power() { return this->cone.power_cone_t._0; }
