@@ -2,7 +2,7 @@
 set(CPP_EXAMPLES 
   # example_expcone
   example_lp
-  # example_powcone
+  example_powcone
   # example_qp
   # example_qp_f32
   # example_qp_f64

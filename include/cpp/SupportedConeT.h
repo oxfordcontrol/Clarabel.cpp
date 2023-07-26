@@ -87,4 +87,16 @@ namespace clarabel
 
         uintptr_t dimension() { return this->cone.zero_cone_t._0; }
     };
+
+    template<typename T = double>
+    class PowerConeT : public SupportedConeT<T>
+    {
+    public:
+        PowerConeT(T power)
+        {
+            this->cone = { .tag = rust_ffi::C_SupportedConeT<double>::Tag::PowerConeT, .power_cone_t = {._0 = power } };
+        }
+
+        T power() { return this->cone.power_cone_t._0; }
+    };
 }

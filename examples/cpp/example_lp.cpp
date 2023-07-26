@@ -38,8 +38,12 @@ int main(void)
 
     auto cone1 = NonnegativeConeT<double>(4);
 
-    vector<SupportedConeT<double>> cones;
-    cones.push_back(NonnegativeConeT<double>(4));
+    vector<SupportedConeT<double>> cones
+    {
+        NonnegativeConeT<double>(4),
+        // Add more cones: ZeroConeT<double>(2)
+    };
+    //cones.push_back(NonnegativeConeT<double>(4));
     // Add more cones: // cones.push_back(ZeroConeT<double>(4));
 
     // SupportedConeT<double> *cones[1] =
