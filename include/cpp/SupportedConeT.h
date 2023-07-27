@@ -5,8 +5,8 @@
 
 namespace clarabel
 {
-    // Layout for SupportedConeT object in Rust
-
+    // Provides the layout for SupportedConeT objects in Rust
+    // Base type of all cones
     template<typename T = double>
     struct SupportedConeT
     {
@@ -42,13 +42,12 @@ namespace clarabel
             SecondOrderConeT_Body second_order_cone_t;
             ExponentialConeT_Body exponential_cone_t;
             PowerConeT_Body power_cone_t;
-#if defined(FEATURE_SDP)
+#ifdef FEATURE_SDP
             PSDTriangleConeT_Body psd_triangle_cone_t;
 #endif
         };
     };
 
-    // Concrete cone types
     template<typename T = double>
     struct ZeroConeT : public SupportedConeT<T>
     {
@@ -76,6 +75,29 @@ namespace clarabel
     };
 
     template<typename T = double>
+    struct SecondOrderConeT : public SupportedConeT<T>
+    {
+    public:
+        SecondOrderConeT(T dimension)
+        {
+            this->tag = SupportedConeT<T>::Tag::SecondOrderConeT;
+            this->second_order_cone_t = { dimension };
+        }
+
+        T dimension() { return this->second_order_cone_t._0; }
+    };
+
+    template<typename T = double>
+    struct ExponentialConeT : public SupportedConeT<T>
+    {
+    public:
+        ExponentialConeT()
+        {
+            this->tag = SupportedConeT<T>::Tag::ExponentialConeT;
+        }
+    };
+
+    template<typename T = double>
     struct PowerConeT : public SupportedConeT<T>
     {
     public:
@@ -87,4 +109,19 @@ namespace clarabel
 
         T power() { return this->power_cone_t._0; }
     };
+
+#ifdef FEATURE_SDP
+    template<typename T = double>
+    struct PSDTriangleConeT : public SupportedConeT<T>
+    {
+    public:
+        PSDTriangleConeT(T dimension)
+        {
+            this->tag = SupportedConeT<T>::Tag::PSDTriangleConeT;
+            this->psd_triangle_cone_t = { dimension };
+        }
+
+        T dimension() { return this->psd_triangle_cone_t._0; }
+    };
+#endif
 }
