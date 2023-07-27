@@ -43,8 +43,6 @@ int main(void)
         NonnegativeConeT<double>(4),
         // Add more cones: ZeroConeT<double>(2)
     };
-    //cones.push_back(NonnegativeConeT<double>(4));
-    // Add more cones: // cones.push_back(ZeroConeT<double>(4));
 
     // SupportedConeT<double> *cones[1] =
     // {
