@@ -25,6 +25,9 @@ foreach(EXAMPLE_NAME ${CPP_EXAMPLES})
   target_link_libraries("cpp_${EXAMPLE_NAME}" PRIVATE libclarabel_c_shared)
   target_include_directories("cpp_${EXAMPLE_NAME}" PRIVATE "${CMAKE_SOURCE_DIR}/include/cpp")
 
+  # Link to Eigen
+  target_link_libraries("cpp_${EXAMPLE_NAME}" PRIVATE Eigen3::Eigen)
+
   # Link to the utils library
   target_link_libraries("cpp_${EXAMPLE_NAME}" PRIVATE utils_c)
 endforeach(EXAMPLE_NAME)

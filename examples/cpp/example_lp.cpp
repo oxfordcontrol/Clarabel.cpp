@@ -1,14 +1,23 @@
 #include "clarabel.h"
 #include "utils.h"
+#include <Eigen/Dense>
 #include <cstdint>
 #include <vector>
 #include <memory>
 
 using namespace clarabel;
 using namespace std;
+using Eigen::MatrixXd;
 
 int main(void)
 {
+    MatrixXd m(2, 2);
+    m(0, 0) = 3;
+    m(1, 0) = 2.5;
+    m(0, 1) = -1;
+    m(1, 1) = m(1, 0) + m(0, 1);
+    std::cout << m << std::endl;
+
     // 2 x 2 zero matrix
     uintptr_t P_colptr[] = { 0, 0, 0 };
     CscMatrix<double> P(
