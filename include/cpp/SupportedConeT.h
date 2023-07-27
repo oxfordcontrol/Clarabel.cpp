@@ -26,7 +26,7 @@ namespace clarabel
         };
         Tag tag;
 
-    private:
+    protected:
         struct ZeroConeT_Body { uintptr_t _0; };
         struct NonnegativeConeT_Body { uintptr_t _0; };
         struct SecondOrderConeT_Body { uintptr_t _0; };
