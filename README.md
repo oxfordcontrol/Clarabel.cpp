@@ -74,12 +74,12 @@ cmake ..
 cmake --build .
 ```
 
-## Examples
+## Run examples
 Examples for both C and C++ are available in `examples/c` and `examples/cpp` and can be run from the `build` directory using the following commands:
 ```sh
 ./examples/c/example_NAME
 ./examples/cpp/example_NAME
 ```
 
-## License 🔍
+# License 🔍
 This project is licensed under the Apache License 2.0 - see the [LICENSE.md](LICENSE.md) file for details.
