@@ -53,7 +53,33 @@ Clarabel is also available in a [Rust / Python](https://github.com/oxfordcontrol
 * __Open Source__: Our code is available on [GitHub](https://github.com/oxfordcontrol/Clarabel.cpp) and distributed under the Apache 2.0 License
 
 # Installation
-// TODO: instructions for compiling this library
+Clarabel.cpp uses CMake as the build system and requires the following dependencies:
+- Rust
+- Clarabel.rs (included as a submodule)
+- A compiler that supports C11 and C++11
+- Eigen (optional for the C++ interface)
+
+You may install Eigen via the system package manager on Unix systems or vcpkg on Windows.
+
+## Clone this repo
+```sh
+git clone --recurse-submodules https://github.com/oxfordcontrol/Clarabel.cpp.git
+```
+
+## Build
+```sh
+mkdir build
+cd build
+cmake ..
+cmake --build .
+```
+
+## Examples
+Examples for both C and C++ are available in `examples/c` and `examples/cpp` and can be run from the `build` directory using the following commands:
+```sh
+./examples/c/example_NAME
+./examples/cpp/example_NAME
+```
 
 ## License 🔍
 This project is licensed under the Apache License 2.0 - see the [LICENSE.md](LICENSE.md) file for details.
