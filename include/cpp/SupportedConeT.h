@@ -12,7 +12,7 @@ namespace clarabel
     {
         static_assert(std::is_same<T, float>::value || std::is_same<T, double>::value, "T must be float or double");
 
-        // Types
+        // Tag for the type of the cone
         enum class Tag
         {
             ZeroConeT,
@@ -24,7 +24,9 @@ namespace clarabel
             PSDTriangleConeT,
 #endif
         };
+        Tag tag;
 
+    private:
         struct ZeroConeT_Body { uintptr_t _0; };
         struct NonnegativeConeT_Body { uintptr_t _0; };
         struct SecondOrderConeT_Body { uintptr_t _0; };
@@ -33,8 +35,7 @@ namespace clarabel
 #if defined(FEATURE_SDP)
         struct PSDTriangleConeT_Body { uintptr_t _0; };
 #endif
-        // Members
-        Tag tag;
+        // Data
         union {
             ZeroConeT_Body zero_cone_t;
             NonnegativeConeT_Body nonnegative_cone_t;
