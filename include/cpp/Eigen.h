@@ -63,10 +63,10 @@ namespace clarabel
         template<typename T>
         std::unique_ptr<ConvertedCscMatrix<T>>
             DefaultSolver<T>::eigen_sparse_to_clarabel(const Eigen::SparseMatrix<T, Eigen::ColMajor> &matrix)
-        {
+        {            
             // Make a copy of data in SparseMatrix to convert StorageIndex to uintptr_t
             std::vector<uintptr_t> row_indices(matrix.nonZeros());
-            std::vector<uintptr_t> col_pointers(matrix.outerSize());
+            std::vector<uintptr_t> col_pointers(matrix.outerSize() + 1);
 
             // Convert to uintptr_t
             for (int k = 0; k < matrix.nonZeros(); ++k)
@@ -77,13 +77,17 @@ namespace clarabel
             {
                 col_pointers[k] = matrix.outerIndexPtr()[k];
             }
+            col_pointers[matrix.outerSize()] = matrix.nonZeros();
+
+            // No conversion needed for nz values
+            const T *nzval_ptr = matrix.nonZeros() == 0 ? nullptr : matrix.valuePtr();
 
             ConvertedCscMatrix<T> *csc_matrix = new ConvertedCscMatrix<T>(
                 static_cast<uintptr_t>(matrix.rows()),
                 static_cast<uintptr_t>(matrix.cols()),
                 col_pointers,
                 row_indices,
-                static_cast<const T *>(matrix.valuePtr()) // No conversion needed for values
+                nzval_ptr
             );
 
             return std::unique_ptr<ConvertedCscMatrix<T>>(csc_matrix);
