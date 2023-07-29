@@ -17,9 +17,11 @@ namespace clarabel
     class DefaultSolver
     {
         static_assert(std::is_same<T, float>::value || std::is_same<T, double>::value, "T must be float or double");
-    private:
+    protected:
         RustObjectHandle handle;
-        std::vector<SupportedConeT<T>> cones;
+        std::vector<SupportedConeT<T>> cones; // Copy the cones or initialize with the pointer?
+
+        DefaultSolver() = default;
 
     public:
         DefaultSolver(
@@ -64,10 +66,13 @@ namespace clarabel
 
         void clarabel_DefaultSolver_f32_free(RustDefaultSolverHandle_f32 solver);
 
+        template struct DefaultSolution<double>; // Instantiate the template
         DefaultSolution<double> clarabel_DefaultSolver_f64_solution(RustDefaultSolverHandle_f64 solver);
 
+        template struct DefaultSolution<float>; // Instantiate the template
         DefaultSolution<float> clarabel_DefaultSolver_f32_solution(RustDefaultSolverHandle_f32 solver);
     }
+
 
     template<>
     inline DefaultSolver<double>::DefaultSolver(
@@ -93,6 +98,7 @@ namespace clarabel
         handle = clarabel_DefaultSolver_f32_new(P, q, A, b, cones.size(), cones.data(), settings);
     }
 
+
     template<>
     inline DefaultSolver<double>::~DefaultSolver()
     {
@@ -104,6 +110,7 @@ namespace clarabel
     {
         clarabel_DefaultSolver_f32_free(handle);
     }
+
 
     template<>
     inline void DefaultSolver<double>::solve()
@@ -117,6 +124,7 @@ namespace clarabel
         clarabel_DefaultSolver_f32_solve(handle);
     }
 
+
     template<>
     inline DefaultSolution<double> DefaultSolver<double>::solution() const
     {
@@ -128,4 +136,5 @@ namespace clarabel
     {
         return clarabel_DefaultSolver_f32_solution(handle);
     }
-}
+
+} // namespace clarabel
