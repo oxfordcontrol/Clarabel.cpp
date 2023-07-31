@@ -78,7 +78,7 @@ namespace clarabel
     struct SecondOrderConeT : public SupportedConeT<T>
     {
     public:
-        SecondOrderConeT(T dimension)
+        SecondOrderConeT(uintptr_t dimension)
         {
             this->tag = SupportedConeT<T>::Tag::SecondOrderConeT;
             this->second_order_cone_t = { dimension };
