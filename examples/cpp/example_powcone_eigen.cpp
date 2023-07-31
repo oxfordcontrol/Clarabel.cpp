@@ -1,13 +1,11 @@
 #include "utils.h"
 
-#include <Eigen.h>
+#include <Clarabel>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
-#include <clarabel.h>
 #include <cstdint>
 #include <memory>
 #include <vector>
-
 
 using namespace clarabel;
 using namespace std;

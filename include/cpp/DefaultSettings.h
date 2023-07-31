@@ -56,6 +56,10 @@ namespace clarabel
         bool presolve_enable;
     };
 
+    // Instantiate the templates
+    template struct DefaultSettings<double>;
+    template struct DefaultSettings<float>;
+
     template<typename T = double>
     class DefaultSettingsBuilder
     {
@@ -69,7 +73,6 @@ namespace clarabel
 
         DefaultSettings<T> build() { return settings; }
 
-#pragma region DefaultSettings_Fields
         DefaultSettingsBuilder<T> &max_iter(uint32_t max_iter) 
         { 
             settings.max_iter = max_iter;
@@ -291,7 +294,6 @@ namespace clarabel
             settings.presolve_enable = presolve_enable;
             return *this; 
         }
-#pragma endregion
 
     };
 
@@ -301,7 +303,7 @@ namespace clarabel
         DefaultSettings<float> clarabel_DefaultSettingsBuilder_f32_default();
     }
 
-#pragma region Constructor
+    
     template<>
     inline DefaultSettingsBuilder<double>::DefaultSettingsBuilder()
     {
@@ -313,9 +315,8 @@ namespace clarabel
     {
         settings = clarabel_DefaultSettingsBuilder_f32_default();
     }
-#pragma endregion
 
-#pragma region default_settings()
+
     template<>
     inline DefaultSettingsBuilder<double> DefaultSettingsBuilder<double>::default_settings()
     {
@@ -327,6 +328,5 @@ namespace clarabel
     {
         return DefaultSettingsBuilder<float>();
     }
-#pragma endregion
 
 }

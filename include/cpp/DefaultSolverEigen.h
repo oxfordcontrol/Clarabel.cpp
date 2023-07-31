@@ -1,7 +1,10 @@
 #pragma once
 
 #include "CscMatrix.h"
-#include "clarabel.h"
+#include "DefaultSettings.h"
+#include "DefaultSolution.h"
+#include "DefaultSolver.h"
+#include "SupportedConeT.h"
 
 #include <Eigen/Sparse>
 #include <memory>

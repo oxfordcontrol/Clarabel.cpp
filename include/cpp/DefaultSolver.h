@@ -4,8 +4,9 @@
 #include "DefaultSettings.h"
 #include "DefaultSolution.h"
 #include "SupportedConeT.h"
-#include <vector>
+
 #include <memory>
+#include <vector>
 
 namespace clarabel
 {
@@ -66,10 +67,8 @@ namespace clarabel
 
         void clarabel_DefaultSolver_f32_free(RustDefaultSolverHandle_f32 solver);
 
-        template struct DefaultSolution<double>; // Instantiate the template
         DefaultSolution<double> clarabel_DefaultSolver_f64_solution(RustDefaultSolverHandle_f64 solver);
 
-        template struct DefaultSolution<float>; // Instantiate the template
         DefaultSolution<float> clarabel_DefaultSolver_f32_solution(RustDefaultSolverHandle_f32 solver);
     }
 

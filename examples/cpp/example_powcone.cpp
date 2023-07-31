@@ -1,8 +1,9 @@
-#include "clarabel.h"
 #include "utils.h"
+
+#include <Clarabel>
 #include <cstdint>
-#include <vector>
 #include <memory>
+#include <vector>
 
 using namespace clarabel;
 using namespace std;

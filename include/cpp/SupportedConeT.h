@@ -20,7 +20,7 @@ namespace clarabel
             SecondOrderConeT,
             ExponentialConeT,
             PowerConeT,
-#if defined(FEATURE_SDP)
+#ifdef FEATURE_SDP
             PSDTriangleConeT,
 #endif
         };
@@ -32,7 +32,7 @@ namespace clarabel
         struct SecondOrderConeT_Body { uintptr_t _0; };
         struct ExponentialConeT_Body {};
         struct PowerConeT_Body { T _0; };
-#if defined(FEATURE_SDP)
+#ifdef FEATURE_SDP
         struct PSDTriangleConeT_Body { uintptr_t _0; };
 #endif
         // Data
