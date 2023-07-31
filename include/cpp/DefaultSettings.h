@@ -54,6 +54,8 @@ namespace clarabel
         uint32_t iterative_refinement_max_iter;
         T iterative_refinement_stop_ratio;
         bool presolve_enable;
+
+        // TODO: add default ctor and copy ctor
     };
 
     // Instantiate the templates
