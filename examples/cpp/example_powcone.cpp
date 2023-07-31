@@ -1,12 +1,15 @@
 #include "utils.h"
 
 #include <Clarabel>
+#include <Eigen/Dense>
+#include <Eigen/Sparse>
 #include <cstdint>
 #include <memory>
 #include <vector>
 
 using namespace clarabel;
 using namespace std;
+using namespace Eigen;
 
 // Power Cone Example
 //
@@ -22,40 +25,25 @@ using namespace std;
 
 int main()
 {
-    // 6 x 6 zero matrix
-    uintptr_t P_colptr[] = { 0, 0, 0, 0, 0, 0, 0 };
-    CscMatrix<double> P(
-        6,        // row
-        6,        // col
-        P_colptr, // colptr
-        nullptr,  // rowval
-        nullptr   // nzval
-    );
+    MatrixXd P_dense = MatrixXd::Zero(6, 6);
+    SparseMatrix<double> P = P_dense.sparseView();
+    P.makeCompressed();
 
     double q[6] = { 0., 0., -1., 0., 0., -1. };
 
-    /* From dense matrix:
-    * [[-1., 0., 0., 0., 0., 0.],
-    *  [0., -1., 0., 0., 0., 0.],
-    *  [0., 0., -1., 0., 0., 0.],
-    *  [0., 0., 0., -1., 0., 0.],
-    *  [0., 0., 0., 0., -1., 0.],
-    *  [0., 0., 0., 0., 0., -1.],
-    *  [1., 2., 0., 3., 0., 0.],
-    *  [0., 0., 0., 0., 1., 0.]]
-    */
-
-    uintptr_t A_colptr[]{ 0, 2, 4, 5, 7, 9, 10 };
-    uintptr_t A_rowptr[]{ 0, 6, 1, 6, 2, 3, 6, 4, 7, 5 };
-    double A_nzvals[]{ -1.0, 1.0, -1.0, 2.0, -1.0, -1.0, 3.0, -1.0, 1.0, -1.0 };
-
-    CscMatrix<double> A(
-        8,        // row
-        6,        // col
-        A_colptr, // colptr
-        A_rowptr, // rowval
-        A_nzvals  // nzval
-    );
+    MatrixXd A_dense(8, 6);
+    A_dense <<
+        -1.,  0.,  0.,  0.,  0.,  0.,
+         0., -1.,  0.,  0.,  0.,  0.,
+         0.,  0., -1.,  0.,  0.,  0.,
+         0.,  0.,  0., -1.,  0.,  0.,
+         0.,  0.,  0.,  0., -1.,  0.,
+         0.,  0.,  0.,  0.,  0., -1.,
+         1.,  2.,  0.,  3.,  0.,  0.,
+         0.,  0.,  0.,  0.,  1.,  0.;
+          
+    SparseMatrix<double> A = A_dense.sparseView();
+    A.makeCompressed();
 
     double b[8] = { 0., 0., 0., 0., 0., 0., 3., 1. };
 
@@ -69,19 +57,12 @@ int main()
 
     // Settings
     DefaultSettings<double> settings = DefaultSettingsBuilder<double>::default_settings()
-        .verbose(true)
-        .max_iter(100)
-        .build();
+                                           .verbose(true)
+                                           .max_iter(100)
+                                           .build();
 
     // Build solver
-    DefaultSolver<double> solver(
-        &P, // P
-        q,  // q
-        &A, // A
-        b,  // b
-        cones,
-        &settings
-    );
+    clarabel::eigen::DefaultSolver<double> solver(P, q, A, b, cones, &settings);
 
     // Solve
     solver.solve();
