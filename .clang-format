@@ -24,6 +24,7 @@ TabWidth:        4
 SpacesInContainerLiterals: true
 SpacesInAngles: Leave
 Cpp11BracedListStyle: false
+SpaceAfterTemplateKeyword: false
 
 # Includes
 SortIncludes:    true

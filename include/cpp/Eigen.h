@@ -2,9 +2,10 @@
 
 #include "CscMatrix.h"
 #include "clarabel.h"
+
+#include <Eigen/Sparse>
 #include <memory>
 #include <vector>
-#include <Eigen/Sparse>
 
 namespace clarabel
 {
@@ -100,8 +101,10 @@ namespace clarabel
         // No conversion is needed for nzval, so the Eigen sparse matrices must be kept alive until the solver is destroyed.
         template<>
         inline DefaultSolver<double>::DefaultSolver(
-            const Eigen::SparseMatrix<double, Eigen::ColMajor> &P, const double *q,
-            const Eigen::SparseMatrix<double, Eigen::ColMajor> &A, const double *b,
+            const Eigen::SparseMatrix<double, Eigen::ColMajor> &P,
+            const double *q,
+            const Eigen::SparseMatrix<double, Eigen::ColMajor> &A,
+            const double *b,
             const std::vector<SupportedConeT<double>> &cones,
             const DefaultSettings<double> *settings)
             : 
@@ -115,8 +118,10 @@ namespace clarabel
 
         template<>
         inline DefaultSolver<float>::DefaultSolver(
-            const Eigen::SparseMatrix<float, Eigen::ColMajor> &P, const float *q,
-            const Eigen::SparseMatrix<float, Eigen::ColMajor> &A, const float *b,
+            const Eigen::SparseMatrix<float, Eigen::ColMajor> &P,
+            const float *q,
+            const Eigen::SparseMatrix<float, Eigen::ColMajor> &A,
+            const float *b,
             const std::vector<SupportedConeT<float>> &cones,
             const DefaultSettings<float> *settings)
             : 
