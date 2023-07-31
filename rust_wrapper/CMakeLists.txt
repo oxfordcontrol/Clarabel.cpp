@@ -55,8 +55,10 @@ endif()
 
 # Static library
 target_link_libraries(libclarabel_c_static INTERFACE ${LIBCLARABEL_C_STATIC_PATH})
+target_include_directories(libclarabel_c_static INTERFACE ${CMAKE_SOURCE_DIR}/include)
 add_dependencies(libclarabel_c_static libclarabel_c)
 
 # Shared library
 target_link_libraries(libclarabel_c_shared INTERFACE ${LIBCLARABEL_C_SHARED_PATH})
+target_include_directories(libclarabel_c_shared INTERFACE ${CMAKE_SOURCE_DIR}/include)
 add_dependencies(libclarabel_c_shared libclarabel_c)

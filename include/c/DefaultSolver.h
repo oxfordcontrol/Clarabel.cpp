@@ -1,15 +1,15 @@
-#ifndef CLARABEL_H
-#define CLARABEL_H
-
-#include <stdarg.h>
-#include <stdbool.h>
-#include <stdint.h>
-#include <stdlib.h>
+#ifndef CLARABEL_DEFAULT_SOLVER_H
+#define CLARABEL_DEFAULT_SOLVER_H
 
 #include "CscMatrix.h"
 #include "DefaultSettings.h"
 #include "DefaultSolution.h"
 #include "SupportedConeT.h"
+
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stdint.h>
+#include <stdlib.h>
 
 #ifdef CLARABEL_USE_FLOAT
 typedef float ClarabelFloat;

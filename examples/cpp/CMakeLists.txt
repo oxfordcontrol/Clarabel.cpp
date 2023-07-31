@@ -16,9 +16,8 @@ foreach(EXAMPLE_NAME ${CPP_EXAMPLES})
   add_executable("cpp_${EXAMPLE_NAME}" ${EXAMPLE_NAME}.cpp)
   target_compile_features("cpp_${EXAMPLE_NAME}" PRIVATE cxx_std_11) # Use C++11
 
-  # Link to the static clarabel library built from the Rust wrapper
+  # Link to clarabel built from the Rust wrapper
   target_link_libraries("cpp_${EXAMPLE_NAME}" PRIVATE libclarabel_c_shared)
-  target_include_directories("cpp_${EXAMPLE_NAME}" PRIVATE "${CMAKE_SOURCE_DIR}/include")
 
   # Link to Eigen
   target_link_libraries("cpp_${EXAMPLE_NAME}" PRIVATE Eigen3::Eigen)

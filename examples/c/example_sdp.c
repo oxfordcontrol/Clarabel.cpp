@@ -1,6 +1,7 @@
 // #define FEATURE_SDP
-#include "clarabel.h"
 #include "utils.h"
+
+#include <Clarabel>
 #include <math.h>
 #include <stdio.h>
 
