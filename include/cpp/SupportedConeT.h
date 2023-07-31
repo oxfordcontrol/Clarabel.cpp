@@ -115,7 +115,7 @@ namespace clarabel
     struct PSDTriangleConeT : public SupportedConeT<T>
     {
     public:
-        PSDTriangleConeT(T dimension)
+        PSDTriangleConeT(uintptr_t dimension)
         {
             this->tag = SupportedConeT<T>::Tag::PSDTriangleConeT;
             this->psd_triangle_cone_t = { dimension };

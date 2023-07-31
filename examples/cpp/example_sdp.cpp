@@ -24,9 +24,10 @@ int main(void)
     int nvec = (n * (n + 1)) >> 1;
 
     // 6 x 6 zero matrix
-    SparseMatrix<double> P = MatrixXd::Zero(6, 6).sparseView();
+    SparseMatrix<double> P = MatrixXd::Zero(nvec, nvec).sparseView();
+    P.makeCompressed();
 
-    double c[6] = { 0., 0., -1., 0., 0., -1. };
+    double c[6] = { 1., 0., 1., 0., 0., 1. };
 
     double sqrt2 = sqrt(2.0);
     MatrixXd A_dense(7, 6);
@@ -46,7 +47,7 @@ int main(void)
 
     vector<SupportedConeT<double>> cones
     {
-        PSDTriangleConeT<double>(nvec),
+        PSDTriangleConeT<double>(n),
         ZeroConeT<double>(1),
     };
 
