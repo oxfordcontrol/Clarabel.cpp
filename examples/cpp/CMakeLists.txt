@@ -16,6 +16,23 @@ foreach(EXAMPLE_NAME ${CPP_EXAMPLES})
 
   # Link to clarabel built from the Rust wrapper
   target_link_libraries("cpp_${EXAMPLE_NAME}" PRIVATE libclarabel_c_shared)
+  # On Windows, copy the shared library and debug symbols to the output directory for targets that link to it
+  if(WIN32)
+    add_custom_command(
+        TARGET "cpp_${EXAMPLE_NAME}"
+        POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${CMAKE_SOURCE_DIR}/rust_wrapper/target/debug/clarabel_c.dll
+        "$<TARGET_FILE_DIR:cpp_${EXAMPLE_NAME}>"
+    )
+    add_custom_command(
+        TARGET "cpp_${EXAMPLE_NAME}"
+        POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${CMAKE_SOURCE_DIR}/rust_wrapper/target/debug/clarabel_c.pdb
+        "$<TARGET_FILE_DIR:cpp_${EXAMPLE_NAME}>"
+    )
+  endif()
 
   # Link to Eigen
   target_link_libraries("cpp_${EXAMPLE_NAME}" PRIVATE Eigen3::Eigen)

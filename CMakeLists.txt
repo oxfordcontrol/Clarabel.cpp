@@ -29,6 +29,8 @@ set_property(CACHE FEATURE_SDP PROPERTY STRINGS
 if (NOT TARGET Eigen3::Eigen)
   find_package(Eigen3 CONFIG REQUIRED)
   message(STATUS "Clarabel.cpp: `Eigen3` package found.")
+else()
+  message(STATUS "Clarabel.cpp: `Eigen3` package already exists.")
 endif()
 
 # Build the Rust library
