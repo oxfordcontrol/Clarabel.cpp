@@ -27,7 +27,7 @@ set_property(CACHE FEATURE_SDP PROPERTY STRINGS
 
 # Eigen3
 if (NOT TARGET Eigen3::Eigen)
-  find_package(Eigen3 3.3.7 REQUIRED NO_MODULE)
+  find_package(Eigen3 CONFIG REQUIRED)
   message(STATUS "Clarabel.cpp: `Eigen3` package found.")
 endif()
 

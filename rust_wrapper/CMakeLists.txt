@@ -10,10 +10,10 @@ add_library(libclarabel_c_shared INTERFACE)
 # Debug/Release flags
 if(CMAKE_BUILD_TYPE MATCHES Release)
    set(clarabel_c_build_flags "--release")
-   set(clarabel_c_output_directory "${CMAKE_SOURCE_DIR}/rust_wrapper/target/release/")
+   set(clarabel_c_output_directory "${CMAKE_SOURCE_DIR}/rust_wrapper/target/release")
 else()
     set(clarabel_c_build_flags "")
-    set(clarabel_c_output_directory "${CMAKE_SOURCE_DIR}/rust_wrapper/target/debug/")
+    set(clarabel_c_output_directory "${CMAKE_SOURCE_DIR}/rust_wrapper/target/debug")
 endif()
 
 # SDP feature flag

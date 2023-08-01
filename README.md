@@ -53,20 +53,37 @@ Clarabel is also available in a [Rust / Python](https://github.com/oxfordcontrol
 * __Open Source__: Our code is available on [GitHub](https://github.com/oxfordcontrol/Clarabel.cpp) and distributed under the Apache 2.0 License
 
 # Installation
-Clarabel.cpp uses CMake as the build system and requires the following dependencies:
+
+Clarabel.cpp uses CMake to generate the build system and requires the following dependencies:
+
 - Rust
 - Clarabel.rs (included as a submodule)
 - A compiler that supports C11 and C++11
 - Eigen (optional for the C++ interface)
 
-You may install Eigen via the system package manager on Unix systems or vcpkg on Windows.
+You may install Eigen via the system package manager on Unix-like systems or [vcpkg](https://vcpkg.io/en/getting-started) on Windows.
+
+Ubuntu:
+
+```sh
+sudo apt install libeigen3-dev
+```
+
+Windows:
+
+```sh
+vcpkg install eigen3:x64-windows
+```
 
 ## Clone this repo
+
 ```sh
 git clone --recurse-submodules https://github.com/oxfordcontrol/Clarabel.cpp.git
+cd Clarabel.cpp
 ```
 
 ## Build
+
 ```sh
 mkdir build
 cd build
@@ -74,8 +91,26 @@ cmake ..
 cmake --build .
 ```
 
+You may specify a particular build system using the `-G` flag for `cmake` (e.g. `-G "Unix Makefiles"`).
+
+### Windows
+
+If you are using vcpkg on Windows, you may need to specify the path to the vcpkg toolchain file when generating the build system using `cmake ..`:
+
+```sh
+cmake .. -DCMAKE_TOOLCHAIN_FILE=PATH_TO_VCPKG/scripts/buildsystems/vcpkg.cmake
+```
+
+The path can be obtained by running:
+
+```sh
+vcpkg integrate install
+```
+
 ## Run examples
+
 Examples for both C and C++ are available in `examples/c` and `examples/cpp` and can be run from the `build` directory using the following commands:
+
 ```sh
 ./examples/c/example_NAME
 ./examples/cpp/example_NAME
