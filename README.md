@@ -61,7 +61,9 @@ Clarabel.cpp uses CMake to generate the build system and requires the following 
 - A compiler that supports C11 and C++11
 - Eigen (optional for the C++ interface)
 
-You may install Eigen via the system package manager on Unix-like systems or [vcpkg](https://vcpkg.io/en/getting-started) on Windows.
+You may install Eigen via the system package manager on Unix-like systems or vcpkg on Windows.
+
+- Follow the [vcpkg](https://vcpkg.io/en/getting-started) instructions to compile vcpkg and add `vcpkg.exe` to `PATH`.
 
 Ubuntu:
 
@@ -71,8 +73,16 @@ sudo apt install libeigen3-dev
 
 Windows:
 
+- 64-bit system:
+
 ```sh
 vcpkg install eigen3:x64-windows
+```
+
+- 32-bit system:
+
+```sh
+vcpkg install eigen3:x86-windows
 ```
 
 ## Clone this repo
@@ -95,13 +105,21 @@ You may specify a particular build system using the `-G` flag for `cmake` (e.g. 
 
 ### Windows
 
-If you are using vcpkg on Windows, you may need to specify the path to the vcpkg toolchain file when generating the build system using `cmake ..`:
+If you are using vcpkg on Windows, you may need to specify the path to the vcpkg toolchain file and the vcpkg target triplet when generating the build system using `cmake ..`:
+
+- 64-bit system:
 
 ```sh
-cmake .. -DCMAKE_TOOLCHAIN_FILE=PATH_TO_VCPKG/scripts/buildsystems/vcpkg.cmake
+cmake .. -DCMAKE_TOOLCHAIN_FILE=PATH_TO_VCPKG_TOOLCHAIN -DVCPKG_TARGET_TRIPLET=x64-windows
 ```
 
-The path can be obtained by running:
+- 32-bit system:
+
+```sh
+cmake .. -DCMAKE_TOOLCHAIN_FILE=PATH_TO_VCPKG_TOOLCHAIN -DVCPKG_TARGET_TRIPLET=x86-windows
+```
+
+The `PATH_TO_VCPKG_TOOLCHAIN` can be obtained by running:
 
 ```sh
 vcpkg integrate install
