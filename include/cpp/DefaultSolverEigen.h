@@ -116,6 +116,9 @@ namespace clarabel
         {
             CscMatrix<double> p(matrix_P->m, matrix_P->n, matrix_P->colptr.data(), matrix_P->rowval.data(), matrix_P->nzval);
             CscMatrix<double> a(matrix_A->m, matrix_A->n, matrix_A->colptr.data(), matrix_A->rowval.data(), matrix_A->nzval);
+
+            // Cones are copied on the Rust side, so we don't need to worry about the lifetime of the cones.
+            // The settings struct is also copied on the Rust side.
             this->handle = clarabel_DefaultSolver_f64_new(&p, q, &a, b, cones.size(), cones.data(), settings);
         }
 
@@ -133,6 +136,9 @@ namespace clarabel
         {
             CscMatrix<float> p(matrix_P->m, matrix_P->n, matrix_P->colptr.data(), matrix_P->rowval.data(), matrix_P->nzval);
             CscMatrix<float> a(matrix_A->m, matrix_A->n, matrix_A->colptr.data(), matrix_A->rowval.data(), matrix_A->nzval);
+            
+            // Cones are copied on the Rust side, so we don't need to worry about the lifetime of the cones.
+            // The settings struct is also copied on the Rust side.
             this->handle = clarabel_DefaultSolver_f32_new(&p, q, &a, b, cones.size(), cones.data(), settings);
         }
 
