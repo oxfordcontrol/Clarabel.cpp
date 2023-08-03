@@ -16,6 +16,8 @@ else()
     set(clarabel_c_output_directory "${CMAKE_SOURCE_DIR}/rust_wrapper/target/debug")
 endif()
 
+set(CLARABEL_C_OUTPUT_DIR ${clarabel_c_output_directory} PARENT_SCOPE)
+
 # SDP feature flag
 if(NOT FEATURE_SDP STREQUAL "none")
     # Set the Rust feature flag

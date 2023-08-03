@@ -22,14 +22,14 @@ foreach(EXAMPLE_NAME ${CPP_EXAMPLES})
         TARGET "cpp_${EXAMPLE_NAME}"
         POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        ${CMAKE_SOURCE_DIR}/rust_wrapper/target/debug/clarabel_c.dll
+        ${CLARABEL_C_OUTPUT_DIR}/clarabel_c.dll
         "$<TARGET_FILE_DIR:cpp_${EXAMPLE_NAME}>"
     )
     add_custom_command(
         TARGET "cpp_${EXAMPLE_NAME}"
         POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        ${CMAKE_SOURCE_DIR}/rust_wrapper/target/debug/clarabel_c.pdb
+        ${CLARABEL_C_OUTPUT_DIR}/clarabel_c.pdb
         "$<TARGET_FILE_DIR:cpp_${EXAMPLE_NAME}>"
     )
   endif()
