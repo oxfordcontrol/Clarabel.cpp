@@ -44,7 +44,6 @@ __For more information see the Clarabel Documentation ([stable](https://oxfordco
 
 Clarabel is also available in a [Rust / Python](https://github.com/oxfordcontrol/Clarabel.rs) and a [Julia](https://github.com/oxfordcontrol/Clarabel.jl) implementation.
  
-
 ## Features
 
 * __Versatile__: Clarabel.cpp solves linear programs (LPs), quadratic programs (QPs), second-order cone programs (SOCPs) and semidefinite programs (SDPs). It also solves problems with exponential and power cone constraints.
@@ -53,6 +52,8 @@ Clarabel is also available in a [Rust / Python](https://github.com/oxfordcontrol
 * __Open Source__: Our code is available on [GitHub](https://github.com/oxfordcontrol/Clarabel.cpp) and distributed under the Apache 2.0 License
 
 # Installation
+
+> **Note:** The C++ interface is WIP and there might be breaking changes in future releases.
 
 Clarabel.cpp uses CMake to generate the build system and requires the following dependencies:
 
@@ -73,17 +74,11 @@ sudo apt install libeigen3-dev
 
 Windows:
 
-- 64-bit system:
-
 ```sh
 vcpkg install eigen3:x64-windows
 ```
 
-- 32-bit system:
-
-```sh
-vcpkg install eigen3:x86-windows
-```
+- For 32-bit platforms, use `eigen3:x86-windows` instead of `eigen3:x64-windows`.
 
 ## Clone this repo
 
@@ -105,34 +100,35 @@ You may specify a particular build system using the `-G` flag for `cmake` (e.g. 
 
 ### Windows
 
-If you are using vcpkg on Windows, you may need to specify the path to the vcpkg toolchain file and the vcpkg target triplet when generating the build system using `cmake ..`:
-
-- 64-bit system:
-
-```sh
-cmake .. -DCMAKE_TOOLCHAIN_FILE=PATH_TO_VCPKG_TOOLCHAIN -DVCPKG_TARGET_TRIPLET=x64-windows
-```
-
-- 32-bit system:
-
-```sh
-cmake .. -DCMAKE_TOOLCHAIN_FILE=PATH_TO_VCPKG_TOOLCHAIN -DVCPKG_TARGET_TRIPLET=x86-windows
-```
-
-The `PATH_TO_VCPKG_TOOLCHAIN` can be obtained by running:
+If you are using vcpkg on Windows, you may find the vcpkg toolchain file using:
 
 ```sh
 vcpkg integrate install
 ```
 
-## Run examples
-
-Examples for both C and C++ are available in `examples/c` and `examples/cpp` and can be run from the `build` directory using the following commands:
+and then specify the vcpkg toolchain file path and target triplet to generate the build system using:
 
 ```sh
-./examples/c/example_NAME
-./examples/cpp/example_NAME
+cmake .. -DCMAKE_TOOLCHAIN_FILE=VCPKG_TOOLCHAIN_PATH -DVCPKG_TARGET_TRIPLET=x64-windows
 ```
+
+where `VCPKG_TOOLCHAIN_PATH` is the path to the vcpkg toolchain file.
+
+- For 32-bit platforms, use `x86-windows` instead of `x64-windows`.
+
+## Run examples
+
+Examples for both C and C++ are available in `examples/c` and `examples/cpp` and can be run from the `build` directory using:
+
+```sh
+./examples/c/C_EXAMPLE
+./examples/cpp/CPP_EXAMPLE
+```
+
+# Usage
+
+- Link to the `libclarabel_c_shared` (shared library) or `libclarabel_c_static` (static library) target in CMake.
+- `#include <Clarabel>` in your C/C++ source files.
 
 # License 🔍
 This project is licensed under the Apache License 2.0 - see the [LICENSE.md](LICENSE.md) file for details.
