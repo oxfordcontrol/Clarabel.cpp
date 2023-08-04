@@ -3,10 +3,11 @@ use crate::core::cones::ClarabelSupportedConeT;
 use crate::solver::implementations::default::settings::*;
 use crate::utils;
 use clarabel::algebra::FloatT;
-use clarabel::solver::{self as lib, IPSolver};
+use clarabel::solver::{self as lib, IPSolver, SolverStatus};
 use std::slice;
 use std::{ffi::c_void, mem::forget};
 
+use super::info::ClarabelDefaultInfo;
 use super::solution::DefaultSolution;
 
 #[allow(non_camel_case_types)]
@@ -21,10 +22,10 @@ pub type ClarabelDefaultSolver_f64 = c_void;
 #[allow(non_snake_case)]
 unsafe fn _internal_DefaultSolver_new<T: FloatT>(
     P: *const ClarabelCscMatrix<T>, // Matrix P
-    q: *const T,            // Array of double from C
+    q: *const T,                    // Array of double from C
     A: *const ClarabelCscMatrix<T>, // Matrix A
-    b: *const T,            // Array of double from C
-    n_cones: usize,         // Number of cones
+    b: *const T,                    // Array of double from C
+    n_cones: usize,                 // Number of cones
     cones: *const ClarabelSupportedConeT<T>,
     settings: *const ClarabelDefaultSettings<T>,
 ) -> *mut c_void {
@@ -168,6 +169,30 @@ pub enum ClarabelSolverStatus {
     ClarabelInsufficientProgress,
 }
 
+impl From<&mut SolverStatus> for ClarabelSolverStatus {
+    fn from(value: &mut SolverStatus) -> Self {
+        match value {
+            SolverStatus::Unsolved => ClarabelSolverStatus::ClarabelUnsolved,
+            SolverStatus::Solved => ClarabelSolverStatus::ClarabelSolved,
+            SolverStatus::PrimalInfeasible => ClarabelSolverStatus::ClarabelPrimalInfeasible,
+            SolverStatus::DualInfeasible => ClarabelSolverStatus::ClarabelDualInfeasible,
+            SolverStatus::AlmostSolved => ClarabelSolverStatus::ClarabelAlmostSolved,
+            SolverStatus::AlmostPrimalInfeasible => {
+                ClarabelSolverStatus::ClarabelAlmostPrimalInfeasible
+            }
+            SolverStatus::AlmostDualInfeasible => {
+                ClarabelSolverStatus::ClarabelAlmostDualInfeasible
+            }
+            SolverStatus::MaxIterations => ClarabelSolverStatus::ClarabelMaxIterations,
+            SolverStatus::MaxTime => ClarabelSolverStatus::ClarabelMaxTime,
+            SolverStatus::NumericalError => ClarabelSolverStatus::ClarabelNumericalError,
+            SolverStatus::InsufficientProgress => {
+                ClarabelSolverStatus::ClarabelInsufficientProgress
+            }
+        }
+    }
+}
+
 /// Get the solution field from a DefaultSolver object.
 ///
 /// The solution is returned as a C struct.
@@ -198,4 +223,34 @@ pub extern "C" fn clarabel_DefaultSolver_f32_solution(
     solver: *mut ClarabelDefaultSolver_f32,
 ) -> DefaultSolution<f32> {
     _internal_DefaultSolver_solution::<f32>(solver)
+}
+
+/// Get the info field from a DefaultSolver object.
+#[allow(non_snake_case)]
+fn _internal_DefaultSolver_info<T: FloatT>(solver: *mut c_void) -> ClarabelDefaultInfo<T> {
+    // Recover the solver object from the opaque pointer
+    let mut solver = unsafe { Box::from_raw(solver as *mut lib::DefaultSolver<T>) };
+
+    // Get the info field and convert to C struct
+    let info = ClarabelDefaultInfo::<T>::from(&mut solver.info);
+
+    // Leave the solver object on the heap
+    Box::into_raw(solver);
+
+    // Return the info as a C struct
+    info
+}
+
+#[no_mangle]
+pub extern "C" fn clarabel_DefaultSolver_f64_info(
+    solver: *mut ClarabelDefaultSolver_f64,
+) -> ClarabelDefaultInfo<f64> {
+    _internal_DefaultSolver_info::<f64>(solver)
+}
+
+#[no_mangle]
+pub extern "C" fn clarabel_DefaultSolver_f32_info(
+    solver: *mut ClarabelDefaultSolver_f32,
+) -> ClarabelDefaultInfo<f32> {
+    _internal_DefaultSolver_info::<f32>(solver)
 }
