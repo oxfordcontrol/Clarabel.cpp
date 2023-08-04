@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CscMatrix.h"
+#include "DefaultInfo.h"
 #include "DefaultSettings.h"
 #include "DefaultSolution.h"
 #include "SupportedConeT.h"
@@ -37,6 +38,7 @@ namespace clarabel
 
         void solve();
         DefaultSolution<T> solution() const;
+        DefaultInfo<T> info() const;
     };
 
     extern "C"
@@ -70,6 +72,10 @@ namespace clarabel
         DefaultSolution<double> clarabel_DefaultSolver_f64_solution(RustDefaultSolverHandle_f64 solver);
 
         DefaultSolution<float> clarabel_DefaultSolver_f32_solution(RustDefaultSolverHandle_f32 solver);
+
+        DefaultInfo<double> clarabel_DefaultSolver_f64_info(RustDefaultSolverHandle_f64 solver);
+
+        DefaultInfo<float> clarabel_DefaultSolver_f32_info(RustDefaultSolverHandle_f32 solver);
     }
 
 
@@ -134,6 +140,19 @@ namespace clarabel
     inline DefaultSolution<float> DefaultSolver<float>::solution() const
     {
         return clarabel_DefaultSolver_f32_solution(handle);
+    }
+
+    
+    template<>
+    inline DefaultInfo<double> DefaultSolver<double>::info() const
+    {
+        return clarabel_DefaultSolver_f64_info(handle);
+    }
+
+    template<>
+    inline DefaultInfo<float> DefaultSolver<float>::info() const
+    {
+        return clarabel_DefaultSolver_f32_info(handle);
     }
 
 } // namespace clarabel

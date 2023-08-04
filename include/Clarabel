@@ -4,6 +4,7 @@
 #ifdef __cplusplus // C++ interface
 
 #include "cpp/CscMatrix.h"
+#include "cpp/DefaultInfo.h"
 #include "cpp/DefaultSettings.h"
 #include "cpp/DefaultSolution.h"
 #include "cpp/DefaultSolver.h"
