@@ -23,6 +23,16 @@ set_property(CACHE FEATURE_SDP PROPERTY STRINGS
     sdp-r
 )
 
+# Get dependencies
+
+# Eigen3
+if (NOT TARGET Eigen3::Eigen)
+  find_package(Eigen3 CONFIG REQUIRED)
+  message(STATUS "Clarabel.cpp: `Eigen3` package found.")
+else()
+  message(STATUS "Clarabel.cpp: `Eigen3` package already exists.")
+endif()
+
 # Build the Rust library
 add_subdirectory(rust_wrapper)
 

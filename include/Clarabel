@@ -1,0 +1,23 @@
+#ifndef CLARABEL_H
+#define CLARABEL_H
+
+#ifdef __cplusplus // C++ interface
+
+#include "cpp/CscMatrix.h"
+#include "cpp/DefaultSettings.h"
+#include "cpp/DefaultSolution.h"
+#include "cpp/DefaultSolver.h"
+#include "cpp/DefaultSolverEigen.h"
+#include "cpp/SupportedConeT.h"
+
+#else // C interface
+
+#include "c/CscMatrix.h"
+#include "c/DefaultSettings.h"
+#include "c/DefaultSolution.h"
+#include "c/DefaultSolver.h"
+#include "c/SupportedConeT.h"
+
+#endif
+
+#endif

@@ -1,8 +1,9 @@
 // To use float instead of double:
 // #define CLARABEL_USE_FLOAT
 
-#include "clarabel.h"
 #include "utils.h"
+
+#include <Clarabel>
 
 int main(void)
 {

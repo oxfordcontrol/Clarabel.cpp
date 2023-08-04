@@ -1,5 +1,6 @@
-#include "clarabel.h"
 #include "utils.h"
+
+#include <Clarabel>
 
 // Power Cone Example
 //

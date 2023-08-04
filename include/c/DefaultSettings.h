@@ -1,9 +1,9 @@
 #ifndef CLARABEL_DEFAULT_SETTINGS_H
 #define CLARABEL_DEFAULT_SETTINGS_H
 
+#include <math.h>
 #include <stdbool.h>
 #include <stdint.h>
-#include <math.h>
 
 typedef enum ClarabelDirectSolveMethods
 {

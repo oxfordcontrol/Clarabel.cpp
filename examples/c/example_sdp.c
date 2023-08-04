@@ -1,6 +1,7 @@
 // #define FEATURE_SDP
-#include "clarabel.h"
 #include "utils.h"
+
+#include <Clarabel>
 #include <math.h>
 #include <stdio.h>
 
@@ -19,14 +20,14 @@ int main(void)
     ClarabelCscMatrix P;
     clarabel_CscMatrix_init(
         &P,
-        6,                                    // row
-        6,                                    // col
+        nvec,                                    // row
+        nvec,                                    // col
         (uintptr_t[]){ 0, 0, 0, 0, 0, 0, 0 }, // colptr
         NULL,                                 // rowval
         NULL                                  // nzval
     );
 
-    ClarabelFloat c[6] = { 0., 0., -1., 0., 0., -1. };
+    ClarabelFloat c[6] = { 1., 0., 1., 0., 0., 1. };
 
     /* From dense matrix:
      * [[-1., 0., 0., 0., 0., 0.],

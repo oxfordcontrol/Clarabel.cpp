@@ -1,11 +1,13 @@
 # Rust wrapper library
 rust_wrapper/target
+rust_wrapper/headers
 rust_wrapper/Cargo.lock
 
 # CMake build directory
 build
 
-# Visual Studio on Windows
-.vs
+.*/
+!.vscode/
+!.github
 
 CMakePresets.json

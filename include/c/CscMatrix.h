@@ -1,10 +1,9 @@
 #ifndef CLARABEL_CSC_MATRIX_H
 #define CLARABEL_CSC_MATRIX_H
 
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdlib.h>
-#include "clarabel.h"
 
 typedef struct ClarabelCscMatrix_f64
 {

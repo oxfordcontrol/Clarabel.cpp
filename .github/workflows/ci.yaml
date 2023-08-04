@@ -20,6 +20,13 @@ jobs:
       with:
         submodules: 'recursive'
 
+    # Install tools and dependencies
+    - name: Install packages
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y valgrind
+        sudo apt-get install -y libeigen3-dev
+
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
@@ -34,12 +41,7 @@ jobs:
       working-directory: ${{env.CMAKE_BUILD_DIR}}
       run: ctest -C ${{env.BUILD_TYPE}}
 
-    # Run Valgrind Memcheck
-    - name: Install valgrind
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y valgrind
-
+    # Run valgrind memcheck on the examples
     - name: Valgrind Memcheck
       working-directory: ${{env.CMAKE_BUILD_DIR}}
       run: |
@@ -48,3 +50,9 @@ jobs:
         valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --error-exitcode=1 ./examples/c/example_powcone
         valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --error-exitcode=1 ./examples/c/example_qp
         valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --error-exitcode=1 ./examples/c/example_socp
+
+        valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --error-exitcode=1 ./examples/cpp/cpp_example_expcone
+        valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --error-exitcode=1 ./examples/cpp/cpp_example_lp
+        valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --error-exitcode=1 ./examples/cpp/cpp_example_powcone
+        valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --error-exitcode=1 ./examples/cpp/cpp_example_qp
+        valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --error-exitcode=1 ./examples/cpp/cpp_example_socp

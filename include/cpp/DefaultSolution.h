@@ -38,4 +38,8 @@ namespace clarabel
         T r_prim;
         T r_dual;
     };
+
+    // Instantiate the templates
+    template struct DefaultSolution<double>;
+    template struct DefaultSolution<float>;
 }
