@@ -4,6 +4,7 @@
 #ifdef __cplusplus // C++ interface
 
 #include "cpp/CscMatrix.h"
+#include "cpp/DefaultInfo.h"
 #include "cpp/DefaultSettings.h"
 #include "cpp/DefaultSolution.h"
 #include "cpp/DefaultSolver.h"
@@ -13,6 +14,7 @@
 #else // C interface
 
 #include "c/CscMatrix.h"
+#include "c/DefaultInfo.h"
 #include "c/DefaultSettings.h"
 #include "c/DefaultSolution.h"
 #include "c/DefaultSolver.h"
