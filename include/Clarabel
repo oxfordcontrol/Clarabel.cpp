@@ -13,6 +13,7 @@
 #else // C interface
 
 #include "c/CscMatrix.h"
+#include "c/DefaultInfo.h"
 #include "c/DefaultSettings.h"
 #include "c/DefaultSolution.h"
 #include "c/DefaultSolver.h"
