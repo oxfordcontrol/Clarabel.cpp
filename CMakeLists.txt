@@ -38,3 +38,7 @@ add_subdirectory(rust_wrapper)
 
 # Add other subdirectories
 add_subdirectory(examples)
+
+# Add tests
+enable_testing()
+add_subdirectory(tests)
