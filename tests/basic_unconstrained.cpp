@@ -1,7 +1,5 @@
 #include <Clarabel>
 #include <Eigen/Eigen>
-#include <Eigen/src/Core/Matrix.h>
-#include <Eigen/src/Core/util/Constants.h>
 #include <cmath>
 #include <gtest/gtest.h>
 #include <iostream>
