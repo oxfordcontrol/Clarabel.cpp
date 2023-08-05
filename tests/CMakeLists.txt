@@ -16,7 +16,10 @@ else()
     message(STATUS "Clarabel.cpp: `googletest` targets found.")
 endif()
 
-add_executable(clarabel_cpp_tests basic_lp.cpp)
+add_executable(clarabel_cpp_tests
+    basic_lp.cpp
+    basic_unconstrained.cpp
+)
 target_link_libraries(clarabel_cpp_tests 
     libclarabel_c_shared
     Eigen3::Eigen
