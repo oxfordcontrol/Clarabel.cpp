@@ -19,6 +19,7 @@ endif()
 add_executable(clarabel_cpp_tests
     basic_lp.cpp
     basic_unconstrained.cpp
+    mixed_conic.cpp
 )
 target_link_libraries(clarabel_cpp_tests 
     libclarabel_c_shared
