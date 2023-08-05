@@ -21,18 +21,17 @@ namespace clarabel
         static_assert(std::is_same<T, float>::value || std::is_same<T, double>::value, "T must be float or double");
     protected:
         RustObjectHandle handle;
-        std::vector<SupportedConeT<T>> cones;
 
         DefaultSolver() = default;
 
     public:
         DefaultSolver(
             const CscMatrix<T> &P,
-            const T *q,
+            const std::vector<T> &q,
             const CscMatrix<T> &A,
-            const T *b,
+            const std::vector<T> &b,
             const std::vector<SupportedConeT<T>> &cones,
-            const DefaultSettings<T> *settings);
+            const DefaultSettings<T> &settings);
 
         ~DefaultSolver();
 
@@ -78,29 +77,28 @@ namespace clarabel
         DefaultInfo<float> clarabel_DefaultSolver_f32_info(RustDefaultSolverHandle_f32 solver);
     }
 
-
     template<>
     inline DefaultSolver<double>::DefaultSolver(
         const CscMatrix<double> &P,
-        const double *q,
+        const std::vector<double> &q,
         const CscMatrix<double> &A,
-        const double *b,
+        const std::vector<double> &b,
         const std::vector<SupportedConeT<double>> &cones,
-        const DefaultSettings<double> *settings) : cones(std::move(cones))
+        const DefaultSettings<double> &settings)
     {
-        handle = clarabel_DefaultSolver_f64_new(&P, q, &A, b, cones.size(), cones.data(), settings);
+        handle = clarabel_DefaultSolver_f64_new(&P, q.data(), &A, b.data(), cones.size(), cones.data(), &settings);
     }
 
     template<>
     inline DefaultSolver<float>::DefaultSolver(
         const CscMatrix<float> &P,
-        const float *q,
+        const std::vector<float> &q,
         const CscMatrix<float> &A,
-        const float *b,
+        const std::vector<float> &b,
         const std::vector<SupportedConeT<float>> &cones,
-        const DefaultSettings<float> *settings) : cones(std::move(cones))
+        const DefaultSettings<float> &settings)
     {
-        handle = clarabel_DefaultSolver_f32_new(&P, q, &A, b, cones.size(), cones.data(), settings);
+        handle = clarabel_DefaultSolver_f32_new(&P, q.data(), &A, b.data(), cones.size(), cones.data(), &settings);
     }
 
 
