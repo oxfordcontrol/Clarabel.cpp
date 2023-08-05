@@ -75,9 +75,9 @@ int main()
 
     // Build solver
     DefaultSolver<double> solver(
-        &P, // P
+        P, // P
         q,  // q
-        &A, // A
+        A, // A
         b,  // b
         cones,
         &settings

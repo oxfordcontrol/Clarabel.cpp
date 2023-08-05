@@ -63,7 +63,7 @@ namespace clarabel
                 const std::vector<SupportedConeT<T>> &cones,
                 const DefaultSettings<T> *settings);
         };
- 
+
         template<typename T>
         std::unique_ptr<ConvertedCscMatrix<T>>
             DefaultSolver<T>::eigen_sparse_to_clarabel(const Eigen::SparseMatrix<T, Eigen::ColMajor> &matrix)
