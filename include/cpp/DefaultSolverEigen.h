@@ -51,10 +51,15 @@ namespace clarabel
 
             // Helper function for converting a Eigen sparse matrix into a temporary object of type ConvertedCscMatrix<T>
             // The temporary object is used to keep the matrix data used by the solver alive, and will be used to init a clarabel::CscMatrix<T> object, which is then passed to the solver.
-            static std::unique_ptr<ConvertedCscMatrix<T>> 
-                eigen_sparse_to_clarabel(const Eigen::SparseMatrix<T, Eigen::ColMajor> &matrix);
+            static std::unique_ptr<ConvertedCscMatrix<T>> eigen_sparse_to_clarabel(
+                const Eigen::SparseMatrix<T, Eigen::ColMajor> &matrix);
 
         public:
+            // Lifetime of problem data:
+            // - Cones are copied on the Rust side, so we don't need to worry about the lifetime of the cones.
+            // - The settings struct is also copied on the Rust side.
+            // - Matrices P, A are converted and kept alive by the unique_ptr.
+            // - Vectors q, b must be kept alive until the solver is destroyed.
             DefaultSolver(
                 const Eigen::SparseMatrix<T, Eigen::ColMajor> &P,
                 const T *q,
@@ -117,8 +122,6 @@ namespace clarabel
             CscMatrix<double> p(matrix_P->m, matrix_P->n, matrix_P->colptr.data(), matrix_P->rowval.data(), matrix_P->nzval);
             CscMatrix<double> a(matrix_A->m, matrix_A->n, matrix_A->colptr.data(), matrix_A->rowval.data(), matrix_A->nzval);
 
-            // Cones are copied on the Rust side, so we don't need to worry about the lifetime of the cones.
-            // The settings struct is also copied on the Rust side.
             this->handle = clarabel_DefaultSolver_f64_new(&p, q, &a, b, cones.size(), cones.data(), settings);
         }
 
@@ -136,9 +139,7 @@ namespace clarabel
         {
             CscMatrix<float> p(matrix_P->m, matrix_P->n, matrix_P->colptr.data(), matrix_P->rowval.data(), matrix_P->nzval);
             CscMatrix<float> a(matrix_A->m, matrix_A->n, matrix_A->colptr.data(), matrix_A->rowval.data(), matrix_A->nzval);
-            
-            // Cones are copied on the Rust side, so we don't need to worry about the lifetime of the cones.
-            // The settings struct is also copied on the Rust side.
+
             this->handle = clarabel_DefaultSolver_f32_new(&p, q, &a, b, cones.size(), cones.data(), settings);
         }
 
