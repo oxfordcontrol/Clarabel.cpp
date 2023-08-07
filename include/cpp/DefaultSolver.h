@@ -21,18 +21,48 @@ namespace clarabel
         static_assert(std::is_same<T, float>::value || std::is_same<T, double>::value, "T must be float or double");
     protected:
         RustObjectHandle handle;
-        std::vector<SupportedConeT<T>> cones; // Copy the cones or initialize with the pointer?
 
         DefaultSolver() = default;
 
+    private:
+        static void check_dimensions(
+            const CscMatrix<T> &P,
+            const std::vector<T> &q,
+            const CscMatrix<T> &A,
+            const std::vector<T> &b)
+        {
+            if (P.m != P.n)
+            {
+                throw std::invalid_argument("P must be a square matrix");
+            }
+
+            if (P.m != q.size())
+            {
+                throw std::invalid_argument("P and q must have the same number of rows");
+            }
+
+            if (A.n != P.n)
+            {
+                throw std::invalid_argument("A and P must have the same number of columns");
+            }
+
+            if (A.m != b.size())
+            {
+                throw std::invalid_argument("A and b must have the same number of rows");
+            }
+        }
+
     public:
+        // Lifetime of problem data:
+        // - Vectors q, b, cones and the settings are copied when the DefaultSolver object is created in Rust.
+        // - Matrices P, A must be kept alive until the solver is destroyed.
         DefaultSolver(
-            const CscMatrix<T> *P,
-            const T *q,
-            const CscMatrix<T> *A,
-            const T *b,
+            const CscMatrix<T> &P,
+            const std::vector<T> &q,
+            const CscMatrix<T> &A,
+            const std::vector<T> &b,
             const std::vector<SupportedConeT<T>> &cones,
-            const DefaultSettings<T> *settings);
+            const DefaultSettings<T> &settings);
 
         ~DefaultSolver();
 
@@ -78,29 +108,30 @@ namespace clarabel
         DefaultInfo<float> clarabel_DefaultSolver_f32_info(RustDefaultSolverHandle_f32 solver);
     }
 
-
     template<>
     inline DefaultSolver<double>::DefaultSolver(
-        const CscMatrix<double> *P,
-        const double *q,
-        const CscMatrix<double> *A,
-        const double *b,
-        const std::vector<SupportedConeT<double>> &_cones,
-        const DefaultSettings<double> *settings) : cones(_cones)
+        const CscMatrix<double> &P,
+        const std::vector<double> &q,
+        const CscMatrix<double> &A,
+        const std::vector<double> &b,
+        const std::vector<SupportedConeT<double>> &cones,
+        const DefaultSettings<double> &settings)
     {
-        handle = clarabel_DefaultSolver_f64_new(P, q, A, b, cones.size(), cones.data(), settings);
+        check_dimensions(P, q, A, b); // Rust wrapper will assume the pointers represent matrices with the right dimensions.
+        handle = clarabel_DefaultSolver_f64_new(&P, q.data(), &A, b.data(), cones.size(), cones.data(), &settings);
     }
 
     template<>
     inline DefaultSolver<float>::DefaultSolver(
-        const CscMatrix<float> *P,
-        const float *q,
-        const CscMatrix<float> *A,
-        const float *b,
-        const std::vector<SupportedConeT<float>> &_cones,
-        const DefaultSettings<float> *settings) : cones(_cones)
+        const CscMatrix<float> &P,
+        const std::vector<float> &q,
+        const CscMatrix<float> &A,
+        const std::vector<float> &b,
+        const std::vector<SupportedConeT<float>> &cones,
+        const DefaultSettings<float> &settings)
     {
-        handle = clarabel_DefaultSolver_f32_new(P, q, A, b, cones.size(), cones.data(), settings);
+        check_dimensions(P, q, A, b); // Rust wrapper will assume the pointers represent matrices with the right dimensions.
+        handle = clarabel_DefaultSolver_f32_new(&P, q.data(), &A, b.data(), cones.size(), cones.data(), &settings);
     }
 
 

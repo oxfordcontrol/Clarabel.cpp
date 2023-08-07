@@ -32,7 +32,7 @@ int main()
         nullptr   // nzval
     );
 
-    double q[6] = { 0., 0., -1., 0., 0., -1. };
+    vector<double> q = { 0., 0., -1., 0., 0., -1. };
 
     /* From dense matrix:
     * [[-1., 0., 0., 0., 0., 0.],
@@ -44,7 +44,6 @@ int main()
     *  [1., 2., 0., 3., 0., 0.],
     *  [0., 0., 0., 0., 1., 0.]]
     */
-
     uintptr_t A_colptr[]{ 0, 2, 4, 5, 7, 9, 10 };
     uintptr_t A_rowptr[]{ 0, 6, 1, 6, 2, 3, 6, 4, 7, 5 };
     double A_nzvals[]{ -1.0, 1.0, -1.0, 2.0, -1.0, -1.0, 3.0, -1.0, 1.0, -1.0 };
@@ -57,7 +56,7 @@ int main()
         A_nzvals  // nzval
     );
 
-    double b[8] = { 0., 0., 0., 0., 0., 0., 3., 1. };
+    vector<double> b = { 0., 0., 0., 0., 0., 0., 3., 1. };
 
     vector<SupportedConeT<double>> cones
     {
@@ -74,14 +73,7 @@ int main()
         .build();
 
     // Build solver
-    DefaultSolver<double> solver(
-        &P, // P
-        q,  // q
-        &A, // A
-        b,  // b
-        cones,
-        &settings
-    );
+    DefaultSolver<double> solver(P, q, A, b, cones, settings);
 
     // Solve
     solver.solve();
