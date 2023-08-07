@@ -14,7 +14,7 @@ int main()
     SparseMatrix<double> P = P_dense.sparseView();
     P.makeCompressed();
     
-    double q[2] = {1.0, -1.0};
+    Vector<double, 2> q = {1.0, -1.0};
 
     // a 2-d box constraint, separated into 4 inequalities.
     // A = [I; -I]
@@ -27,8 +27,8 @@ int main()
         
     SparseMatrix<double> A = A_dense.sparseView();
     A.makeCompressed();
-    
-    double b[4] = { 1.0, 1.0, 1.0, 1.0 };
+
+    Vector<double, 4> b = { 1.0, 1.0, 1.0, 1.0 };
 
     vector<SupportedConeT<double>> cones
     {

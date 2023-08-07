@@ -26,9 +26,8 @@ namespace clarabel
 
     public:
         // Lifetime of problem data:
-        // - Cones are copied on the Rust side, so we don't need to worry about the lifetime of the cones.
-        // - The settings struct is also copied on the Rust side.
-        // - Matrices P, A and vectors q, b must be kept alive until the solver is destroyed.
+        // - Vectors q, b, cones and the settings are copied when the DefaultSolver object is created in Rust.
+        // - Matrices P, A must be kept alive until the solver is destroyed.
         DefaultSolver(
             const CscMatrix<T> &P,
             const std::vector<T> &q,

@@ -29,8 +29,8 @@ namespace clarabel
             ConvertedCscMatrix(
                 uintptr_t m,
                 uintptr_t n,
-                std::vector<uintptr_t> &colptr,
-                std::vector<uintptr_t> &rowval,
+                std::vector<uintptr_t> &&colptr,
+                std::vector<uintptr_t> &&rowval,
                 const T *nzval)
                 :
                 m(m), n(n),
@@ -56,15 +56,13 @@ namespace clarabel
 
         public:
             // Lifetime of problem data:
-            // - Cones are copied on the Rust side, so we don't need to worry about the lifetime of the cones.
-            // - The settings struct is also copied on the Rust side.
-            // - Matrices P, A are converted and kept alive by the unique_ptr.
-            // - Vectors q, b must be kept alive until the solver is destroyed.
+            // - Matrices P, A are converted and the converted colptr and rowptr are kept alive by the unique_ptr, but matrix data is not copied, so the Eigen sparse matrices must be kept alive until the solver is destroyed.
+            // - Vectors q, b, cones and the settings are copied when the DefaultSolver object is created in Rust.
             DefaultSolver(
                 const Eigen::SparseMatrix<T, Eigen::ColMajor> &P,
-                const T *q,
+                const Eigen::Ref<Eigen::VectorX<T>> &q,
                 const Eigen::SparseMatrix<T, Eigen::ColMajor> &A,
-                const T *b,
+                const Eigen::Ref<Eigen::VectorX<T>> &b,
                 const std::vector<SupportedConeT<T>> &cones,
                 const DefaultSettings<T> *settings);
         };
@@ -94,8 +92,8 @@ namespace clarabel
             ConvertedCscMatrix<T> *csc_matrix = new ConvertedCscMatrix<T>(
                 static_cast<uintptr_t>(matrix.rows()),
                 static_cast<uintptr_t>(matrix.cols()),
-                col_pointers,
-                row_indices,
+                std::move(col_pointers),
+                std::move(row_indices),
                 nzval_ptr
             );
 
@@ -110,37 +108,36 @@ namespace clarabel
         template<>
         inline DefaultSolver<double>::DefaultSolver(
             const Eigen::SparseMatrix<double, Eigen::ColMajor> &P,
-            const double *q,
+            const Eigen::Ref<Eigen::VectorX<double>> &q,
             const Eigen::SparseMatrix<double, Eigen::ColMajor> &A,
-            const double *b,
+            const Eigen::Ref<Eigen::VectorX<double>> &b,
             const std::vector<SupportedConeT<double>> &cones,
             const DefaultSettings<double> *settings)
-            : 
-            matrix_P(DefaultSolver<double>::eigen_sparse_to_clarabel(P)),
-            matrix_A(DefaultSolver<double>::eigen_sparse_to_clarabel(A))
+            : matrix_P(DefaultSolver<double>::eigen_sparse_to_clarabel(P)),
+              matrix_A(DefaultSolver<double>::eigen_sparse_to_clarabel(A))
         {
+            // TODO: consider checking dimensions?
             CscMatrix<double> p(matrix_P->m, matrix_P->n, matrix_P->colptr.data(), matrix_P->rowval.data(), matrix_P->nzval);
             CscMatrix<double> a(matrix_A->m, matrix_A->n, matrix_A->colptr.data(), matrix_A->rowval.data(), matrix_A->nzval);
 
-            this->handle = clarabel_DefaultSolver_f64_new(&p, q, &a, b, cones.size(), cones.data(), settings);
+            this->handle = clarabel_DefaultSolver_f64_new(&p, q.data(), &a, b.data(), cones.size(), cones.data(), settings);
         }
 
         template<>
         inline DefaultSolver<float>::DefaultSolver(
             const Eigen::SparseMatrix<float, Eigen::ColMajor> &P,
-            const float *q,
+            const Eigen::Ref<Eigen::VectorX<float>> &q,
             const Eigen::SparseMatrix<float, Eigen::ColMajor> &A,
-            const float *b,
+            const Eigen::Ref<Eigen::VectorX<float>> &b,
             const std::vector<SupportedConeT<float>> &cones,
             const DefaultSettings<float> *settings)
-            : 
-            matrix_P(DefaultSolver<float>::eigen_sparse_to_clarabel(P)),
-            matrix_A(DefaultSolver<float>::eigen_sparse_to_clarabel(A))
+            : matrix_P(DefaultSolver<float>::eigen_sparse_to_clarabel(P)),
+              matrix_A(DefaultSolver<float>::eigen_sparse_to_clarabel(A))
         {
             CscMatrix<float> p(matrix_P->m, matrix_P->n, matrix_P->colptr.data(), matrix_P->rowval.data(), matrix_P->nzval);
             CscMatrix<float> a(matrix_A->m, matrix_A->n, matrix_A->colptr.data(), matrix_A->rowval.data(), matrix_A->nzval);
 
-            this->handle = clarabel_DefaultSolver_f32_new(&p, q, &a, b, cones.size(), cones.data(), settings);
+            this->handle = clarabel_DefaultSolver_f32_new(&p, q.data(), &a, b.data(), cones.size(), cones.data(), settings);
         }
 
     } // namespace eigen

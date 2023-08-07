@@ -15,7 +15,7 @@ int main(void)
     SparseMatrix<double> P = MatrixXd::Zero(3, 3).sparseView();
     P.makeCompressed();
 
-    double q[3] = { -1.0, 0.0, 0.0 };
+    Vector<double, 3> q{ -1.0, 0.0, 0.0 };
 
     MatrixXd A_dense(5, 3);
     A_dense <<
@@ -28,7 +28,7 @@ int main(void)
     SparseMatrix<double> A = A_dense.sparseView();
     A.makeCompressed();
 
-    double b[5] = { 0., 0., 0., 1., exp(5.0) };
+    Vector<double, 5> b { 0., 0., 0., 1., exp(5.0) };
 
     vector<SupportedConeT<double>> cones
     {
