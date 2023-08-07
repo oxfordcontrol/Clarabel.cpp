@@ -43,7 +43,7 @@ int main()
                                            .build();
 
     // Build solver
-    clarabel::eigen::DefaultSolver<double> solver(P, q, A, b, cones, &settings);
+    clarabel::eigen::DefaultSolver<double> solver(P, q, A, b, cones, settings);
 
     // Solve
     solver.solve();
