@@ -15,43 +15,18 @@ namespace clarabel
     namespace eigen
     {
         template<typename T = double>
-        struct ConvertedCscMatrix
-        {
-            static_assert(std::is_same<T, float>::value || std::is_same<T, double>::value, "T must be float or double");
-
-            uintptr_t m;
-            uintptr_t n;
-            const std::vector<uintptr_t> colptr;
-            const std::vector<uintptr_t> rowval;
-            const T *nzval;
-
-            // Use move semantics to avoid copying the data
-            ConvertedCscMatrix(
-                uintptr_t m,
-                uintptr_t n,
-                std::vector<uintptr_t> &&colptr,
-                std::vector<uintptr_t> &&rowval,
-                const T *nzval)
-                :
-                m(m), n(n),
-                colptr(std::move(colptr)),
-                rowval(std::move(rowval)),
-                nzval(nzval)
-            {
-            }
-        };
-
-        template<typename T = double>
         class DefaultSolver : public clarabel::DefaultSolver<T>
         {
         private:
+            struct ConvertedCscMatrix;
+            
             // Holds the rowptr and colptr values converted from Eigen sparse matrix.
             // These intermediate values should be disposed when this DefaultSolver object is destroyed.
-            std::unique_ptr<ConvertedCscMatrix<T>> matrix_P = nullptr, matrix_A = nullptr;
+            std::unique_ptr<ConvertedCscMatrix> matrix_P = nullptr, matrix_A = nullptr;
 
             // Helper function for converting a Eigen sparse matrix into a temporary object of type ConvertedCscMatrix<T>
             // The temporary object is used to keep the matrix data used by the solver alive, and will be used to init a clarabel::CscMatrix<T> object, which is then passed to the solver.
-            static std::unique_ptr<ConvertedCscMatrix<T>> eigen_sparse_to_clarabel(
+            static std::unique_ptr<ConvertedCscMatrix> eigen_sparse_to_clarabel(
                 const Eigen::SparseMatrix<T, Eigen::ColMajor> &matrix);
 
         public:
@@ -68,7 +43,31 @@ namespace clarabel
         };
 
         template<typename T>
-        std::unique_ptr<ConvertedCscMatrix<T>>
+        struct DefaultSolver<T>::ConvertedCscMatrix
+        {
+            uintptr_t m;
+            uintptr_t n;
+            const std::vector<uintptr_t> colptr;
+            const std::vector<uintptr_t> rowval;
+            const T *nzval;
+
+            // Use move semantics to avoid copying the data
+            ConvertedCscMatrix(
+                uintptr_t m,
+                uintptr_t n,
+                std::vector<uintptr_t> &&colptr,
+                std::vector<uintptr_t> &&rowval,
+                const T *nzval)
+                : m(m), n(n),
+                  colptr(std::move(colptr)),
+                  rowval(std::move(rowval)),
+                  nzval(nzval)
+            {
+            }
+        };
+
+        template<typename T>
+        std::unique_ptr<typename DefaultSolver<T>::ConvertedCscMatrix>
             DefaultSolver<T>::eigen_sparse_to_clarabel(const Eigen::SparseMatrix<T, Eigen::ColMajor> &matrix)
         {            
             // Make a copy of data in SparseMatrix to convert StorageIndex to uintptr_t
@@ -89,7 +88,7 @@ namespace clarabel
             // No conversion needed for nz values
             const T *nzval_ptr = matrix.nonZeros() == 0 ? nullptr : matrix.valuePtr();
 
-            ConvertedCscMatrix<T> *csc_matrix = new ConvertedCscMatrix<T>(
+            ConvertedCscMatrix *csc_matrix = new ConvertedCscMatrix(
                 static_cast<uintptr_t>(matrix.rows()),
                 static_cast<uintptr_t>(matrix.cols()),
                 std::move(col_pointers),
@@ -97,7 +96,7 @@ namespace clarabel
                 nzval_ptr
             );
 
-            return std::unique_ptr<ConvertedCscMatrix<T>>(csc_matrix);
+            return std::unique_ptr<ConvertedCscMatrix>(csc_matrix);
         }
 
         
