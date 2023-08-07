@@ -21,8 +21,8 @@ int main(void)
 
     SparseMatrix<double> P = P_dense.sparseView();
     P.makeCompressed();
-    
-    double q[2] = { -1., -4. };
+
+    Vector<double, 2> q = { -1., -4. };
 
     MatrixXd A_dense(5, 2);
     A_dense <<
@@ -35,7 +35,7 @@ int main(void)
     SparseMatrix<double> A = A_dense.sparseView();
     A.makeCompressed();
 
-    double b[5] = { 0., 1., 1., 1., 1. };
+    Vector<double, 5> b = { 0., 1., 1., 1., 1. };
 
     vector<SupportedConeT<double>> cones
     {
@@ -47,7 +47,7 @@ int main(void)
     DefaultSettings<double> settings = DefaultSettingsBuilder<double>::default_settings().build();
 
     // Build solver
-    clarabel::eigen::DefaultSolver<double> solver(P, q, A, b, cones, &settings);
+    clarabel::eigen::DefaultSolver<double> solver(P, q, A, b, cones, settings);
 
     // Solve
     solver.solve();
