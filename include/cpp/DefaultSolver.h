@@ -24,6 +24,34 @@ namespace clarabel
 
         DefaultSolver() = default;
 
+    private:
+        static void check_dimensions(
+            const CscMatrix<T> &P,
+            const std::vector<T> &q,
+            const CscMatrix<T> &A,
+            const std::vector<T> &b)
+        {
+            if (P.m != P.n)
+            {
+                throw std::invalid_argument("P must be a square matrix");
+            }
+
+            if (P.m != q.size())
+            {
+                throw std::invalid_argument("P and q must have the same number of rows");
+            }
+
+            if (A.n != P.n)
+            {
+                throw std::invalid_argument("A and P must have the same number of columns");
+            }
+
+            if (A.m != b.size())
+            {
+                throw std::invalid_argument("A and b must have the same number of rows");
+            }
+        }
+
     public:
         // Lifetime of problem data:
         // - Vectors q, b, cones and the settings are copied when the DefaultSolver object is created in Rust.
@@ -89,6 +117,7 @@ namespace clarabel
         const std::vector<SupportedConeT<double>> &cones,
         const DefaultSettings<double> &settings)
     {
+        check_dimensions(P, q, A, b); // Rust wrapper will assume the pointers represent matrices with the right dimensions.
         handle = clarabel_DefaultSolver_f64_new(&P, q.data(), &A, b.data(), cones.size(), cones.data(), &settings);
     }
 
@@ -101,6 +130,7 @@ namespace clarabel
         const std::vector<SupportedConeT<float>> &cones,
         const DefaultSettings<float> &settings)
     {
+        check_dimensions(P, q, A, b); // Rust wrapper will assume the pointers represent matrices with the right dimensions.
         handle = clarabel_DefaultSolver_f32_new(&P, q.data(), &A, b.data(), cones.size(), cones.data(), &settings);
     }
 

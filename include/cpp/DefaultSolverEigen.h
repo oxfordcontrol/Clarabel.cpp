@@ -29,6 +29,33 @@ namespace clarabel
             static std::unique_ptr<ConvertedCscMatrix> eigen_sparse_to_clarabel(
                 const Eigen::SparseMatrix<T, Eigen::ColMajor> &matrix);
 
+            static void check_dimensions(
+                const Eigen::SparseMatrix<T, Eigen::ColMajor> &P,
+                const Eigen::Ref<const Eigen::VectorX<T>> &q,
+                const Eigen::SparseMatrix<T, Eigen::ColMajor> &A,
+                const Eigen::Ref<const Eigen::VectorX<T>> &b)
+            {
+                if (P.rows() != P.cols())
+                {
+                    throw std::invalid_argument("P must be a square matrix");
+                }
+
+                if (P.rows() != q.size())
+                {
+                    throw std::invalid_argument("P and q must have the same number of rows");
+                }
+
+                if (A.cols() != P.cols())
+                {
+                    throw std::invalid_argument("A and P must have the same number of columns");
+                }
+
+                if (A.rows() != b.size())
+                {
+                    throw std::invalid_argument("A and b must have the same number of rows");
+                }
+            }
+
         public:
             // Lifetime of problem data:
             // - Matrices P, A are converted and the converted colptr and rowptr are kept alive by the unique_ptr, but matrix data is not copied, so the Eigen sparse matrices must be kept alive until the solver is destroyed.
@@ -115,7 +142,7 @@ namespace clarabel
             : matrix_P(DefaultSolver<double>::eigen_sparse_to_clarabel(P)),
               matrix_A(DefaultSolver<double>::eigen_sparse_to_clarabel(A))
         {
-            // TODO: consider checking dimensions?
+            check_dimensions(P, q, A, b); // Rust wrapper will assume the pointers represent matrices with the right dimensions.
             CscMatrix<double> p(matrix_P->m, matrix_P->n, matrix_P->colptr.data(), matrix_P->rowval.data(), matrix_P->nzval);
             CscMatrix<double> a(matrix_A->m, matrix_A->n, matrix_A->colptr.data(), matrix_A->rowval.data(), matrix_A->nzval);
 
@@ -133,6 +160,7 @@ namespace clarabel
             : matrix_P(DefaultSolver<float>::eigen_sparse_to_clarabel(P)),
               matrix_A(DefaultSolver<float>::eigen_sparse_to_clarabel(A))
         {
+            check_dimensions(P, q, A, b); // Rust wrapper will assume the pointers represent matrices with the right dimensions.
             CscMatrix<float> p(matrix_P->m, matrix_P->n, matrix_P->colptr.data(), matrix_P->rowval.data(), matrix_P->nzval);
             CscMatrix<float> a(matrix_A->m, matrix_A->n, matrix_A->colptr.data(), matrix_A->rowval.data(), matrix_A->nzval);
 
