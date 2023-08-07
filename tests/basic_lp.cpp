@@ -14,8 +14,8 @@ class BasicLPTest : public ::testing::Test
 {
   protected:
     SparseMatrix<double> P, A;
-    double c[3] = { 3., -2., 1. };
-    double b[6] = { 1., 1., 1., 1., 1., 1. };
+    Vector<double, 3> c = { 3., -2., 1. };
+    Vector<double, 6> b = { 1., 1., 1., 1., 1., 1. };
     vector<SupportedConeT<double>> cones = {
         NonnegativeConeT<double>(3),
         NonnegativeConeT<double>(3)
@@ -42,7 +42,7 @@ TEST_F(BasicLPTest, Feasible)
 {
     DefaultSettings<double> settings = DefaultSettingsBuilder<double>::default_settings().build();
 
-    clarabel::eigen::DefaultSolver<double> solver(P, c, A, b, cones, &settings);
+    clarabel::eigen::DefaultSolver<double> solver(P, c, A, b, cones, settings);
     solver.solve();
 
     DefaultSolution<double> solution = solver.solution();
@@ -75,7 +75,7 @@ TEST_F(BasicLPTest, PrimalInfeasible)
 
     DefaultSettings<double> settings = DefaultSettingsBuilder<double>::default_settings().build();
 
-    clarabel::eigen::DefaultSolver<double> solver(P, c, A, b, cones, &settings);
+    clarabel::eigen::DefaultSolver<double> solver(P, c, A, b, cones, settings);
     solver.solve();
 
     DefaultSolution<double> solution = solver.solution();
@@ -94,7 +94,7 @@ TEST_F(BasicLPTest, InfeasibleIllCond)
 
     DefaultSettings<double> settings = DefaultSettingsBuilder<double>::default_settings().build();
 
-    clarabel::eigen::DefaultSolver<double> solver(P, c, A, b, cones, &settings);
+    clarabel::eigen::DefaultSolver<double> solver(P, c, A, b, cones, settings);
     solver.solve();
 
     DefaultSolution<double> solution = solver.solution();

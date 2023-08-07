@@ -15,18 +15,18 @@ TEST(BasicUnconstrainedTest, Feasible)
     SparseMatrix<double> P = MatrixXd::Identity(3, 3).sparseView();
     P.makeCompressed();
 
-    double c[3] = { 1., 2., -3. };
+    Vector<double, 3> c = { 1., 2., -3. };
 
     SparseMatrix<double> A = MatrixXd::Zero(0, 3).sparseView();
     A.makeCompressed();
 
-    double b[0] = {};
+    Vector<double, 0> b = {};
 
     vector<SupportedConeT<double>> cones = {};
 
     DefaultSettings<double> settings = DefaultSettingsBuilder<double>::default_settings().build();
 
-    clarabel::eigen::DefaultSolver<double> solver(P, c, A, b, cones, &settings);
+    clarabel::eigen::DefaultSolver<double> solver(P, c, A, b, cones, settings);
     solver.solve();
 
     DefaultSolution<double> solution = solver.solution();
@@ -48,18 +48,18 @@ TEST(BasicUnconstrainedTest, Infeasible)
     SparseMatrix<double> P = MatrixXd::Zero(3, 3).sparseView();
     P.makeCompressed();
 
-    double c[3] = { 1., 0., 0. };
+    Vector<double, 3> c = { 1., 0., 0. };
 
     SparseMatrix<double> A = MatrixXd::Zero(0, 3).sparseView();
     A.makeCompressed();
 
-    double b[0] = {};
+    Vector<double, 0> b = {};
 
     vector<SupportedConeT<double>> cones = {};
 
     DefaultSettings<double> settings = DefaultSettingsBuilder<double>::default_settings().build();
 
-    clarabel::eigen::DefaultSolver<double> solver(P, c, A, b, cones, &settings);
+    clarabel::eigen::DefaultSolver<double> solver(P, c, A, b, cones, settings);
     solver.solve();
 
     ASSERT_EQ(solver.solution().status, SolverStatus::DualInfeasible);

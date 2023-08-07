@@ -22,7 +22,7 @@ TEST(MixedConicTest, Feasible)
     SparseMatrix<double> P = MatrixXd::Identity(n, n).sparseView();
     P.makeCompressed();
 
-    double c[3] = { 1., 1., 1. };
+    Vector<double, 3> c = { 1., 1., 1. };
 
     MatrixXd A_dense = MatrixXd::Zero(5 * n, n);
     A_dense <<
@@ -34,7 +34,7 @@ TEST(MixedConicTest, Feasible)
     SparseMatrix<double> A = A_dense.sparseView();
     A.makeCompressed();
 
-    double b[5 * n] = { 0. };
+    Vector<double, 5 * n> b = Vector<double, 5 * n>::Zero();
 
     // put a 3 dimensional vector into the composition of multiple
     // cones, all with b = 0 on the RHS
@@ -48,7 +48,7 @@ TEST(MixedConicTest, Feasible)
 
     DefaultSettings<double> settings = DefaultSettingsBuilder<double>::default_settings().build();
 
-    clarabel::eigen::DefaultSolver<double> solver(P, c, A, b, cones, &settings);
+    clarabel::eigen::DefaultSolver<double> solver(P, c, A, b, cones, settings);
     solver.solve();
 
     ASSERT_EQ(solver.solution().status, SolverStatus::Solved);
