@@ -20,7 +20,7 @@ namespace clarabel
     {
         static_assert(std::is_same<T, float>::value || std::is_same<T, double>::value, "T must be float or double");
     protected:
-        RustObjectHandle handle;
+        RustObjectHandle handle = nullptr;
 
         DefaultSolver() = default;
 
@@ -138,16 +138,18 @@ namespace clarabel
     template<>
     inline DefaultSolver<double>::~DefaultSolver()
     {
-        clarabel_DefaultSolver_f64_free(handle);
+        if (handle != nullptr)
+            clarabel_DefaultSolver_f64_free(handle);
     }
 
     template<>
     inline DefaultSolver<float>::~DefaultSolver()
     {
-        clarabel_DefaultSolver_f32_free(handle);
+        if (handle != nullptr)
+            clarabel_DefaultSolver_f32_free(handle);
     }
 
-
+    
     template<>
     inline void DefaultSolver<double>::solve()
     {

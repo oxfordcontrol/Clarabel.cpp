@@ -17,6 +17,7 @@ else()
 endif()
 
 add_executable(clarabel_cpp_tests
+    api_dimension_checks.cpp
     basic_lp.cpp
     basic_qp.cpp
     basic_unconstrained.cpp
