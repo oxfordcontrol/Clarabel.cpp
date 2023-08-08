@@ -20,6 +20,7 @@ class BasicQPTest : public ::testing::Test
         NonnegativeConeT<double>(3),
         NonnegativeConeT<double>(3)
     };
+    DefaultSettings<double> settings = DefaultSettings<double>::default_settings();
 
     BasicQPTest()
     {
@@ -58,8 +59,6 @@ TEST_F(BasicQPTest, Univariate)
         NonnegativeConeT<double>(1)
     };
 
-    DefaultSettings<double> settings = DefaultSettingsBuilder<double>::default_settings().build();
-
     clarabel::eigen::DefaultSolver<double> solver(P, c1, A, b1, cones, settings);
     solver.solve();
 
@@ -73,8 +72,6 @@ TEST_F(BasicQPTest, Univariate)
 
 TEST_F(BasicQPTest, Feasible)
 {
-    DefaultSettings<double> settings = DefaultSettingsBuilder<double>::default_settings().build();
-
     clarabel::eigen::DefaultSolver<double> solver(P, c, A, b, cones, settings);
     solver.solve();
 
@@ -96,8 +93,6 @@ TEST_F(BasicQPTest, PrimalInfeasible)
     b[0] = -1.;
     b[3] = -1.;
 
-    DefaultSettings<double> settings = DefaultSettingsBuilder<double>::default_settings().build();
-
     clarabel::eigen::DefaultSolver<double> solver(P, c, A, b, cones, settings);
     solver.solve();
 
@@ -113,6 +108,7 @@ class BasicQPDualInfeasibleTest : public ::testing::Test
     vector<SupportedConeT<double>> cones = {
         NonnegativeConeT<double>(2)
     };
+    DefaultSettings<double> settings = DefaultSettings<double>::default_settings();
 
     BasicQPDualInfeasibleTest()
     {
@@ -130,8 +126,6 @@ class BasicQPDualInfeasibleTest : public ::testing::Test
 
 TEST_F(BasicQPDualInfeasibleTest, DualInfeasible)
 {
-    DefaultSettings<double> settings = DefaultSettingsBuilder<double>::default_settings().build();
-
     clarabel::eigen::DefaultSolver<double> solver(P, c, A, b, cones, settings);
     solver.solve();
 
@@ -150,8 +144,6 @@ TEST_F(BasicQPDualInfeasibleTest, DualInfeasibleIllConditioned)
     };
 
     Vector<double, 1> b1{ 1. };
-
-    DefaultSettings<double> settings = DefaultSettingsBuilder<double>::default_settings().build();
 
     clarabel::eigen::DefaultSolver<double> solver(P, c, A, b1, cones, settings);
     solver.solve();

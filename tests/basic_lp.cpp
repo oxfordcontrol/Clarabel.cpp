@@ -20,6 +20,7 @@ class BasicLPTest : public ::testing::Test
         NonnegativeConeT<double>(3),
         NonnegativeConeT<double>(3)
     };
+    DefaultSettings<double> settings = DefaultSettings<double>::default_settings();
 
     BasicLPTest()
     {
@@ -40,8 +41,6 @@ class BasicLPTest : public ::testing::Test
 
 TEST_F(BasicLPTest, Feasible)
 {
-    DefaultSettings<double> settings = DefaultSettingsBuilder<double>::default_settings().build();
-
     clarabel::eigen::DefaultSolver<double> solver(P, c, A, b, cones, settings);
     solver.solve();
 
@@ -73,8 +72,6 @@ TEST_F(BasicLPTest, PrimalInfeasible)
     c[1] = 0.0;
     c[2] = 0.0;
 
-    DefaultSettings<double> settings = DefaultSettingsBuilder<double>::default_settings().build();
-
     clarabel::eigen::DefaultSolver<double> solver(P, c, A, b, cones, settings);
     solver.solve();
 
@@ -91,8 +88,6 @@ TEST_F(BasicLPTest, InfeasibleIllCond)
     c[0] = 1.0;
     c[1] = 0.0;
     c[2] = 0.0;
-
-    DefaultSettings<double> settings = DefaultSettingsBuilder<double>::default_settings().build();
 
     clarabel::eigen::DefaultSolver<double> solver(P, c, A, b, cones, settings);
     solver.solve();

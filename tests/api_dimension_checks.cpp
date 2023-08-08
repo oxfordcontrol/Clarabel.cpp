@@ -24,7 +24,7 @@ class DimensionChecksTest : public ::testing::Test
         NonnegativeConeT<double>(3)
     };
 
-    DefaultSettings<double> settings = DefaultSettingsBuilder<double>::default_settings().build();
+    DefaultSettings<double> settings = DefaultSettings<double>::default_settings();
 
     DimensionChecksTest()
     {

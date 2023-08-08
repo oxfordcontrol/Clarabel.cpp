@@ -55,7 +55,7 @@ namespace clarabel
         T iterative_refinement_stop_ratio;
         bool presolve_enable;
 
-        // TODO: add default ctor and copy ctor
+        static DefaultSettings<T> default_settings();
     };
 
     // Instantiate the templates
@@ -68,10 +68,16 @@ namespace clarabel
         static_assert(std::is_same<T, float>::value || std::is_same<T, double>::value, "T must be float or double");
     private:
         DefaultSettings<T> settings;
-        DefaultSettingsBuilder();
+        DefaultSettingsBuilder()
+        {
+            settings = DefaultSettings<T>::default_settings();    
+        }
 
     public:
-        static DefaultSettingsBuilder<T> default_settings();
+        static DefaultSettingsBuilder<T> default_settings()
+        {
+            return DefaultSettingsBuilder<T>();
+        }
 
         DefaultSettings<T> build() { return settings; }
 
@@ -305,30 +311,16 @@ namespace clarabel
         DefaultSettings<float> clarabel_DefaultSettingsBuilder_f32_default();
     }
 
-    
     template<>
-    inline DefaultSettingsBuilder<double>::DefaultSettingsBuilder()
+    inline DefaultSettings<double> DefaultSettings<double>::default_settings()
     {
-        settings = clarabel_DefaultSettingsBuilder_f64_default();
+        return clarabel_DefaultSettingsBuilder_f64_default();
     }
 
     template<>
-    inline DefaultSettingsBuilder<float>::DefaultSettingsBuilder()
+    inline DefaultSettings<float> DefaultSettings<float>::default_settings()
     {
-        settings = clarabel_DefaultSettingsBuilder_f32_default();
-    }
-
-
-    template<>
-    inline DefaultSettingsBuilder<double> DefaultSettingsBuilder<double>::default_settings()
-    {
-        return DefaultSettingsBuilder<double>();
-    }
-
-    template<>
-    inline DefaultSettingsBuilder<float> DefaultSettingsBuilder<float>::default_settings()
-    {
-        return DefaultSettingsBuilder<float>();
+        return clarabel_DefaultSettingsBuilder_f32_default();
     }
 
 }

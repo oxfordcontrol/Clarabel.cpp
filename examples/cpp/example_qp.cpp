@@ -44,7 +44,7 @@ int main(void)
     };
 
     // Settings
-    DefaultSettings<double> settings = DefaultSettingsBuilder<double>::default_settings().build();
+    DefaultSettings<double> settings = DefaultSettings<double>::default_settings();
 
     // Build solver
     clarabel::eigen::DefaultSolver<double> solver(P, q, A, b, cones, settings);

@@ -24,7 +24,7 @@ TEST(BasicUnconstrainedTest, Feasible)
 
     vector<SupportedConeT<double>> cones = {};
 
-    DefaultSettings<double> settings = DefaultSettingsBuilder<double>::default_settings().build();
+    DefaultSettings<double> settings = DefaultSettings<double>::default_settings();
 
     clarabel::eigen::DefaultSolver<double> solver(P, c, A, b, cones, settings);
     solver.solve();
@@ -57,7 +57,7 @@ TEST(BasicUnconstrainedTest, Infeasible)
 
     vector<SupportedConeT<double>> cones = {};
 
-    DefaultSettings<double> settings = DefaultSettingsBuilder<double>::default_settings().build();
+    DefaultSettings<double> settings = DefaultSettings<double>::default_settings();
 
     clarabel::eigen::DefaultSolver<double> solver(P, c, A, b, cones, settings);
     solver.solve();
