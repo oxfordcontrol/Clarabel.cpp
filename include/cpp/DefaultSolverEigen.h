@@ -40,6 +40,8 @@ namespace clarabel
                     throw std::invalid_argument("P must be a square matrix");
                 }
 
+                int n = P.rows();
+                int m = q.size();
                 if (P.rows() != q.size())
                 {
                     throw std::invalid_argument("P and q must have the same number of rows");
@@ -139,10 +141,12 @@ namespace clarabel
             const Eigen::Ref<Eigen::VectorX<double>> &b,
             const std::vector<SupportedConeT<double>> &cones,
             const DefaultSettings<double> &settings)
-            : matrix_P(DefaultSolver<double>::eigen_sparse_to_clarabel(P)),
-              matrix_A(DefaultSolver<double>::eigen_sparse_to_clarabel(A))
         {
             check_dimensions(P, q, A, b); // Rust wrapper will assume the pointers represent matrices with the right dimensions.
+
+            // segfault will occur if the dimensions are incorrect
+            matrix_P = DefaultSolver<double>::eigen_sparse_to_clarabel(P);
+            matrix_A = DefaultSolver<double>::eigen_sparse_to_clarabel(A);
             CscMatrix<double> p(matrix_P->m, matrix_P->n, matrix_P->colptr.data(), matrix_P->rowval.data(), matrix_P->nzval);
             CscMatrix<double> a(matrix_A->m, matrix_A->n, matrix_A->colptr.data(), matrix_A->rowval.data(), matrix_A->nzval);
 
@@ -161,6 +165,10 @@ namespace clarabel
               matrix_A(DefaultSolver<float>::eigen_sparse_to_clarabel(A))
         {
             check_dimensions(P, q, A, b); // Rust wrapper will assume the pointers represent matrices with the right dimensions.
+
+            // segfault will occur if the dimensions are incorrect
+            matrix_P = DefaultSolver<float>::eigen_sparse_to_clarabel(P);
+            matrix_A = DefaultSolver<float>::eigen_sparse_to_clarabel(A);
             CscMatrix<float> p(matrix_P->m, matrix_P->n, matrix_P->colptr.data(), matrix_P->rowval.data(), matrix_P->nzval);
             CscMatrix<float> a(matrix_A->m, matrix_A->n, matrix_A->colptr.data(), matrix_A->rowval.data(), matrix_A->nzval);
 

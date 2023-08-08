@@ -19,6 +19,8 @@ pub type ClarabelDefaultSolver_f64 = c_void;
 // - Matrices and vectors are constructed from raw pointers
 // - Cones are converted from C struct to Rust struct
 // - Settings are converted from C struct to Rust struct
+//
+// b and cones are allowed to be null pointers, in which case they form zero-length slices and this is consistent with Clarabel.rs.
 #[allow(non_snake_case)]
 unsafe fn _internal_DefaultSolver_new<T: FloatT>(
     P: *const ClarabelCscMatrix<T>, // Matrix P
@@ -33,9 +35,7 @@ unsafe fn _internal_DefaultSolver_new<T: FloatT>(
     debug_assert!(!P.is_null(), "Pointer P must not be null");
     debug_assert!(!q.is_null(), "Pointer q must not be null");
     debug_assert!(!A.is_null(), "Pointer A must not be null");
-    debug_assert!(!b.is_null(), "Pointer b must not be null");
-    debug_assert!(!cones.is_null(), "Pointer cones must not be null");
-    if P.is_null() || q.is_null() || A.is_null() || b.is_null() || cones.is_null() {
+    if P.is_null() || q.is_null() || A.is_null() {
         return std::ptr::null_mut();
     }
 
