@@ -58,7 +58,7 @@ namespace clarabel
             this->nonnegative_cone_t = { dimension };
         }
 
-        uintptr_t dimension() { return this->nonnegative_cone_t._0; }
+        uintptr_t dimension() const { return this->nonnegative_cone_t._0; }
     };
 
     template<typename T = double>
@@ -71,7 +71,7 @@ namespace clarabel
             this->zero_cone_t = { dimension };
         }
 
-        uintptr_t dimension() { return this->zero_cone_t._0; }
+        uintptr_t dimension() const { return this->zero_cone_t._0; }
     };
 
     template<typename T = double>
@@ -84,7 +84,7 @@ namespace clarabel
             this->second_order_cone_t = { dimension };
         }
 
-        T dimension() { return this->second_order_cone_t._0; }
+        T dimension() const { return this->second_order_cone_t._0; }
     };
 
     template<typename T = double>
@@ -107,7 +107,7 @@ namespace clarabel
             this->power_cone_t = { power };
         }
 
-        T power() { return this->power_cone_t._0; }
+        T power() const { return this->power_cone_t._0; }
     };
 
 #ifdef FEATURE_SDP
@@ -121,7 +121,7 @@ namespace clarabel
             this->psd_triangle_cone_t = { dimension };
         }
 
-        T dimension() { return this->psd_triangle_cone_t._0; }
+        T dimension() const { return this->psd_triangle_cone_t._0; }
     };
 #endif
 }
