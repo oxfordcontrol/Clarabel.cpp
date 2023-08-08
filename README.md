@@ -116,7 +116,26 @@ where `VCPKG_TOOLCHAIN_PATH` is the path to the vcpkg toolchain file.
 
 - For 32-bit platforms, use `x86-windows` instead of `x64-windows`.
 
+## CMake options
+
+### SDP support
+
+To enable SDP features, set the `CLARABEL_ENABLE_SDP` option to one of the following values:
+- `sdp-accelerate`
+- `sdp-netlib`
+- `sdp-openblas`
+- `sdp-mkl`
+- `sdp-r`
+
+By default, `CLARABEL_ENABLE_SDP` is `none` and SDP features are disabled.
+
+### Unit tests
+
+By default, unit tests are disabled to reduce build time. To enable unit tests, set the `CLARABEL_ENABLE_TESTS` option to `ON`.
+
 ## Run examples
+
+```sh
 
 Examples for both C and C++ are available in `examples/c` and `examples/cpp` and can be run from the `build` directory using:
 

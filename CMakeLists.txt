@@ -13,8 +13,8 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED True)
 
 # SDP feature configuration
-set(FEATURE_SDP "none" CACHE STRING "Package for SDP to be selected")
-set_property(CACHE FEATURE_SDP PROPERTY STRINGS 
+set(CLARABEL_FEATURE_SDP "none" CACHE STRING "Package for SDP to be selected")
+set_property(CACHE CLARABEL_FEATURE_SDP PROPERTY STRINGS 
     none
     sdp-accelerate
     sdp-netlib
@@ -40,5 +40,8 @@ add_subdirectory(rust_wrapper)
 add_subdirectory(examples)
 
 # Add tests
-enable_testing()
-add_subdirectory(tests)
+option(CLARABEL_BUILD_TESTS "Build the unit tests for Clarabel.cpp" OFF)
+if(CLARABEL_BUILD_TESTS)
+  enable_testing()
+  add_subdirectory(tests)
+endif()

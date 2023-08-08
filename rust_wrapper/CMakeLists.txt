@@ -19,9 +19,9 @@ endif()
 set(CLARABEL_C_OUTPUT_DIR ${clarabel_c_output_directory} PARENT_SCOPE)
 
 # SDP feature flag
-if(NOT FEATURE_SDP STREQUAL "none")
+if(NOT CLARABEL_FEATURE_SDP STREQUAL "none")
     # Set the Rust feature flag
-    set(clarabel_c_build_flags "${clarabel_c_build_flags};--features;${FEATURE_SDP}")
+    set(clarabel_c_build_flags "${clarabel_c_build_flags};--features;${CLARABEL_FEATURE_SDP}")
     
     # Define the FEATURE_SDP flag for all targets that link against clarabel_c
     target_compile_definitions(libclarabel_c_static INTERFACE FEATURE_SDP)
