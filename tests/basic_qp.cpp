@@ -59,7 +59,7 @@ TEST_F(BasicQPTest, Univariate)
         NonnegativeConeT<double>(1)
     };
 
-    clarabel::eigen::DefaultSolver<double> solver(P, c1, A, b1, cones, settings);
+    DefaultSolver<double> solver(P, c1, A, b1, cones, settings);
     solver.solve();
 
     DefaultSolution<double> solution = solver.solution();
@@ -72,7 +72,7 @@ TEST_F(BasicQPTest, Univariate)
 
 TEST_F(BasicQPTest, Feasible)
 {
-    clarabel::eigen::DefaultSolver<double> solver(P, c, A, b, cones, settings);
+    DefaultSolver<double> solver(P, c, A, b, cones, settings);
     solver.solve();
 
     DefaultSolution<double> solution = solver.solution();
@@ -93,7 +93,7 @@ TEST_F(BasicQPTest, PrimalInfeasible)
     b[0] = -1.;
     b[3] = -1.;
 
-    clarabel::eigen::DefaultSolver<double> solver(P, c, A, b, cones, settings);
+    DefaultSolver<double> solver(P, c, A, b, cones, settings);
     solver.solve();
 
     ASSERT_EQ(solver.solution().status, SolverStatus::PrimalInfeasible);
@@ -126,7 +126,7 @@ class BasicQPDualInfeasibleTest : public ::testing::Test
 
 TEST_F(BasicQPDualInfeasibleTest, DualInfeasible)
 {
-    clarabel::eigen::DefaultSolver<double> solver(P, c, A, b, cones, settings);
+    DefaultSolver<double> solver(P, c, A, b, cones, settings);
     solver.solve();
 
     ASSERT_EQ(solver.solution().status, SolverStatus::DualInfeasible);
@@ -145,7 +145,7 @@ TEST_F(BasicQPDualInfeasibleTest, DualInfeasibleIllConditioned)
 
     Vector<double, 1> b1{ 1. };
 
-    clarabel::eigen::DefaultSolver<double> solver(P, c, A, b1, cones, settings);
+    DefaultSolver<double> solver(P, c, A, b1, cones, settings);
     solver.solve();
 
     ASSERT_EQ(solver.solution().status, SolverStatus::DualInfeasible);

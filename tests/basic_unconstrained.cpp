@@ -26,7 +26,7 @@ TEST(BasicUnconstrainedTest, Feasible)
 
     DefaultSettings<double> settings = DefaultSettings<double>::default_settings();
 
-    clarabel::eigen::DefaultSolver<double> solver(P, c, A, b, cones, settings);
+    DefaultSolver<double> solver(P, c, A, b, cones, settings);
     solver.solve();
 
     DefaultSolution<double> solution = solver.solution();
@@ -59,7 +59,7 @@ TEST(BasicUnconstrainedTest, Infeasible)
 
     DefaultSettings<double> settings = DefaultSettings<double>::default_settings();
 
-    clarabel::eigen::DefaultSolver<double> solver(P, c, A, b, cones, settings);
+    DefaultSolver<double> solver(P, c, A, b, cones, settings);
     solver.solve();
 
     ASSERT_EQ(solver.solution().status, SolverStatus::DualInfeasible);

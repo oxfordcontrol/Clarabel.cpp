@@ -8,7 +8,7 @@
 #include "cpp/DefaultSettings.h"
 #include "cpp/DefaultSolution.h"
 #include "cpp/DefaultSolver.h"
-#include "cpp/DefaultSolverEigen.h"
+// #include "cpp/DefaultSolverEigen.h"
 #include "cpp/SupportedConeT.h"
 
 #else // C interface
