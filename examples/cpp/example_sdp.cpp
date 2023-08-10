@@ -55,7 +55,7 @@ int main(void)
     DefaultSettings<double> settings = DefaultSettings<double>::default_settings();
 
     // Build solver
-    clarabel::eigen::DefaultSolver<double> solver(P, c, A, b, cones, settings);
+    DefaultSolver<double> solver(P, c, A, b, cones, settings);
 
     // Solve
     solver.solve();

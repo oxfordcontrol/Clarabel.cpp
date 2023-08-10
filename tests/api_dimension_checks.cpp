@@ -41,7 +41,7 @@ TEST_F(DimensionChecksTest, Working)
     // This example should work because dimensions are
     // all compatible. All following checks vary one
     // of these sizes to test dimension checks
-    clarabel::eigen::DefaultSolver<double> solver(P, q, A, b, cones, settings);
+    DefaultSolver<double> solver(P, q, A, b, cones, settings);
 }
 
 TEST_F(DimensionChecksTest, BadP)
@@ -49,7 +49,7 @@ TEST_F(DimensionChecksTest, BadP)
     P = MatrixXd::Zero(3, 3).sparseView();
     P.makeCompressed();
     
-    ASSERT_THROW(clarabel::eigen::DefaultSolver<double> solver(P, q, A, b, cones, settings), std::invalid_argument);
+    ASSERT_THROW(DefaultSolver<double> solver(P, q, A, b, cones, settings), std::invalid_argument);
 }
 
 TEST_F(DimensionChecksTest, BadARows)
@@ -57,7 +57,7 @@ TEST_F(DimensionChecksTest, BadARows)
     A = MatrixXd::Zero(5, 4).sparseView();
     A.makeCompressed();
 
-    ASSERT_THROW(clarabel::eigen::DefaultSolver<double> solver(P, q, A, b, cones, settings), std::invalid_argument);
+    ASSERT_THROW(DefaultSolver<double> solver(P, q, A, b, cones, settings), std::invalid_argument);
 }
 
 TEST_F(DimensionChecksTest, BadACols)
@@ -65,7 +65,7 @@ TEST_F(DimensionChecksTest, BadACols)
     A = MatrixXd::Zero(6, 3).sparseView();
     A.makeCompressed();
 
-    ASSERT_THROW(clarabel::eigen::DefaultSolver<double> solver(P, q, A, b, cones, settings), std::invalid_argument);
+    ASSERT_THROW(DefaultSolver<double> solver(P, q, A, b, cones, settings), std::invalid_argument);
 }
 
 TEST_F(DimensionChecksTest, PNotSquare)
@@ -73,7 +73,7 @@ TEST_F(DimensionChecksTest, PNotSquare)
     P = MatrixXd::Zero(4, 3).sparseView();
     P.makeCompressed();
 
-    ASSERT_THROW(clarabel::eigen::DefaultSolver<double> solver(P, q, A, b, cones, settings), std::invalid_argument);
+    ASSERT_THROW(DefaultSolver<double> solver(P, q, A, b, cones, settings), std::invalid_argument);
 }
 
 TEST_F(DimensionChecksTest, BadCones)
@@ -86,5 +86,5 @@ TEST_F(DimensionChecksTest, BadCones)
     //     NonnegativeConeT<double>(4)
     // };
 
-    // ASSERT_THROW(clarabel::eigen::DefaultSolver<double> solver(P, q, A, b, cones, settings), std::invalid_argument);
+    // ASSERT_THROW(DefaultSolver<double> solver(P, q, A, b, cones, settings), std::invalid_argument);
 }

@@ -41,7 +41,7 @@ class BasicLPTest : public ::testing::Test
 
 TEST_F(BasicLPTest, Feasible)
 {
-    clarabel::eigen::DefaultSolver<double> solver(P, c, A, b, cones, settings);
+    DefaultSolver<double> solver(P, c, A, b, cones, settings);
     solver.solve();
 
     DefaultSolution<double> solution = solver.solution();
@@ -72,7 +72,7 @@ TEST_F(BasicLPTest, PrimalInfeasible)
     c[1] = 0.0;
     c[2] = 0.0;
 
-    clarabel::eigen::DefaultSolver<double> solver(P, c, A, b, cones, settings);
+    DefaultSolver<double> solver(P, c, A, b, cones, settings);
     solver.solve();
 
     DefaultSolution<double> solution = solver.solution();
@@ -89,7 +89,7 @@ TEST_F(BasicLPTest, InfeasibleIllCond)
     c[1] = 0.0;
     c[2] = 0.0;
 
-    clarabel::eigen::DefaultSolver<double> solver(P, c, A, b, cones, settings);
+    DefaultSolver<double> solver(P, c, A, b, cones, settings);
     solver.solve();
 
     DefaultSolution<double> solution = solver.solution();

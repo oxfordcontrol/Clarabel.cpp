@@ -48,7 +48,7 @@ TEST(MixedConicTest, Feasible)
 
     DefaultSettings<double> settings = DefaultSettingsBuilder<double>::default_settings().build();
 
-    clarabel::eigen::DefaultSolver<double> solver(P, c, A, b, cones, settings);
+    DefaultSolver<double> solver(P, c, A, b, cones, settings);
     solver.solve();
 
     ASSERT_EQ(solver.solution().status, SolverStatus::Solved);
