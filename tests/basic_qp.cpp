@@ -80,9 +80,8 @@ TEST_F(BasicQPTest, Feasible)
 
     // Check the solution
     Vector2d ref_solution{ 0.3, 0.7 };
-    ASSERT_EQ(solution.x_length, 2);
-    Vector2d actual_solution{ solution.x[0], solution.x[1] };
-    ASSERT_TRUE(actual_solution.isApprox(ref_solution, 1e-6));
+    ASSERT_EQ(solution.x.size(), 2);
+    ASSERT_TRUE(solution.x.isApprox(ref_solution, 1e-6));
 
     double ref_obj = 1.8800000298331538;
     ASSERT_NEAR(solver.info().cost_primal, ref_obj, 1e-6);
