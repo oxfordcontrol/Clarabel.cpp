@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <stdexcept>
 #include <type_traits>
 
 namespace clarabel
@@ -12,6 +13,7 @@ namespace clarabel
     {
         static_assert(std::is_same<T, float>::value || std::is_same<T, double>::value, "T must be float or double");
 
+    public:
         // Tag for the type of the cone
         enum class Tag
         {
@@ -46,6 +48,33 @@ namespace clarabel
             PSDTriangleConeT_Body psd_triangle_cone_t;
 #endif
         };
+
+    public:
+        unsigned int nvars() const
+        {
+            switch (this->tag)
+            {
+            case Tag::ZeroConeT:
+                return this->zero_cone_t._0;
+            case Tag::NonnegativeConeT:
+                return this->nonnegative_cone_t._0;
+            case Tag::SecondOrderConeT:
+                return this->second_order_cone_t._0;
+            case Tag::ExponentialConeT:
+                return 3;
+            case Tag::PowerConeT:
+                return 3;
+#ifdef FEATURE_SDP
+            case Tag::PSDTriangleConeT:
+            {
+                unsigned int k = this->psd_triangle_cone_t._0;
+                return (k * (k + 1)) >> 1;
+            }
+#endif
+            default:
+                throw std::invalid_argument("Invalid cone type");
+            }
+        }
     };
 
     template<typename T = double>
