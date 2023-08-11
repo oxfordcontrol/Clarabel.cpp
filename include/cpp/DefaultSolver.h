@@ -172,9 +172,9 @@ namespace clarabel
 
         void clarabel_DefaultSolver_f32_free(RustDefaultSolverHandle_f32 solver);
 
-        DefaultSolution<double> clarabel_DefaultSolver_f64_solution(RustDefaultSolverHandle_f64 solver);
+        DefaultSolution<double>::ClarabelDefaultSolution clarabel_DefaultSolver_f64_solution(RustDefaultSolverHandle_f64 solver);
 
-        DefaultSolution<float> clarabel_DefaultSolver_f32_solution(RustDefaultSolverHandle_f32 solver);
+        DefaultSolution<float>::ClarabelDefaultSolution clarabel_DefaultSolver_f32_solution(RustDefaultSolverHandle_f32 solver);
 
         DefaultInfo<double> clarabel_DefaultSolver_f64_info(RustDefaultSolverHandle_f64 solver);
 
@@ -258,16 +258,17 @@ namespace clarabel
     template<>
     inline DefaultSolution<double> DefaultSolver<double>::solution() const
     {
-        return clarabel_DefaultSolver_f64_solution(handle);
+        auto solution = clarabel_DefaultSolver_f64_solution(handle);
+        return std::move(DefaultSolution<double>(solution));
     }
 
     template<>
     inline DefaultSolution<float> DefaultSolver<float>::solution() const
     {
-        return clarabel_DefaultSolver_f32_solution(handle);
+        auto solution = clarabel_DefaultSolver_f32_solution(handle);
+        return std::move(DefaultSolution<float>(solution));
     }
 
-    
     template<>
     inline DefaultInfo<double> DefaultSolver<double>::info() const
     {

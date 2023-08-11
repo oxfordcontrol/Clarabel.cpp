@@ -33,14 +33,9 @@ TEST(BasicUnconstrainedTest, Feasible)
     ASSERT_EQ(solution.status, SolverStatus::Solved);
 
     // Compare the solution to the reference solution
-    VectorXd ref_solution(3);
-    ref_solution << -1., -2., 3.;
-    VectorXd actual_solution(3);
-    for (int i = 0; i < 3; ++i)
-    {
-        actual_solution[i] = solution.x[i];
-    }
-    ASSERT_TRUE(actual_solution.isApprox(ref_solution, 1e-6));
+    Vector3d ref_solution{ -1., -2., 3. };
+    ASSERT_EQ(solution.x.size(), 3);
+    ASSERT_TRUE(solution.x.isApprox(ref_solution, 1e-6));
 }
 
 TEST(BasicUnconstrainedTest, Infeasible)

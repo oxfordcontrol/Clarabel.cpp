@@ -48,17 +48,10 @@ TEST_F(BasicLPTest, Feasible)
     ASSERT_EQ(solution.status, SolverStatus::Solved);
 
     // Check the solution
-    VectorXd ref_solution(3);
-    ref_solution << -0.5, 0.5, -0.5;
+    Vector3d ref_solution { -0.5, 0.5, -0.5 };
 
-    ASSERT_EQ(solution.x_length, 3);
-    VectorXd actual_solution(3);
-    for (int i = 0; i < 3; ++i)
-    {
-        cout << solution.x[i] << endl;
-        actual_solution[i] = solution.x[i];
-    }
-    ASSERT_TRUE(actual_solution.isApprox(ref_solution, 1e-8));
+    ASSERT_EQ(solution.x.size(), 3);
+    ASSERT_TRUE(solution.x.isApprox(ref_solution, 1e-8));
 
     double ref_obj = -3.0;
     ASSERT_NEAR(solver.info().cost_primal, ref_obj, 1e-8);
@@ -75,8 +68,7 @@ TEST_F(BasicLPTest, PrimalInfeasible)
     DefaultSolver<double> solver(P, c, A, b, cones, settings);
     solver.solve();
 
-    DefaultSolution<double> solution = solver.solution();
-    ASSERT_EQ(solution.status, SolverStatus::DualInfeasible);
+    ASSERT_EQ(solver.solution().status, SolverStatus::DualInfeasible);
 }
 
 TEST_F(BasicLPTest, InfeasibleIllCond)
@@ -92,6 +84,5 @@ TEST_F(BasicLPTest, InfeasibleIllCond)
     DefaultSolver<double> solver(P, c, A, b, cones, settings);
     solver.solve();
 
-    DefaultSolution<double> solution = solver.solution();
-    ASSERT_EQ(solution.status, SolverStatus::DualInfeasible);
+    ASSERT_EQ(solver.solution().status, SolverStatus::DualInfeasible);
 }
