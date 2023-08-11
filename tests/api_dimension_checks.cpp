@@ -78,13 +78,11 @@ TEST_F(DimensionChecksTest, PNotSquare)
 
 TEST_F(DimensionChecksTest, BadCones)
 {
-    // TODO: enable this test when the SupportedConeT class is implemented by an abstract class.
-    // 
-    // cones = {
-    //     ZeroConeT<double>(1),
-    //     NonnegativeConeT<double>(2),
-    //     NonnegativeConeT<double>(4)
-    // };
+    cones = {
+        ZeroConeT<double>(1),
+        NonnegativeConeT<double>(2),
+        NonnegativeConeT<double>(4)
+    };
 
-    // ASSERT_THROW(DefaultSolver<double> solver(P, q, A, b, cones, settings), std::invalid_argument);
+    ASSERT_THROW(DefaultSolver<double> solver(P, q, A, b, cones, settings), std::invalid_argument);
 }

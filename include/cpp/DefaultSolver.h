@@ -67,15 +67,14 @@ namespace clarabel
             const Eigen::SparseMatrix<T, Eigen::ColMajor> &P,
             const Eigen::Ref<const Eigen::VectorX<T>> &q,
             const Eigen::SparseMatrix<T, Eigen::ColMajor> &A,
-            const Eigen::Ref<const Eigen::VectorX<T>> &b)
+            const Eigen::Ref<const Eigen::VectorX<T>> &b,
+            const std::vector<SupportedConeT<T>> &cones)
         {
             if (P.rows() != P.cols())
             {
                 throw std::invalid_argument("P must be a square matrix");
             }
 
-            int n = P.rows();
-            int m = q.size();
             if (P.rows() != q.size())
             {
                 throw std::invalid_argument("P and q must have the same number of rows");
@@ -89,6 +88,16 @@ namespace clarabel
             if (A.rows() != b.size())
             {
                 throw std::invalid_argument("A and b must have the same number of rows");
+            }
+
+            unsigned int p = 0;
+            for (const auto &cone : cones)
+            {
+                p += cone.nvars();
+            }
+            if (p != b.size())
+            {
+                throw std::invalid_argument("Constraint dimensions inconsistent with size of cones");
             }
         }
 
@@ -185,7 +194,7 @@ namespace clarabel
         const std::vector<SupportedConeT<double>> &cones,
         const DefaultSettings<double> &settings)
     {
-        check_dimensions(P, q, A, b); // Rust wrapper will assume the pointers represent matrices with the right dimensions.
+        check_dimensions(P, q, A, b, cones); // Rust wrapper will assume the pointers represent matrices with the right dimensions.
 
         // segfault will occur if the dimensions are incorrect
         matrix_P = DefaultSolver<double>::eigen_sparse_to_clarabel(P);
@@ -207,7 +216,7 @@ namespace clarabel
         : matrix_P(DefaultSolver<float>::eigen_sparse_to_clarabel(P)),
           matrix_A(DefaultSolver<float>::eigen_sparse_to_clarabel(A))
     {
-        check_dimensions(P, q, A, b); // Rust wrapper will assume the pointers represent matrices with the right dimensions.
+        check_dimensions(P, q, A, b, cones); // Rust wrapper will assume the pointers represent matrices with the right dimensions.
 
         // segfault will occur if the dimensions are incorrect
         matrix_P = DefaultSolver<float>::eigen_sparse_to_clarabel(P);
