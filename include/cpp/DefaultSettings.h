@@ -307,20 +307,20 @@ namespace clarabel
 
     extern "C"
     {
-        DefaultSettings<double> clarabel_DefaultSettingsBuilder_f64_default();
-        DefaultSettings<float> clarabel_DefaultSettingsBuilder_f32_default();
+        DefaultSettings<double> clarabel_DefaultSettings_f64_default();
+        DefaultSettings<float> clarabel_DefaultSettings_f32_default();
     }
 
     template<>
     inline DefaultSettings<double> DefaultSettings<double>::default_settings()
     {
-        return clarabel_DefaultSettingsBuilder_f64_default();
+        return clarabel_DefaultSettings_f64_default();
     }
 
     template<>
     inline DefaultSettings<float> DefaultSettings<float>::default_settings()
     {
-        return clarabel_DefaultSettingsBuilder_f32_default();
+        return clarabel_DefaultSettings_f32_default();
     }
 
 }

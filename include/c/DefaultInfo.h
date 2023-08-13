@@ -1,10 +1,12 @@
 #ifndef CLARABEL_DEFAULT_INFO_H
 #define CLARABEL_DEFAULT_INFO_H
 
+#include "ClarabelTypes.h"
 #include "DefaultSolution.h"
 
 #include <stdint.h>
 
+// ClarabelDefaultInfo types
 typedef struct ClarabelDefaultInfo_f64
 {
     double μ;

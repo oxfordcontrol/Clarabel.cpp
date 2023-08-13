@@ -60,7 +60,7 @@ int main(void)
     };
 
     // Settings
-    ClarabelDefaultSettings settings = clarabel_DefaultSettingsBuilder_default();
+    ClarabelDefaultSettings settings = clarabel_DefaultSettings_default();
     settings.verbose = true;
     settings.max_iter = 100;
 

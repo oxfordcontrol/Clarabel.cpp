@@ -1,7 +1,11 @@
 #ifndef CLARABEL_DEFAULT_SOLUTION_H
 #define CLARABEL_DEFAULT_SOLUTION_H
 
+#include "ClarabelTypes.h"
+
 #include <stdint.h>
+
+// ClarabelDefaultSolution types
 
 typedef enum ClarabelSolverStatus
 {
@@ -20,11 +24,11 @@ typedef enum ClarabelSolverStatus
 
 typedef struct ClarabelDefaultSolution_f64
 {
-    double* x;
+    double *x;
     uintptr_t x_length;
-    double* z;
+    double *z;
     uintptr_t z_length;
-    double* s;
+    double *s;
     uintptr_t s_length;
     ClarabelSolverStatus status;
     double obj_val;
@@ -36,11 +40,11 @@ typedef struct ClarabelDefaultSolution_f64
 
 typedef struct ClarabelDefaultSolution_f32
 {
-    float* x;
+    float *x;
     uintptr_t x_length;
-    float* z;
+    float *z;
     uintptr_t z_length;
-    float* s;
+    float *s;
     uintptr_t s_length;
     ClarabelSolverStatus status;
     float obj_val;
