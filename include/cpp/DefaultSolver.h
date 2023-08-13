@@ -26,13 +26,9 @@ namespace clarabel
         
         RustObjectHandle handle = nullptr;
 
-        // Holds the rowptr and colptr values converted from Eigen sparse matrix.
-        // These intermediate values should be disposed when this DefaultSolver object is destroyed.
-        std::unique_ptr<ConvertedCscMatrix> matrix_P = nullptr, matrix_A = nullptr;
-
         // Helper function for converting a Eigen sparse matrix into a temporary object of type ConvertedCscMatrix<T>
-        // The temporary object is used to keep the matrix data used by the solver alive, and will be used to init a clarabel::CscMatrix<T> object, which is then passed to the solver.
-        static std::unique_ptr<ConvertedCscMatrix> eigen_sparse_to_clarabel(
+        // The temporary object is used to provide the problem data for constructing the solver.
+        static ConvertedCscMatrix eigen_sparse_to_clarabel(
             const Eigen::SparseMatrix<T, Eigen::ColMajor> &matrix)
         {
             // Make a copy of data in SparseMatrix to convert StorageIndex to uintptr_t
@@ -53,14 +49,14 @@ namespace clarabel
             // No conversion needed for nz values
             const T *nzval_ptr = matrix.nonZeros() == 0 ? nullptr : matrix.valuePtr();
 
-            ConvertedCscMatrix *csc_matrix = new ConvertedCscMatrix(
+            ConvertedCscMatrix csc_matrix(
                 static_cast<uintptr_t>(matrix.rows()),
                 static_cast<uintptr_t>(matrix.cols()),
                 std::move(col_pointers),
                 std::move(row_indices),
                 nzval_ptr);
 
-            return std::unique_ptr<ConvertedCscMatrix>(csc_matrix);
+            return std::move(csc_matrix);
         }
 
         static void check_dimensions(
@@ -102,9 +98,8 @@ namespace clarabel
         }
 
     public:
-        // Lifetime of problem data:
-        // - Matrices P, A are converted and the converted colptr and rowptr are kept alive by the unique_ptr, but matrix data is not copied, so the Eigen sparse matrices must be kept alive until the solver is destroyed.
-        // - Vectors q, b, cones and the settings are copied when the DefaultSolver object is created in Rust.
+        // Lifetime of problem data: matrices P, A, vectors q, b, cones and the settings are copied when the DefaultSolver object is created in Rust.
+        // Eigen::SparseMatrix objects need to be converted to the format supported by Clarabel. Since the problem data is copied, the converted data exists as local variables in the constructor and is not stored as part of this class.
         DefaultSolver(
             const Eigen::SparseMatrix<T, Eigen::ColMajor> &P,
             const Eigen::Ref<Eigen::VectorX<T>> &q,
@@ -116,7 +111,9 @@ namespace clarabel
         ~DefaultSolver();
 
         void solve();
-        DefaultSolution<T> solution() const;
+
+        // The solution can only be obtained when the solver is in the Solved state, and the DefaultSolution object is only valid when the solver is alive.
+        DefaultSolution<T> solution() const; 
         DefaultInfo<T> info() const;
     };
 
@@ -129,7 +126,6 @@ namespace clarabel
         const std::vector<uintptr_t> rowval;
         const T *nzval;
 
-        // Use move semantics to avoid copying the data
         ConvertedCscMatrix(
             uintptr_t m,
             uintptr_t n,
@@ -197,10 +193,10 @@ namespace clarabel
         check_dimensions(P, q, A, b, cones); // Rust wrapper will assume the pointers represent matrices with the right dimensions.
 
         // segfault will occur if the dimensions are incorrect
-        matrix_P = DefaultSolver<double>::eigen_sparse_to_clarabel(P);
-        matrix_A = DefaultSolver<double>::eigen_sparse_to_clarabel(A);
-        CscMatrix<double> p(matrix_P->m, matrix_P->n, matrix_P->colptr.data(), matrix_P->rowval.data(), matrix_P->nzval);
-        CscMatrix<double> a(matrix_A->m, matrix_A->n, matrix_A->colptr.data(), matrix_A->rowval.data(), matrix_A->nzval);
+        ConvertedCscMatrix matrix_P = DefaultSolver<double>::eigen_sparse_to_clarabel(P);
+        ConvertedCscMatrix matrix_A = DefaultSolver<double>::eigen_sparse_to_clarabel(A);
+        CscMatrix<double> p(matrix_P.m, matrix_P.n, matrix_P.colptr.data(), matrix_P.rowval.data(), matrix_P.nzval);
+        CscMatrix<double> a(matrix_A.m, matrix_A.n, matrix_A.colptr.data(), matrix_A.rowval.data(), matrix_A.nzval);
 
         this->handle = clarabel_DefaultSolver_f64_new(&p, q.data(), &a, b.data(), cones.size(), cones.data(), &settings);
     }
@@ -213,16 +209,14 @@ namespace clarabel
         const Eigen::Ref<Eigen::VectorX<float>> &b,
         const std::vector<SupportedConeT<float>> &cones,
         const DefaultSettings<float> &settings)
-        : matrix_P(DefaultSolver<float>::eigen_sparse_to_clarabel(P)),
-          matrix_A(DefaultSolver<float>::eigen_sparse_to_clarabel(A))
     {
         check_dimensions(P, q, A, b, cones); // Rust wrapper will assume the pointers represent matrices with the right dimensions.
 
         // segfault will occur if the dimensions are incorrect
-        matrix_P = DefaultSolver<float>::eigen_sparse_to_clarabel(P);
-        matrix_A = DefaultSolver<float>::eigen_sparse_to_clarabel(A);
-        CscMatrix<float> p(matrix_P->m, matrix_P->n, matrix_P->colptr.data(), matrix_P->rowval.data(), matrix_P->nzval);
-        CscMatrix<float> a(matrix_A->m, matrix_A->n, matrix_A->colptr.data(), matrix_A->rowval.data(), matrix_A->nzval);
+        ConvertedCscMatrix matrix_P = DefaultSolver<float>::eigen_sparse_to_clarabel(P);
+        ConvertedCscMatrix matrix_A = DefaultSolver<float>::eigen_sparse_to_clarabel(A);
+        CscMatrix<float> p(matrix_P.m, matrix_P.n, matrix_P.colptr.data(), matrix_P.rowval.data(), matrix_P.nzval);
+        CscMatrix<float> a(matrix_A.m, matrix_A.n, matrix_A.colptr.data(), matrix_A.rowval.data(), matrix_A.nzval);
 
         this->handle = clarabel_DefaultSolver_f32_new(&p, q.data(), &a, b.data(), cones.size(), cones.data(), &settings);
     }
