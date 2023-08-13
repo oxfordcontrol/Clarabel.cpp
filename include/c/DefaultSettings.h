@@ -1,10 +1,13 @@
 #ifndef CLARABEL_DEFAULT_SETTINGS_H
 #define CLARABEL_DEFAULT_SETTINGS_H
 
+#include "ClarabelTypes.h"
+
 #include <math.h>
 #include <stdbool.h>
 #include <stdint.h>
 
+// ClarabelDefaultSettings types
 typedef enum ClarabelDirectSolveMethods
 {
     QDLDL,
@@ -94,16 +97,26 @@ typedef struct ClarabelDefaultSettings_f32
     bool presolve_enable;
 } ClarabelDefaultSettings_f32;
 
+#ifdef CLARABEL_USE_FLOAT
+typedef ClarabelDefaultSettings_f32 ClarabelDefaultSettings;
+#else
+typedef ClarabelDefaultSettings_f64 ClarabelDefaultSettings;
+#endif
+
+// ClarabelDefaultSettings APIs
+
+// ClarabelDefaultSettings::default
 ClarabelDefaultSettings_f64 clarabel_DefaultSettingsBuilder_f64_default(void);
 
 ClarabelDefaultSettings_f32 clarabel_DefaultSettingsBuilder_f32_default(void);
 
+static inline ClarabelDefaultSettings clarabel_DefaultSettingsBuilder_default(void)
+{
 #ifdef CLARABEL_USE_FLOAT
-typedef ClarabelDefaultSettings_f32 ClarabelDefaultSettings;
-#define clarabel_DefaultSettingsBuilder_default(...) clarabel_DefaultSettingsBuilder_f32_default(__VA_ARGS__)
+    return clarabel_DefaultSettingsBuilder_f32_default();
 #else
-typedef ClarabelDefaultSettings_f64 ClarabelDefaultSettings;
-#define clarabel_DefaultSettingsBuilder_default(...) clarabel_DefaultSettingsBuilder_f64_default(__VA_ARGS__)
-#endif /* CLARABEL_USE_FLOAT */
+    return clarabel_DefaultSettingsBuilder_f64_default();
+#endif
+}
 
 #endif /* CLARABEL_DEFAULT_SETTINGS_H */
