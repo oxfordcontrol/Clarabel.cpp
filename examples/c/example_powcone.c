@@ -30,15 +30,15 @@ int main(void)
     ClarabelFloat q[6] = { 0., 0., -1., 0., 0., -1. };
 
     /* From dense matrix:
-    * [[-1., 0., 0., 0., 0., 0.],
-    *  [0., -1., 0., 0., 0., 0.],
-    *  [0., 0., -1., 0., 0., 0.],
-    *  [0., 0., 0., -1., 0., 0.],
-    *  [0., 0., 0., 0., -1., 0.],
-    *  [0., 0., 0., 0., 0., -1.],
-    *  [1., 2., 0., 3., 0., 0.],
-    *  [0., 0., 0., 0., 1., 0.]]
-    */
+     * [[-1., 0., 0., 0., 0., 0.],
+     *  [0., -1., 0., 0., 0., 0.],
+     *  [0., 0., -1., 0., 0., 0.],
+     *  [0., 0., 0., -1., 0., 0.],
+     *  [0., 0., 0., 0., -1., 0.],
+     *  [0., 0., 0., 0., 0., -1.],
+     *  [1., 2., 0., 3., 0., 0.],
+     *  [0., 0., 0., 0., 1., 0.]]
+     */
     ClarabelCscMatrix A;
     clarabel_CscMatrix_init(
         &A,
@@ -51,13 +51,8 @@ int main(void)
 
     ClarabelFloat b[8] = { 0., 0., 0., 0., 0., 0., 3., 1. };
 
-    ClarabelSupportedConeT cones[4] =
-    {
-        ClarabelPowerConeT(0.6),
-        ClarabelPowerConeT(0.1),
-        ClarabelZeroConeT(1),
-        ClarabelZeroConeT(1)
-    };
+    ClarabelSupportedConeT cones[4] = { ClarabelPowerConeT(0.6), ClarabelPowerConeT(0.1), ClarabelZeroConeT(1),
+                                        ClarabelZeroConeT(1) };
 
     // Settings
     ClarabelDefaultSettings settings = clarabel_DefaultSettings_default();
@@ -71,8 +66,7 @@ int main(void)
         &A, // A
         b,  // b
         4,  // n_cones
-        cones,
-        &settings
+        cones, &settings
     );
 
     // Solve

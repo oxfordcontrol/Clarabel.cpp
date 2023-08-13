@@ -26,32 +26,29 @@ typedef ClarabelDefaultSolver_f64 ClarabelDefaultSolver;
 // Default solver APIs
 
 // DefaultSolver::new
-ClarabelDefaultSolver_f64 *clarabel_DefaultSolver_f64_new(
-    const ClarabelCscMatrix_f64 *P,
-    const double *q,
-    const ClarabelCscMatrix_f64 *A,
-    const double *b,
-    uintptr_t n_cones,
-    const ClarabelSupportedConeT_f64 *cones,
-    const ClarabelDefaultSettings_f64 *settings);
+ClarabelDefaultSolver_f64 *clarabel_DefaultSolver_f64_new(const ClarabelCscMatrix_f64 *P,
+                                                          const double *q,
+                                                          const ClarabelCscMatrix_f64 *A,
+                                                          const double *b,
+                                                          uintptr_t n_cones,
+                                                          const ClarabelSupportedConeT_f64 *cones,
+                                                          const ClarabelDefaultSettings_f64 *settings);
 
-ClarabelDefaultSolver_f32 *clarabel_DefaultSolver_f32_new(
-    const ClarabelCscMatrix_f32 *P,
-    const float *q,
-    const ClarabelCscMatrix_f32 *A,
-    const float *b,
-    uintptr_t n_cones,
-    const ClarabelSupportedConeT_f32 *cones,
-    const ClarabelDefaultSettings_f32 *settings);
+ClarabelDefaultSolver_f32 *clarabel_DefaultSolver_f32_new(const ClarabelCscMatrix_f32 *P,
+                                                          const float *q,
+                                                          const ClarabelCscMatrix_f32 *A,
+                                                          const float *b,
+                                                          uintptr_t n_cones,
+                                                          const ClarabelSupportedConeT_f32 *cones,
+                                                          const ClarabelDefaultSettings_f32 *settings);
 
-static inline ClarabelDefaultSolver *clarabel_DefaultSolver_new(
-    const ClarabelCscMatrix *P,
-    const ClarabelFloat *q,
-    const ClarabelCscMatrix *A,
-    const ClarabelFloat *b,
-    uintptr_t n_cones,
-    const ClarabelSupportedConeT *cones,
-    const ClarabelDefaultSettings *settings)
+static inline ClarabelDefaultSolver *clarabel_DefaultSolver_new(const ClarabelCscMatrix *P,
+                                                                const ClarabelFloat *q,
+                                                                const ClarabelCscMatrix *A,
+                                                                const ClarabelFloat *b,
+                                                                uintptr_t n_cones,
+                                                                const ClarabelSupportedConeT *cones,
+                                                                const ClarabelDefaultSettings *settings)
 {
 #ifdef CLARABEL_USE_FLOAT
     return clarabel_DefaultSolver_f32_new(P, q, A, b, n_cones, cones, settings);

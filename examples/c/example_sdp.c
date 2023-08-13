@@ -20,8 +20,8 @@ int main(void)
     ClarabelCscMatrix P;
     clarabel_CscMatrix_init(
         &P,
-        nvec,                                    // row
-        nvec,                                    // col
+        nvec,                                 // row
+        nvec,                                 // col
         (uintptr_t[]){ 0, 0, 0, 0, 0, 0, 0 }, // colptr
         NULL,                                 // rowval
         NULL                                  // nzval
@@ -44,15 +44,14 @@ int main(void)
         &A,
         7,                                                                                           // row
         6,                                                                                           // col
-        (uintptr_t[]){0, 2, 4, 6, 8, 10, 12},                                                        // colptr
-        (uintptr_t[]){0, 6, 1, 6, 2, 6, 3, 6, 4, 6, 5, 6},                                           // rowval
+        (uintptr_t[]){ 0, 2, 4, 6, 8, 10, 12 },                                                      // colptr
+        (uintptr_t[]){ 0, 6, 1, 6, 2, 6, 3, 6, 4, 6, 5, 6 },                                         // rowval
         (ClarabelFloat[]){ -1.0, 1.0, -sqrt2, 4.0, -1.0, 3.0, -sqrt2, 8.0, -sqrt2, 10.0, -1.0, 6.0 } // nzval
     );
 
     ClarabelFloat b[7] = { 0., 0., 0., 0., 0., 0., 1. };
 
-    ClarabelSupportedConeT cones[2] =
-    {
+    ClarabelSupportedConeT cones[2] = {
         ClarabelPSDTriangleConeT(n),
         ClarabelZeroConeT(1),
     };
@@ -67,8 +66,7 @@ int main(void)
         &A, // A
         b,  // b
         2,  // n_cones
-        cones,
-        &settings
+        cones, &settings
     );
 
     // Solve

@@ -41,11 +41,7 @@ int main(void)
 
     double b[5] = { 0., 1., 1., 1., 1. };
 
-    ClarabelSupportedConeT_f64 cones[2] =
-    {
-        ClarabelZeroConeT_f64(1),
-        ClarabelNonnegativeConeT_f64(4)
-    };
+    ClarabelSupportedConeT_f64 cones[2] = { ClarabelZeroConeT_f64(1), ClarabelNonnegativeConeT_f64(4) };
 
     // Settings
     ClarabelDefaultSettings_f64 settings = clarabel_DefaultSettings_f64_default();
@@ -57,8 +53,7 @@ int main(void)
         &A, // A
         b,  // b
         2,  // n_cones
-        cones,
-        &settings
+        cones, &settings
     );
 
     // Solve

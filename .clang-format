@@ -2,7 +2,7 @@
 Language:     Cpp
 
 # Breaks
-ColumnLimit:  0
+ColumnLimit:  120
 BreakBeforeBraces: Custom
 BraceWrapping:
   AfterClass:      true
@@ -12,7 +12,9 @@ BraceWrapping:
   AfterNamespace:  true
   AfterStruct:     true
   AfterUnion:      true
-  
+BinPackParameters: false
+AlwaysBreakTemplateDeclarations: Yes
+AlignAfterOpenBracket: BlockIndent
 
 # Indentation
 IndentWidth:     4

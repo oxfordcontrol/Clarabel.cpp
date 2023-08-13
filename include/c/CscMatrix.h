@@ -58,21 +58,19 @@ typedef ClarabelCscMatrix_f64 ClarabelCscMatrix;
 // ClarabelCscMatrix APIs
 
 // ClarabelCscMatrix::init
-void clarabel_CscMatrix_f32_init(
-    ClarabelCscMatrix_f32 *ptr,
-    uintptr_t m,
-    uintptr_t n,
-    const uintptr_t *colptr,
-    const uintptr_t *rowval,
-    const float *nzval);
+void clarabel_CscMatrix_f32_init(ClarabelCscMatrix_f32 *ptr,
+                                 uintptr_t m,
+                                 uintptr_t n,
+                                 const uintptr_t *colptr,
+                                 const uintptr_t *rowval,
+                                 const float *nzval);
 
-void clarabel_CscMatrix_f64_init(
-    ClarabelCscMatrix_f64 *ptr,
-    uintptr_t m,
-    uintptr_t n,
-    const uintptr_t *colptr,
-    const uintptr_t *rowval,
-    const double *nzval);
+void clarabel_CscMatrix_f64_init(ClarabelCscMatrix_f64 *ptr,
+                                 uintptr_t m,
+                                 uintptr_t n,
+                                 const uintptr_t *colptr,
+                                 const uintptr_t *rowval,
+                                 const double *nzval);
 
 /// @brief Initialize a sparse matrix in Compressed Sparse Column format
 /// @param m Number of rows
@@ -80,13 +78,12 @@ void clarabel_CscMatrix_f64_init(
 /// @param colptr CSC format column pointer array (always have length n+1)
 /// @param rowval Array of row indices (always have length colptr[n])
 /// @param nzval Array of nonzero values (always have length colptr[n])
-static inline void clarabel_CscMatrix_init(
-    ClarabelCscMatrix_f64 *ptr,
-    uintptr_t m,
-    uintptr_t n,
-    const uintptr_t *colptr,
-    const uintptr_t *rowval,
-    const double *nzval)
+static inline void clarabel_CscMatrix_init(ClarabelCscMatrix_f64 *ptr,
+                                           uintptr_t m,
+                                           uintptr_t n,
+                                           const uintptr_t *colptr,
+                                           const uintptr_t *rowval,
+                                           const double *nzval)
 {
 #ifdef CLARABEL_USE_FLOAT
     clarabel_CscMatrix_f32_init(ptr, m, n, colptr, rowval, nzval);

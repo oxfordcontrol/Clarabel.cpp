@@ -31,10 +31,7 @@ int main(void)
 
     ClarabelFloat b[4] = { 1.0, 1.0, 1.0, 1.0 };
 
-    ClarabelSupportedConeT cones[1] =
-    {
-        ClarabelNonnegativeConeT(4)
-    };
+    ClarabelSupportedConeT cones[1] = { ClarabelNonnegativeConeT(4) };
 
     // Settings
     ClarabelDefaultSettings settings = clarabel_DefaultSettings_default();
@@ -48,8 +45,7 @@ int main(void)
         &A, // A
         b,  // b
         1,  // n_cones
-        cones,
-        &settings
+        cones, &settings
     );
 
     // Solve

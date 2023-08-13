@@ -7,7 +7,8 @@ int main(void)
 {
     // 3 x 3 zero matrix
     ClarabelCscMatrix P;
-    clarabel_CscMatrix_init(&P,
+    clarabel_CscMatrix_init(
+        &P,
         3,                           // row
         3,                           // col
         (uintptr_t[]){ 0, 0, 0, 0 }, // colptr
@@ -36,11 +37,7 @@ int main(void)
 
     ClarabelFloat b[5] = { 0., 0., 0., 1., exp(5.0) };
 
-    ClarabelSupportedConeT cones[2] =
-    {
-        ClarabelExponentialConeT(),
-        ClarabelZeroConeT(2)
-    };
+    ClarabelSupportedConeT cones[2] = { ClarabelExponentialConeT(), ClarabelZeroConeT(2) };
 
     // Settings
     ClarabelDefaultSettings settings = clarabel_DefaultSettings_default();
@@ -53,8 +50,7 @@ int main(void)
         &A, // A
         b,  // b
         2,  // n_cones
-        cones,
-        &settings
+        cones, &settings
     );
 
     // Solve
