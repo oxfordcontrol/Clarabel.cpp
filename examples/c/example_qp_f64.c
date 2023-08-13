@@ -48,7 +48,7 @@ int main(void)
     };
 
     // Settings
-    ClarabelDefaultSettings_f64 settings = clarabel_DefaultSettingsBuilder_f64_default();
+    ClarabelDefaultSettings_f64 settings = clarabel_DefaultSettings_f64_default();
 
     // Build solver
     ClarabelDefaultSolver_f64 *solver = clarabel_DefaultSolver_f64_new(

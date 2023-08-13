@@ -73,7 +73,7 @@ pub struct ClarabelDefaultSettings<T: FloatT> {
 ///
 /// Get the default settings for the solver
 #[allow(non_snake_case)]
-fn _internal_DefaultSettingsBuilder_default<T: FloatT>() -> ClarabelDefaultSettings<T> {
+fn _internal_DefaultSettings_default<T: FloatT>() -> ClarabelDefaultSettings<T> {
     let default = clarabel::solver::DefaultSettings::<T>::default();
     let default_direct_solver_setting = match default.direct_solve_method.as_str() {
         "qdldl" => ClarabelDirectSolveMethods::QDLDL,
@@ -125,11 +125,11 @@ fn _internal_DefaultSettingsBuilder_default<T: FloatT>() -> ClarabelDefaultSetti
 }
 
 #[no_mangle]
-pub extern "C" fn clarabel_DefaultSettingsBuilder_f64_default() -> ClarabelDefaultSettings<f64> {
-    _internal_DefaultSettingsBuilder_default::<f64>()
+pub extern "C" fn clarabel_DefaultSettings_f64_default() -> ClarabelDefaultSettings<f64> {
+    _internal_DefaultSettings_default::<f64>()
 }
 
 #[no_mangle]
-pub extern "C" fn clarabel_DefaultSettingsBuilder_f32_default() -> ClarabelDefaultSettings<f32> {
-    _internal_DefaultSettingsBuilder_default::<f32>()
+pub extern "C" fn clarabel_DefaultSettings_f32_default() -> ClarabelDefaultSettings<f32> {
+    _internal_DefaultSettings_default::<f32>()
 }

@@ -106,16 +106,16 @@ typedef ClarabelDefaultSettings_f64 ClarabelDefaultSettings;
 // ClarabelDefaultSettings APIs
 
 // ClarabelDefaultSettings::default
-ClarabelDefaultSettings_f64 clarabel_DefaultSettingsBuilder_f64_default(void);
+ClarabelDefaultSettings_f64 clarabel_DefaultSettings_f64_default(void);
 
-ClarabelDefaultSettings_f32 clarabel_DefaultSettingsBuilder_f32_default(void);
+ClarabelDefaultSettings_f32 clarabel_DefaultSettings_f32_default(void);
 
-static inline ClarabelDefaultSettings clarabel_DefaultSettingsBuilder_default(void)
+static inline ClarabelDefaultSettings clarabel_DefaultSettings_default(void)
 {
 #ifdef CLARABEL_USE_FLOAT
-    return clarabel_DefaultSettingsBuilder_f32_default();
+    return clarabel_DefaultSettings_f32_default();
 #else
-    return clarabel_DefaultSettingsBuilder_f64_default();
+    return clarabel_DefaultSettings_f64_default();
 #endif
 }
 

@@ -51,7 +51,7 @@ int main(void)
     };
 
     // Settings
-    ClarabelDefaultSettings settings = clarabel_DefaultSettingsBuilder_default();
+    ClarabelDefaultSettings settings = clarabel_DefaultSettings_default();
 
     // Build solver
     ClarabelDefaultSolver *solver = clarabel_DefaultSolver_new(
