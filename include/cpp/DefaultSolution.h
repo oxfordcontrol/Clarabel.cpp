@@ -53,9 +53,16 @@ class DefaultSolution
     T r_dual;
 
     DefaultSolution(ClarabelDefaultSolution &solution)
-        : x(solution.x, solution.x_length), z(solution.z, solution.z_length), s(solution.s, solution.s_length),
-          status(solution.status), solve_time(solution.solve_time), iterations(solution.iterations),
-          r_prim(solution.r_prim), r_dual(solution.r_dual)
+        : 
+        x(solution.x, solution.x_length), 
+        z(solution.z, solution.z_length), 
+        s(solution.s, solution.s_length),
+        status(solution.status), 
+        obj_val(solution.obj_val),
+        solve_time(solution.solve_time), 
+        iterations(solution.iterations),
+        r_prim(solution.r_prim), 
+        r_dual(solution.r_dual)
     {
     }
 };
