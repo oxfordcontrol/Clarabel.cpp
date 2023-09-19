@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 
 # Project properties
-set(CLARABEL_PROJECT_VERSION 0.1)
+set(CLARABEL_PROJECT_VERSION 0.5.1)
 project(Clarabel VERSION ${CLARABEL_PROJECT_VERSION})
 
 # Specify the default C++ standard applied to all targets
