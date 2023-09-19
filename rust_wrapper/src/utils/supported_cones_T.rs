@@ -11,7 +11,7 @@ pub fn convert_from_C_cones<T: FloatT>(
     let mut cones: Vec<lib::SupportedConeT<T>> = Vec::with_capacity(c_cones.len());
 
     // Convert each cone
-    for cone in c_cones {
+    for cone in c_cones.iter() {
         cones.push(convert_from_C_cone(cone));
     }
     cones
@@ -30,6 +30,10 @@ pub fn convert_from_C_cone<T: FloatT>(cone: &ClarabelSupportedConeT<T>) -> lib::
         }
         ClarabelSupportedConeT::ExponentialConeT() => lib::SupportedConeT::ExponentialConeT(),
         ClarabelSupportedConeT::PowerConeT(payload) => lib::SupportedConeT::PowerConeT(*payload),
+        ClarabelSupportedConeT::GenPowerConeT(ptr_alpha,dim1,dim2) => {
+            let alpha = unsafe { std::slice::from_raw_parts(*ptr_alpha, *dim1) };
+            lib::SupportedConeT::GenPowerConeT(alpha.to_vec(),*dim2)
+        }
         #[cfg(feature = "sdp")]
         ClarabelSupportedConeT::PSDTriangleConeT(payload) => {
             lib::SupportedConeT::PSDTriangleConeT(*payload)

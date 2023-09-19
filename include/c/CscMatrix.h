@@ -75,9 +75,9 @@ void clarabel_CscMatrix_f64_init(ClarabelCscMatrix_f64 *ptr,
 /// @brief Initialize a sparse matrix in Compressed Sparse Column format
 /// @param m Number of rows
 /// @param n Number of columns
-/// @param colptr CSC format column pointer array (always have length n+1)
-/// @param rowval Array of row indices (always have length colptr[n])
-/// @param nzval Array of nonzero values (always have length colptr[n])
+/// @param colptr CSC format column pointer array (always has length n+1)
+/// @param rowval Array of row indices (always has length colptr[n])
+/// @param nzval Array of nonzero values (always has length colptr[n])
 static inline void clarabel_CscMatrix_init(ClarabelCscMatrix_f64 *ptr,
                                            uintptr_t m,
                                            uintptr_t n,

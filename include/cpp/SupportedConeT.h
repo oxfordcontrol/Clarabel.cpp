@@ -23,6 +23,7 @@ struct SupportedConeT
         SecondOrderConeT,
         ExponentialConeT,
         PowerConeT,
+        GenPowerConeT,
 #ifdef FEATURE_SDP
         PSDTriangleConeT,
 #endif
@@ -49,6 +50,12 @@ struct SupportedConeT
     {
         T _0;
     };
+    struct GenPowerConeT_Body
+    {
+        const T* _0;
+        uintptr_t _1;
+        uintptr_t _2;
+    };
 #ifdef FEATURE_SDP
     struct PSDTriangleConeT_Body
     {
@@ -63,6 +70,7 @@ struct SupportedConeT
         SecondOrderConeT_Body second_order_cone_t;
         ExponentialConeT_Body exponential_cone_t;
         PowerConeT_Body power_cone_t;
+        GenPowerConeT_Body genpower_cone_t;
 #ifdef FEATURE_SDP
         PSDTriangleConeT_Body psd_triangle_cone_t;
 #endif
@@ -83,6 +91,8 @@ struct SupportedConeT
             return 3;
         case Tag::PowerConeT:
             return 3;
+        case Tag::GenPowerConeT:
+            return this->genpower_cone_t._1 + this->genpower_cone_t._2;
 #ifdef FEATURE_SDP
         case Tag::PSDTriangleConeT: {
             unsigned int k = this->psd_triangle_cone_t._0;
@@ -152,6 +162,19 @@ struct PowerConeT : public SupportedConeT<T>
     }
 
     T power() const { return this->power_cone_t._0; }
+};
+
+template<typename T = double>
+struct GenPowerConeT : public SupportedConeT<T>
+{
+  public:
+    GenPowerConeT(const Eigen::Ref<Eigen::VectorX<T>> &alpha, uintptr_t dim2)
+    {
+        this->tag = SupportedConeT<T>::Tag::GenPowerConeT;
+        const T* alpha_data = alpha.data();
+        uintptr_t dim1 = alpha.size();
+        this->genpower_cone_t = {alpha_data,dim1,dim2 };
+    }
 };
 
 #ifdef FEATURE_SDP

@@ -38,15 +38,24 @@ typedef enum ClarabelSupportedConeT_Tag
      * The parameter indicates the power.
      */
     ClarabelPowerConeT_Tag,
-/**
- * The positive semidefinite cone in triangular form.
- *
- * The parameter indicates the matrix dimension, i.e. size = n
- * means that the variable is the upper triangle of an nxn matrix.
- */
-#ifdef FEATURE_SDP
-    ClarabelPSDTriangleConeT_Tag,
-#endif
+    /**
+     * The generalized power cone.
+     *
+     * The first two parameters supplies a pointer to an array of nonnegative powers “alpha” of the 
+     * left-hand side of the constraint and its length. The third scalar parameter provides the 
+     * dimension of the 2-norm bounded vector in the right-hand side of the constraint. 
+     * The “alpha” terms must sum to 1.
+     */
+    ClarabelGenPowerConeT_Tag,
+    /**
+     * The positive semidefinite cone in triangular form.
+     *
+     * The parameter indicates the matrix dimension, i.e. size = n
+     * means that the variable is the upper triangle of an nxn matrix.
+     */
+    #ifdef FEATURE_SDP
+        ClarabelPSDTriangleConeT_Tag,
+    #endif
 } ClarabelSupportedConeT_Tag;
 
 typedef struct ClarabelSupportedConeT_f64
@@ -70,6 +79,14 @@ typedef struct ClarabelSupportedConeT_f64
         struct
         {
             double power_cone_t;
+        };
+        struct
+        {
+            // In Rust we require only alpha as a Vec and dim2.
+            // Here we require both dimensions and a pointer to the vector.
+            double* genpow_cone_alpha_t;
+            uintptr_t genpow_cone_dim1_t; //length of alpha
+            uintptr_t genpow_cone_dim2_t;
         };
 #ifdef FEATURE_SDP
         struct
@@ -102,6 +119,14 @@ typedef struct ClarabelSupportedConeT_f32
         {
             float power_cone_t;
         };
+        struct
+        {
+            // In Rust we require only alpha as a Vec and dim2.
+            // Here we require both dimensions and a pointer to the vector.
+            float* genpow_cone_alpha_t;
+            uintptr_t genpow_cone_dim1_t; //length of alpha
+            uintptr_t genpow_cone_dim2_t;
+        };
     };
 } ClarabelSupportedConeT_f32;
 
@@ -128,6 +153,10 @@ typedef ClarabelSupportedConeT_f64 ClarabelSupportedConeT;
 #define ClarabelPowerConeT_f64(power)                                                                                  \
     ((ClarabelSupportedConeT_f64){ .tag = ClarabelPowerConeT_Tag, .power_cone_t = (double)(power) })
 
+#define ClarabelGenPowerConeT_f64(alpha,dim1,dim2)                                                                     \
+    ((ClarabelSupportedConeT_f64){ .tag = ClarabelGenPowerConeT_Tag, .genpow_cone_alpha_t = (double*)(alpha),          \
+                                   .genpow_cone_dim1_t = (uintptr_t)(dim1), .genpow_cone_dim2_t = (uintptr_t)(dim2) })
+
 #ifdef FEATURE_SDP
 #define ClarabelPSDTriangleConeT_f64(size)                                                                             \
     ((ClarabelSupportedConeT_f64){ .tag = ClarabelPSDTriangleConeT_Tag, .psd_triangle_cone_t = (uintptr_t)(size) })
@@ -148,6 +177,10 @@ typedef ClarabelSupportedConeT_f64 ClarabelSupportedConeT;
 #define ClarabelPowerConeT_f32(power)                                                                                  \
     ((ClarabelSupportedConeT_f32){ .tag = ClarabelPowerConeT_Tag, .power_cone_t = (double)(power) })
 
+#define ClarabelGenPowerConeT_f32(alpha,dim1,dim2)                                                                     \
+        ((ClarabelSupportedConeT_f32){ .tag = ClarabelGenPowerConeT_Tag, .genpow_cone_alpha_t = (float*)(alpha),       \
+                                genpow_cone_dim1_t = (uintptr_t)(dim1), genpow_cone_dim2_t = (uintptr_t)(dim2) })
+
 #ifdef FEATURE_SDP
 #define PSDTriangleConeT_f32(size)                                                                                     \
     ((ClarabelSupportedConeT_f32){ .tag = ClarabelPSDTriangleConeT_Tag, .psd_triangle_cone_t = (uintptr_t)(size) })
@@ -161,6 +194,7 @@ typedef ClarabelSupportedConeT_f64 ClarabelSupportedConeT;
 #define ClarabelSecondOrderConeT(size) ClarabelSecondOrderConeT_f32(size)
 #define ClarabelExponentialConeT() ClarabelExponentialConeT_f32()
 #define ClarabelPowerConeT(power) ClarabelPowerConeT_f32(power)
+#define ClarabelGenPowerConeT(alpha,dim1,dim2) ClarabelGenPowerConeT_f32(alpha,dim1,dim2)
 
 #ifdef FEATURE_SDP
 #define ClarabelPSDTriangleConeT(size) ClarabelPSDTriangleConeT_f32(size)
@@ -173,6 +207,7 @@ typedef ClarabelSupportedConeT_f64 ClarabelSupportedConeT;
 #define ClarabelSecondOrderConeT(size) ClarabelSecondOrderConeT_f64(size)
 #define ClarabelExponentialConeT() ClarabelExponentialConeT_f64()
 #define ClarabelPowerConeT(power) ClarabelPowerConeT_f64(power)
+#define ClarabelGenPowerConeT(alpha,dim1,dim2) ClarabelGenPowerConeT_f64(alpha,dim1,dim2)
 
 #ifdef FEATURE_SDP
 #define ClarabelPSDTriangleConeT(size) ClarabelPSDTriangleConeT_f64(size)
