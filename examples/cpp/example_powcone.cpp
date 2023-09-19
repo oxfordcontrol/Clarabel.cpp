@@ -1,8 +1,7 @@
 #include "utils.h"
 
 #include <Clarabel>
-#include <Eigen/Dense>
-#include <Eigen/Sparse>
+#include <Eigen/Eigen>
 #include <cstdint>
 #include <memory>
 #include <vector>
