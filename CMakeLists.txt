@@ -40,7 +40,7 @@ add_subdirectory(rust_wrapper)
 add_subdirectory(examples)
 
 # Add tests
-option(CLARABEL_BUILD_TESTS "Build the unit tests for Clarabel.cpp" OFF)
+option(CLARABEL_BUILD_TESTS "Build the unit tests for Clarabel.cpp" false)
 if(CLARABEL_BUILD_TESTS)
   enable_testing()
   add_subdirectory(tests)
