@@ -1,6 +1,7 @@
 pub mod cones {
 
     #[allow(dead_code)] // Suppress warnings for unused code
+    #[derive(Debug)]
     #[repr(C)]
     pub enum ClarabelSupportedConeT<T> {
         /// The zero cone (used for equality constraints).
@@ -23,6 +24,10 @@ pub mod cones {
         ///
         /// The parameter indicates the power.
         PowerConeT(T),
+        /// The generalized power cone
+        ///
+        /// First parameter is alpha, second is dimension of RHS
+        GenPowerConeT(*const T, usize, usize),
         /// The positive semidefinite cone in triangular form.
         ///
         /// The parameter indicates the matrix dimension, i.e. size = n

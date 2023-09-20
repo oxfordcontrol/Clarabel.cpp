@@ -3,6 +3,7 @@ set(CPP_EXAMPLES
   example_expcone
   example_lp
   example_powcone
+  example_genpowcone
   example_qp
   example_socp
   example_sdp

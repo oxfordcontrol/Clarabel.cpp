@@ -3,6 +3,7 @@ set(C_EXAMPLES
   example_expcone
   example_lp
   example_powcone
+  example_genpowcone
   example_qp
   example_qp_f32
   example_qp_f64

@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 
 # Project properties
-set(CLARABEL_PROJECT_VERSION 0.1)
+set(CLARABEL_PROJECT_VERSION 0.5.1)
 project(Clarabel VERSION ${CLARABEL_PROJECT_VERSION})
 
 # Specify the default C++ standard applied to all targets
@@ -40,7 +40,7 @@ add_subdirectory(rust_wrapper)
 add_subdirectory(examples)
 
 # Add tests
-option(CLARABEL_BUILD_TESTS "Build the unit tests for Clarabel.cpp" OFF)
+option(CLARABEL_BUILD_TESTS "Build the unit tests for Clarabel.cpp" false)
 if(CLARABEL_BUILD_TESTS)
   enable_testing()
   add_subdirectory(tests)

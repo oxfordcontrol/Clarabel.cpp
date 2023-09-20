@@ -45,11 +45,13 @@ int main()
     A.makeCompressed();
 
     Vector<double, 8> b = { 0., 0., 0., 0., 0., 0., 3., 1. };
+    Vector<double, 2> alpha1 = {0.6,0.4};
+    Vector<double, 2> alpha2 = {0.1,0.9};
 
     vector<SupportedConeT<double>> cones
     {
-        PowerConeT<double>(0.6),
-        PowerConeT<double>(0.1),
+        GenPowerConeT<double>(alpha1,1),
+        GenPowerConeT<double>(alpha2,1),
         ZeroConeT<double>(1),
         ZeroConeT<double>(1),
     };
