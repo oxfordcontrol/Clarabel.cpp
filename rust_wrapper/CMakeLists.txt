@@ -50,7 +50,7 @@ elseif(UNIX)
     set(LIBCLARABEL_C_STATIC_PATH "${clarabel_c_output_directory}/libclarabel_c.a")
 elseif(WIN32)
     set(LIBCLARABEL_C_SHARED_PATH "${clarabel_c_output_directory}/clarabel_c.dll.lib")
-    set(LIBCLARABEL_C_STATIC_PATH "${clarabel_c_output_directory}/libclarabel_c.lib")
+    set(LIBCLARABEL_C_STATIC_PATH "${clarabel_c_output_directory}/clarabel_c.lib")
 endif()
 
 # Wrap the Rust library in a CMake library target
