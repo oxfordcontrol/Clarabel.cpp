@@ -101,8 +101,6 @@ By default, unit tests are disabled to reduce build time. To enable unit tests, 
 
 ## Run examples
 
-```sh
-
 Examples for both C and C++ are available in `examples/c` and `examples/cpp` and can be run from the `build` directory using:
 
 ```sh
