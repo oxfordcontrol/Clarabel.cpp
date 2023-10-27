@@ -9,7 +9,7 @@
 // ClarabelDefaultInfo types
 typedef struct ClarabelDefaultInfo_f64
 {
-    double μ;
+    double mu;
     double sigma;
     double step_length;
     uint32_t iterations;
@@ -28,7 +28,7 @@ typedef struct ClarabelDefaultInfo_f64
 
 typedef struct ClarabelDefaultInfo_f32
 {
-    float μ;
+    float mu;
     float sigma;
     float step_length;
     uint32_t iterations;
