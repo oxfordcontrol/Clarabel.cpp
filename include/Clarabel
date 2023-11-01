@@ -9,4 +9,4 @@
 // #include "cpp/DefaultSolverEigen.h"
 #include "cpp/SupportedConeT.h"
 
-#endif
+#endif  // CLARABEL_H

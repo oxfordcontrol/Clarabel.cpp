@@ -8,4 +8,4 @@
 #include "c/DefaultSolver.h"
 #include "c/SupportedConeT.h"
 
-#endif
+#endif  // CLARABEL_H
