@@ -59,10 +59,6 @@ struct DefaultSettings
     static DefaultSettings<T> default_settings();
 };
 
-// Instantiate the templates
-template struct DefaultSettings<double>;
-template struct DefaultSettings<float>;
-
 template<typename T = double>
 class DefaultSettingsBuilder
 {

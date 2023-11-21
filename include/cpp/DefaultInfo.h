@@ -30,8 +30,4 @@ struct DefaultInfo
     clarabel::SolverStatus status;
 };
 
-// Instantiate the templates
-template struct DefaultInfo<double>;
-template struct DefaultInfo<float>;
-
 } // namespace clarabel
