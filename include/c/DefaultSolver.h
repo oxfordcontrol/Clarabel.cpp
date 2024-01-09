@@ -113,4 +113,146 @@ static inline ClarabelDefaultInfo clarabel_DefaultSolver_info(ClarabelDefaultSol
 #endif
 }
 
+
+////// P data updating 
+
+// DefaultSolver::update_P (full rewrite of sparse nonzeros)
+ClarabelDefaultInfo_f64 clarabel_DefaultSolver_f64_update_P(ClarabelDefaultSolver_f64 *solver, const double *Pnzval, uintptr_t nnzP);
+ClarabelDefaultInfo_f32 clarabel_DefaultSolver_f32_update_P(ClarabelDefaultSolver_f32 *solver, const float  *Pnzval, uintptr_t nnzP);
+
+static inline ClarabelDefaultInfo clarabel_DefaultSolver_update_P(ClarabelDefaultSolver *solver, const ClarabelFloat *Pnzval, uintptr_t nnzP)
+{
+#ifdef CLARABEL_USE_FLOAT
+    return clarabel_DefaultSolver_f32_update_P(solver,Pnzval, nnzP);
+#else
+    return clarabel_DefaultSolver_f64_update_P(solver,Pnzval, nnzP);
+#endif
+}
+
+// DefaultSolver::update_P_partial (partial rewrite of sparse nonzeros)
+ClarabelDefaultInfo_f64 clarabel_DefaultSolver_f64_update_P_partial(ClarabelDefaultSolver_f64 *solver, const uintptr_t* index, const double *values, uintptr_t nvals);
+ClarabelDefaultInfo_f32 clarabel_DefaultSolver_f32_update_P_partial(ClarabelDefaultSolver_f32 *solver, const uintptr_t* index, const float  *values, uintptr_t nvals);
+
+static inline ClarabelDefaultInfo clarabel_DefaultSolver_update_P_partial(ClarabelDefaultSolver *solver, const uintptr_t* index, const ClarabelFloat *values, uintptr_t nvals)
+{
+#ifdef CLARABEL_USE_FLOAT
+    return clarabel_DefaultSolver_f32_update_P_partial(solver,index, values, nvals);
+#else
+    return clarabel_DefaultSolver_f64_update_P_partial(solver,index, values, nvals);
+#endif
+}
+
+// DefaultSolver::update_P (full rewrite of sparse matrix data using CSC formatted source)
+ClarabelDefaultInfo_f64 clarabel_DefaultSolver_f64_update_P_csc(ClarabelDefaultSolver_f64 *solver, const ClarabelCscMatrix_f64 *P);
+ClarabelDefaultInfo_f32 clarabel_DefaultSolver_f32_update_P_csc(ClarabelDefaultSolver_f32 *solver, const ClarabelCscMatrix_f32 *P);
+
+static inline ClarabelDefaultInfo clarabel_DefaultSolver_update_P_csc(ClarabelDefaultSolver *solver, const ClarabelCscMatrix *P)
+{
+#ifdef CLARABEL_USE_FLOAT
+    return clarabel_DefaultSolver_f32_update_P_csc(solver,P);
+#else
+    return clarabel_DefaultSolver_f64_update_P_csc(solver,P);
+#endif
+}
+
+
+////// A data updating 
+
+// DefaultSolver::update_A (full rewrite of sparse nonzeros)
+ClarabelDefaultInfo_f64 clarabel_DefaultSolver_f64_update_A(ClarabelDefaultSolver_f64 *solver, const double *Anzval, uintptr_t nnzA);
+ClarabelDefaultInfo_f32 clarabel_DefaultSolver_f32_update_A(ClarabelDefaultSolver_f32 *solver, const float  *Anzval, uintptr_t nnzA);
+
+static inline ClarabelDefaultInfo clarabel_DefaultSolver_update_A(ClarabelDefaultSolver *solver, const ClarabelFloat *Anzval, uintptr_t nnzA)
+{
+#ifdef CLARABEL_USE_FLOAT
+    return clarabel_DefaultSolver_f32_update_A(solver,Anzval, nnzA);
+#else
+    return clarabel_DefaultSolver_f64_update_A(solver,Anzval, nnzA);
+#endif
+}
+
+// DefaultSolver::update_P_partial (partial rewrite of sparse nonzeros)
+ClarabelDefaultInfo_f64 clarabel_DefaultSolver_f64_update_A_partial(ClarabelDefaultSolver_f64 *solver, const uintptr_t* index, const double *values, uintptr_t nvals);
+ClarabelDefaultInfo_f32 clarabel_DefaultSolver_f32_update_A_partial(ClarabelDefaultSolver_f32 *solver, const uintptr_t* index, const float  *values, uintptr_t nvals);
+
+static inline ClarabelDefaultInfo clarabel_DefaultSolver_update_A_partial(ClarabelDefaultSolver *solver, const uintptr_t* index, const ClarabelFloat *values, uintptr_t nvals)
+{
+#ifdef CLARABEL_USE_FLOAT
+    return clarabel_DefaultSolver_f32_update_A_partial(solver,index, values, nvals);
+#else
+    return clarabel_DefaultSolver_f64_update_A_partial(solver,index, values, nvals);
+#endif
+}
+
+// DefaultSolver::update_P (full rewrite of sparse matrix data using CSC formatted source)
+ClarabelDefaultInfo_f64 clarabel_DefaultSolver_f64_update_A_csc(ClarabelDefaultSolver_f64 *solver, const ClarabelCscMatrix_f64 *A);
+ClarabelDefaultInfo_f32 clarabel_DefaultSolver_f32_update_A_csc(ClarabelDefaultSolver_f32 *solver, const ClarabelCscMatrix_f32 *A);
+
+static inline ClarabelDefaultInfo clarabel_DefaultSolver_update_A_csc(ClarabelDefaultSolver *solver, const ClarabelCscMatrix *A)
+{
+#ifdef CLARABEL_USE_FLOAT
+    return clarabel_DefaultSolver_f32_update_A_csc(solver,A);
+#else
+    return clarabel_DefaultSolver_f64_update_A_csc(solver,A);
+#endif
+}
+
+////// q data updating 
+
+// DefaultSolver::update_A (full rewrite of sparse nonzeros)
+ClarabelDefaultInfo_f64 clarabel_DefaultSolver_f64_update_q(ClarabelDefaultSolver_f64 *solver, const double *values, uintptr_t n);
+ClarabelDefaultInfo_f32 clarabel_DefaultSolver_f32_update_q(ClarabelDefaultSolver_f32 *solver, const float  *values, uintptr_t n);
+
+static inline ClarabelDefaultInfo clarabel_DefaultSolver_update_q(ClarabelDefaultSolver *solver, const ClarabelFloat *values, uintptr_t n)
+{
+#ifdef CLARABEL_USE_FLOAT
+    return clarabel_DefaultSolver_f32_update_q(solver, values, n);
+#else
+    return clarabel_DefaultSolver_f64_update_q(solver, values, n);
+#endif
+}
+
+// DefaultSolver::update_P_partial (partial rewrite of sparse nonzeros)
+ClarabelDefaultInfo_f64 clarabel_DefaultSolver_f64_update_q_partial(ClarabelDefaultSolver_f64 *solver, const uintptr_t* index, const double *values, uintptr_t nvals);
+ClarabelDefaultInfo_f32 clarabel_DefaultSolver_f32_update_q_partial(ClarabelDefaultSolver_f32 *solver, const uintptr_t* index, const float  *values, uintptr_t nvals);
+
+static inline ClarabelDefaultInfo clarabel_DefaultSolver_update_q_partial(ClarabelDefaultSolver *solver, const uintptr_t* index, const ClarabelFloat *values, uintptr_t nvals)
+{
+#ifdef CLARABEL_USE_FLOAT
+    return clarabel_DefaultSolver_f32_update_q_partial(solver,index, values, nvals);
+#else
+    return clarabel_DefaultSolver_f64_update_q_partial(solver,index, values, nvals);
+#endif
+}
+
+////// b data updating 
+
+// DefaultSolver::update_A (full rewrite of sparse nonzeros)
+ClarabelDefaultInfo_f64 clarabel_DefaultSolver_f64_update_b(ClarabelDefaultSolver_f64 *solver, const double *values, uintptr_t n);
+ClarabelDefaultInfo_f32 clarabel_DefaultSolver_f32_update_b(ClarabelDefaultSolver_f32 *solver, const float  *values, uintptr_t n);
+
+static inline ClarabelDefaultInfo clarabel_DefaultSolver_update_b(ClarabelDefaultSolver *solver, const ClarabelFloat *values, uintptr_t n)
+{
+#ifdef CLARABEL_USE_FLOAT
+    return clarabel_DefaultSolver_f32_update_b(solver, values, n);
+#else
+    return clarabel_DefaultSolver_f64_update_b(solver, values, n);
+#endif
+}
+
+// DefaultSolver::update_P_partial (partial rewrite of sparse nonzeros)
+ClarabelDefaultInfo_f64 clarabel_DefaultSolver_f64_update_b_partial(ClarabelDefaultSolver_f64 *solver, const uintptr_t* index, const double *values, uintptr_t nvals);
+ClarabelDefaultInfo_f32 clarabel_DefaultSolver_f32_update_b_partial(ClarabelDefaultSolver_f32 *solver, const uintptr_t* index, const float  *values, uintptr_t nvals);
+
+static inline ClarabelDefaultInfo clarabel_DefaultSolver_update_b_partial(ClarabelDefaultSolver *solver, const uintptr_t* index, const ClarabelFloat *values, uintptr_t nvals)
+{
+#ifdef CLARABEL_USE_FLOAT
+    return clarabel_DefaultSolver_f32_update_b_partial(solver,index, values, nvals);
+#else
+    return clarabel_DefaultSolver_f64_update_b_partial(solver,index, values, nvals);
+#endif
+}
+
+
+
 #endif /* CLARABEL_H */

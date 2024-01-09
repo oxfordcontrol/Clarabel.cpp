@@ -5,6 +5,7 @@ edition = "2021"
 
 [dependencies]
 clarabel = { path = "../Clarabel.rs" }
+paste = "1.0"
 
 [lib]
 crate-type = ["cdylib", "staticlib"]
