@@ -3,7 +3,7 @@
 
 #include "utils.h"
 
-#include <Clarabel>
+#include <Clarabel.h>
 
 int main(void)
 {
