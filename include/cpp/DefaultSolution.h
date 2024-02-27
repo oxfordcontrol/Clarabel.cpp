@@ -38,6 +38,7 @@ class DefaultSolution
         uintptr_t s_length;
         SolverStatus status;
         T obj_val;
+        T obj_val_dual;
         double solve_time;
         uint32_t iterations;
         T r_prim;
@@ -47,6 +48,7 @@ class DefaultSolution
     Eigen::Map<Eigen::VectorX<T>> x, z, s;
     SolverStatus status;
     T obj_val;
+    T obj_val_dual;
     double solve_time;
     uint32_t iterations;
     T r_prim;
@@ -59,6 +61,7 @@ class DefaultSolution
         s(solution.s, solution.s_length),
         status(solution.status), 
         obj_val(solution.obj_val),
+        obj_val_dual(solution.obj_val_dual),
         solve_time(solution.solve_time), 
         iterations(solution.iterations),
         r_prim(solution.r_prim), 

@@ -68,6 +68,7 @@ TEST_F(BasicQPTest, Univariate)
     // Compare the solution to the reference solution
     ASSERT_NEAR(solution.x[0], 0.0, 1e-6);
     ASSERT_NEAR(solution.obj_val, 0.0, 1e-6);
+    ASSERT_NEAR(solution.obj_val_dual, 0.0, 1e-6);
 }
 
 TEST_F(BasicQPTest, Feasible)
@@ -84,7 +85,8 @@ TEST_F(BasicQPTest, Feasible)
     ASSERT_TRUE(solution.x.isApprox(ref_solution, 1e-6));
 
     double ref_obj = 1.8800000298331538;
-    ASSERT_NEAR(solver.info().cost_primal, ref_obj, 1e-6);
+    ASSERT_NEAR(solution.obj_val, ref_obj, 1e-6);
+    ASSERT_NEAR(solution.obj_val_dual, ref_obj, 1e-6);
 }
 
 TEST_F(BasicQPTest, PrimalInfeasible)
@@ -94,8 +96,12 @@ TEST_F(BasicQPTest, PrimalInfeasible)
 
     DefaultSolver<double> solver(P, c, A, b, cones, settings);
     solver.solve();
+    DefaultSolution<double> solution = solver.solution();
 
-    ASSERT_EQ(solver.solution().status, SolverStatus::PrimalInfeasible);
+    ASSERT_EQ(solution.status, SolverStatus::PrimalInfeasible);
+    ASSERT_TRUE(std::isnan(solution.obj_val));
+    ASSERT_TRUE(std::isnan(solution.obj_val_dual));
+
 }
 
 class BasicQPDualInfeasibleTest : public ::testing::Test
@@ -127,8 +133,12 @@ TEST_F(BasicQPDualInfeasibleTest, DualInfeasible)
 {
     DefaultSolver<double> solver(P, c, A, b, cones, settings);
     solver.solve();
+    DefaultSolution<double> solution = solver.solution();
 
-    ASSERT_EQ(solver.solution().status, SolverStatus::DualInfeasible);
+
+    ASSERT_EQ(solution.status, SolverStatus::DualInfeasible);
+    ASSERT_TRUE(std::isnan(solution.obj_val));
+    ASSERT_TRUE(std::isnan(solution.obj_val_dual));
 }
 
 TEST_F(BasicQPDualInfeasibleTest, DualInfeasibleIllConditioned)
@@ -146,6 +156,9 @@ TEST_F(BasicQPDualInfeasibleTest, DualInfeasibleIllConditioned)
 
     DefaultSolver<double> solver(P, c, A, b1, cones, settings);
     solver.solve();
+    DefaultSolution<double> solution = solver.solution();
 
-    ASSERT_EQ(solver.solution().status, SolverStatus::DualInfeasible);
+    ASSERT_EQ(solution.status, SolverStatus::DualInfeasible);
+    ASSERT_TRUE(std::isnan(solution.obj_val));
+    ASSERT_TRUE(std::isnan(solution.obj_val_dual));
 }
