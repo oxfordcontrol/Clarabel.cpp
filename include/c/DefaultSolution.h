@@ -32,6 +32,7 @@ typedef struct ClarabelDefaultSolution_f64
     uintptr_t s_length;
     ClarabelSolverStatus status;
     double obj_val;
+    double obj_val_dual;
     double solve_time;
     uint32_t iterations;
     double r_prim;
@@ -48,6 +49,7 @@ typedef struct ClarabelDefaultSolution_f32
     uintptr_t s_length;
     ClarabelSolverStatus status;
     float obj_val;
+    float obj_val_dual;
     double solve_time;
     uint32_t iterations;
     float r_prim;

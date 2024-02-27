@@ -15,6 +15,7 @@ pub struct DefaultSolution<T: FloatT> {
 
     pub status: ClarabelSolverStatus,
     pub obj_val: T,
+    pub obj_val_dual: T,
     pub solve_time: f64,
     pub iterations: u32,
     pub r_prim: T,
@@ -32,6 +33,7 @@ impl<T: FloatT> DefaultSolution<T> {
             s_length: solution.s.len(),
             status: ClarabelSolverStatus::from(&mut solution.status),
             obj_val: solution.obj_val,
+            obj_val_dual: solution.obj_val_dual,
             solve_time: solution.solve_time,
             iterations: solution.iterations,
             r_prim: solution.r_prim,

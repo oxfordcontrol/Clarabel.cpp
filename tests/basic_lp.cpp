@@ -43,8 +43,8 @@ TEST_F(BasicLPTest, Feasible)
 {
     DefaultSolver<double> solver(P, c, A, b, cones, settings);
     solver.solve();
-
     DefaultSolution<double> solution = solver.solution();
+
     ASSERT_EQ(solution.status, SolverStatus::Solved);
 
     // Check the solution
@@ -54,7 +54,8 @@ TEST_F(BasicLPTest, Feasible)
     ASSERT_TRUE(solution.x.isApprox(ref_solution, 1e-8));
 
     double ref_obj = -3.0;
-    ASSERT_NEAR(solver.info().cost_primal, ref_obj, 1e-8);
+    ASSERT_NEAR(solution.obj_val, ref_obj, 1e-8);
+    ASSERT_NEAR(solution.obj_val_dual, ref_obj, 1e-8);
 }
 
 TEST_F(BasicLPTest, PrimalInfeasible)
@@ -67,8 +68,11 @@ TEST_F(BasicLPTest, PrimalInfeasible)
 
     DefaultSolver<double> solver(P, c, A, b, cones, settings);
     solver.solve();
+    DefaultSolution<double> solution = solver.solution();
 
-    ASSERT_EQ(solver.solution().status, SolverStatus::DualInfeasible);
+    ASSERT_EQ(solution.status, SolverStatus::DualInfeasible);
+    ASSERT_TRUE(std::isnan(solution.obj_val));
+    ASSERT_TRUE(std::isnan(solution.obj_val_dual));
 }
 
 TEST_F(BasicLPTest, InfeasibleIllCond)
@@ -83,6 +87,9 @@ TEST_F(BasicLPTest, InfeasibleIllCond)
 
     DefaultSolver<double> solver(P, c, A, b, cones, settings);
     solver.solve();
+    DefaultSolution<double> solution = solver.solution();
 
-    ASSERT_EQ(solver.solution().status, SolverStatus::DualInfeasible);
+    ASSERT_EQ(solution.status, SolverStatus::DualInfeasible);
+    ASSERT_TRUE(std::isnan(solution.obj_val));
+    ASSERT_TRUE(std::isnan(solution.obj_val_dual));
 }
