@@ -5,5 +5,9 @@
     ],
     "files.associations": {
         "**/include/c/*.h": "c",
+        "stack": "cpp",
+        "iosfwd": "cpp",
+        "vector": "cpp",
+        "complex": "cpp"
     }
 }

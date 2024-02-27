@@ -22,6 +22,7 @@ add_executable(clarabel_cpp_tests
     basic_qp.cpp
     basic_unconstrained.cpp
     mixed_conic.cpp
+    data_updating.cpp
 )
 target_link_libraries(clarabel_cpp_tests 
     libclarabel_c_shared

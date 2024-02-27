@@ -105,13 +105,42 @@ class DefaultSolver
                   const DefaultSettings<T> &settings);
 
     ~DefaultSolver();
-
     void solve();
 
     // The solution can only be obtained when the solver is in the Solved state, and the DefaultSolution object is only
     // valid when the solver is alive.
     DefaultSolution<T> solution() const;
     DefaultInfo<T> info() const;
+
+    // problem data updating functions 
+    // ------------------------------- 
+
+    // update P 
+    void update_P(const Eigen::SparseMatrix<T, Eigen::ColMajor> &P);
+    void update_P(const Eigen::Ref<Eigen::VectorX<T>> &Pnzval);
+    void update_P(const T* Pnzval, uintptr_t nnzP);
+    void update_P(const Eigen::Ref<Eigen::VectorX<uintptr_t>> &index, const Eigen::Ref<Eigen::VectorX<T>> &values);
+    void update_P(const uintptr_t* index, const T* values, uintptr_t nvals);
+
+    // update A
+    void update_A(const Eigen::SparseMatrix<T, Eigen::ColMajor> &A);
+    void update_A(const Eigen::Ref<Eigen::VectorX<T>> &Anzval);
+    void update_A(const T* Pnzval, uintptr_t nnzA);
+    void update_A(const Eigen::Ref<Eigen::VectorX<uintptr_t>> &index, const Eigen::Ref<Eigen::VectorX<T>> &values);
+    void update_A(const uintptr_t* index, const T* values, uintptr_t nvals);
+
+    // update q
+    void update_q(const Eigen::Ref<Eigen::VectorX<T>> &Anzval);
+    void update_q(const T* values, uintptr_t nvals);
+    void update_q(const Eigen::Ref<Eigen::VectorX<uintptr_t>> &index, const Eigen::Ref<Eigen::VectorX<T>> &values);
+    void update_q(const uintptr_t* index, const T* values, uintptr_t nvals);
+
+    // update b
+    void update_b(const Eigen::Ref<Eigen::VectorX<T>> &Anzval);
+    void update_b(const T* values, uintptr_t nvals);
+    void update_b(const Eigen::Ref<Eigen::VectorX<uintptr_t>> &index, const Eigen::Ref<Eigen::VectorX<T>> &values);
+    void update_b(const uintptr_t* index, const T* values, uintptr_t nvals);
+
 };
 
 template<typename T>
@@ -163,6 +192,31 @@ DefaultSolution<float>::ClarabelDefaultSolution clarabel_DefaultSolver_f32_solut
 DefaultInfo<double> clarabel_DefaultSolver_f64_info(RustDefaultSolverHandle_f64 solver);
 
 DefaultInfo<float> clarabel_DefaultSolver_f32_info(RustDefaultSolverHandle_f32 solver);
+
+void clarabel_DefaultSolver_f64_update_P_csc(RustDefaultSolverHandle_f64 solver, const CscMatrix<double> *P);
+void clarabel_DefaultSolver_f32_update_P_csc(RustDefaultSolverHandle_f32 solver, const CscMatrix<float> *P);
+void clarabel_DefaultSolver_f64_update_P(RustDefaultSolverHandle_f64 solver, const double *Pnzval, uintptr_t nnzP);
+void clarabel_DefaultSolver_f32_update_P(RustDefaultSolverHandle_f32 solver, const float  *Pnzval, uintptr_t nnzP);
+void clarabel_DefaultSolver_f64_update_P_partial(RustDefaultSolverHandle_f64 solver, const uintptr_t* index, const double *values, uintptr_t nvals);
+void clarabel_DefaultSolver_f32_update_P_partial(RustDefaultSolverHandle_f32 solver, const uintptr_t* index, const float *values, uintptr_t nvals);
+
+void clarabel_DefaultSolver_f64_update_A_csc(RustDefaultSolverHandle_f64 solver, const CscMatrix<double> *A);
+void clarabel_DefaultSolver_f32_update_A_csc(RustDefaultSolverHandle_f32 solver, const CscMatrix<float> *A);
+void clarabel_DefaultSolver_f64_update_A(RustDefaultSolverHandle_f64 solver, const double *Anzval, uintptr_t nnzA);
+void clarabel_DefaultSolver_f32_update_A(RustDefaultSolverHandle_f32 solver, const float  *Anzval, uintptr_t nnzA);
+void clarabel_DefaultSolver_f64_update_A_partial(RustDefaultSolverHandle_f64 solver, const uintptr_t* index, const double *values, uintptr_t nvals);
+void clarabel_DefaultSolver_f32_update_A_partial(RustDefaultSolverHandle_f32 solver, const uintptr_t* index, const float *values, uintptr_t nvals);
+
+void clarabel_DefaultSolver_f64_update_q(RustDefaultSolverHandle_f64 solver, const double *values, uintptr_t n);
+void clarabel_DefaultSolver_f32_update_q(RustDefaultSolverHandle_f32 solver, const float  *values, uintptr_t n);
+void clarabel_DefaultSolver_f64_update_q_partial(RustDefaultSolverHandle_f64 solver, const uintptr_t* index, const double *values, uintptr_t nvals);
+void clarabel_DefaultSolver_f32_update_q_partial(RustDefaultSolverHandle_f32 solver, const uintptr_t* index, const float *values, uintptr_t nvals);
+
+void clarabel_DefaultSolver_f64_update_b(RustDefaultSolverHandle_f64 solver, const double *values, uintptr_t n);
+void clarabel_DefaultSolver_f32_update_b(RustDefaultSolverHandle_f32 solver, const float  *values, uintptr_t n);
+void clarabel_DefaultSolver_f64_update_b_partial(RustDefaultSolverHandle_f64 solver, const uintptr_t* index, const double *values, uintptr_t nvals);
+void clarabel_DefaultSolver_f32_update_b_partial(RustDefaultSolverHandle_f32 solver, const uintptr_t* index, const float *values, uintptr_t nvals);
+
 }
 
 // Convert unique_ptr P, A to CscMatrix objects, then init the solver
@@ -259,6 +313,229 @@ template<>
 inline DefaultInfo<float> DefaultSolver<float>::info() const
 {
     return clarabel_DefaultSolver_f32_info(handle);
+}
+
+
+// update P
+
+template<>
+inline void DefaultSolver<double>::update_P(const Eigen::SparseMatrix<double, Eigen::ColMajor> &P){
+    ConvertedCscMatrix matrix_P = DefaultSolver<double>::eigen_sparse_to_clarabel(P);
+    CscMatrix<double> mat(matrix_P.m, matrix_P.n, matrix_P.colptr.data(), matrix_P.rowval.data(), matrix_P.nzval);
+     clarabel_DefaultSolver_f64_update_P_csc(this->handle,&mat);
+}
+
+template<>
+inline void DefaultSolver<float>::update_P(const Eigen::SparseMatrix<float, Eigen::ColMajor> &P){
+    ConvertedCscMatrix matrix_P = DefaultSolver<float>::eigen_sparse_to_clarabel(P);
+    CscMatrix<float> mat(matrix_P.m, matrix_P.n, matrix_P.colptr.data(), matrix_P.rowval.data(), matrix_P.nzval);
+    clarabel_DefaultSolver_f32_update_P_csc(this->handle,&mat);
+}
+
+template<>
+inline void DefaultSolver<double>::update_P(const Eigen::Ref<Eigen::VectorX<double>> &nzval){
+     clarabel_DefaultSolver_f64_update_P(this->handle,nzval.data(), nzval.size());
+}
+
+template<>
+inline void DefaultSolver<float>::update_P(const Eigen::Ref<Eigen::VectorX<float>> &nzval){
+    clarabel_DefaultSolver_f32_update_P(this->handle,nzval.data(), nzval.size());
+}
+
+template<>
+inline void DefaultSolver<double>::update_P(const double *nzval, uintptr_t nnz){
+     clarabel_DefaultSolver_f64_update_P(this->handle, nzval, nnz);
+}
+
+template<>
+inline void DefaultSolver<float>::update_P(const float *nzval, uintptr_t nnz){
+    clarabel_DefaultSolver_f32_update_P(this->handle, nzval, nnz);
+}
+
+template<>
+inline void DefaultSolver<double>::update_P(const Eigen::Ref<Eigen::VectorX<uintptr_t>> &index, const Eigen::Ref<Eigen::VectorX<double>> &values){
+    if(index.size() != values.size()){
+        throw std::invalid_argument("index and values must have the same size");
+    }
+     clarabel_DefaultSolver_f64_update_P_partial(this->handle, index.data(), values.data(), index.size());
+}
+
+template<>
+inline void DefaultSolver<float>::update_P(const Eigen::Ref<Eigen::VectorX<uintptr_t>> &index, const Eigen::Ref<Eigen::VectorX<float>> &values){
+    if(index.size() != values.size()){
+        throw std::invalid_argument("index and values must have the same size");
+    }
+     clarabel_DefaultSolver_f32_update_P_partial(this->handle, index.data(), values.data(), index.size());
+}
+
+template<>
+inline void DefaultSolver<double>::update_P(const uintptr_t* index, const double *values, uintptr_t nvals){
+     clarabel_DefaultSolver_f64_update_P_partial(this->handle, index, values, nvals);
+}
+
+template<>
+inline void DefaultSolver<float>::update_P(const uintptr_t* index, const float *values, uintptr_t nvals){
+     clarabel_DefaultSolver_f32_update_P_partial(this->handle, index, values, nvals);
+}
+
+
+// update A
+
+template<>
+inline void DefaultSolver<double>::update_A(const Eigen::SparseMatrix<double, Eigen::ColMajor> &A){
+    ConvertedCscMatrix matrix_A = DefaultSolver<double>::eigen_sparse_to_clarabel(A);
+    CscMatrix<double> mat(matrix_A.m, matrix_A.n, matrix_A.colptr.data(), matrix_A.rowval.data(), matrix_A.nzval);
+     clarabel_DefaultSolver_f64_update_A_csc(this->handle,&mat);
+}
+
+template<>
+inline void DefaultSolver<float>::update_A(const Eigen::SparseMatrix<float, Eigen::ColMajor> &A){
+    ConvertedCscMatrix matrix_A = DefaultSolver<float>::eigen_sparse_to_clarabel(A);
+    CscMatrix<float> mat(matrix_A.m, matrix_A.n, matrix_A.colptr.data(), matrix_A.rowval.data(), matrix_A.nzval);
+    clarabel_DefaultSolver_f32_update_A_csc(this->handle,&mat);
+}
+
+template<>
+inline void DefaultSolver<double>::update_A(const Eigen::Ref<Eigen::VectorX<double>> &nzval){
+     clarabel_DefaultSolver_f64_update_A(this->handle,nzval.data(), nzval.size());
+}
+
+template<>
+inline void DefaultSolver<float>::update_A(const Eigen::Ref<Eigen::VectorX<float>> &nzval){
+    clarabel_DefaultSolver_f32_update_A(this->handle,nzval.data(), nzval.size());
+}
+
+template<>
+inline void DefaultSolver<double>::update_A(const double *nzval, uintptr_t nnz){
+     clarabel_DefaultSolver_f64_update_A(this->handle, nzval, nnz);
+}
+
+template<>
+inline void DefaultSolver<float>::update_A(const float *nzval, uintptr_t nnz){
+    clarabel_DefaultSolver_f32_update_A(this->handle, nzval, nnz);
+}
+
+template<>
+inline void DefaultSolver<double>::update_A(const Eigen::Ref<Eigen::VectorX<uintptr_t>> &index, const Eigen::Ref<Eigen::VectorX<double>> &values){
+    if(index.size() != values.size()){
+        throw std::invalid_argument("index and values must have the same size");
+    }
+     clarabel_DefaultSolver_f64_update_A_partial(this->handle, index.data(), values.data(), index.size());
+}
+
+template<>
+inline void DefaultSolver<float>::update_A(const Eigen::Ref<Eigen::VectorX<uintptr_t>> &index, const Eigen::Ref<Eigen::VectorX<float>> &values){
+    if(index.size() != values.size()){
+        throw std::invalid_argument("index and values must have the same size");
+    }
+     clarabel_DefaultSolver_f32_update_A_partial(this->handle, index.data(), values.data(), index.size());
+}
+
+template<>
+inline void DefaultSolver<double>::update_A(const uintptr_t* index, const double *values, uintptr_t nvals){
+     clarabel_DefaultSolver_f64_update_A_partial(this->handle, index, values, nvals);
+}
+
+template<>
+inline void DefaultSolver<float>::update_A(const uintptr_t* index, const float *values, uintptr_t nvals){
+     clarabel_DefaultSolver_f32_update_A_partial(this->handle, index, values, nvals);
+}
+
+
+// update q
+
+template<>
+inline void DefaultSolver<double>::update_q(const Eigen::Ref<Eigen::VectorX<double>> &values){
+     clarabel_DefaultSolver_f64_update_q(this->handle, values.data(), values.size());
+}
+
+template<>
+inline void DefaultSolver<float>::update_q(const Eigen::Ref<Eigen::VectorX<float>> &values){
+    clarabel_DefaultSolver_f32_update_q(this->handle, values.data(), values.size());
+}
+
+template<>
+inline void DefaultSolver<double>::update_q(const double *values, uintptr_t n){
+     clarabel_DefaultSolver_f64_update_q(this->handle, values, n);
+}
+
+template<>
+inline void DefaultSolver<float>::update_q(const float *values, uintptr_t n){
+    clarabel_DefaultSolver_f32_update_q(this->handle, values, n);
+}
+
+template<>
+inline void DefaultSolver<double>::update_q(const Eigen::Ref<Eigen::VectorX<uintptr_t>> &index, const Eigen::Ref<Eigen::VectorX<double>> &values){
+    if(index.size() != values.size()){
+        throw std::invalid_argument("index and values must have the same size");
+    }
+     clarabel_DefaultSolver_f64_update_q_partial(this->handle, index.data(), values.data(), index.size());
+}
+
+template<>
+inline void DefaultSolver<float>::update_q(const Eigen::Ref<Eigen::VectorX<uintptr_t>> &index, const Eigen::Ref<Eigen::VectorX<float>> &values){
+    if(index.size() != values.size()){
+        throw std::invalid_argument("index and values must have the same size");
+    }
+     clarabel_DefaultSolver_f32_update_q_partial(this->handle, index.data(), values.data(), index.size());
+}
+
+template<>
+inline void DefaultSolver<double>::update_q(const uintptr_t* index, const double *values, uintptr_t nvals){
+     clarabel_DefaultSolver_f64_update_q_partial(this->handle, index, values, nvals);
+}
+
+template<>
+inline void DefaultSolver<float>::update_q(const uintptr_t* index, const float *values, uintptr_t nvals){
+     clarabel_DefaultSolver_f32_update_q_partial(this->handle, index, values, nvals);
+}
+
+// update b
+
+template<>
+inline void DefaultSolver<double>::update_b(const Eigen::Ref<Eigen::VectorX<double>> &values){
+     clarabel_DefaultSolver_f64_update_b(this->handle, values.data(), values.size());
+}
+
+template<>
+inline void DefaultSolver<float>::update_b(const Eigen::Ref<Eigen::VectorX<float>> &values){
+    clarabel_DefaultSolver_f32_update_b(this->handle, values.data(), values.size());
+}
+
+template<>
+inline void DefaultSolver<double>::update_b(const double *values, uintptr_t n){
+     clarabel_DefaultSolver_f64_update_b(this->handle, values, n);
+}
+
+template<>
+inline void DefaultSolver<float>::update_b(const float *values, uintptr_t n){
+    clarabel_DefaultSolver_f32_update_b(this->handle, values, n);
+}
+
+template<>
+inline void DefaultSolver<double>::update_b(const Eigen::Ref<Eigen::VectorX<uintptr_t>> &index, const Eigen::Ref<Eigen::VectorX<double>> &values){
+    if(index.size() != values.size()){
+        throw std::invalid_argument("index and values must have the same size");
+    }
+     clarabel_DefaultSolver_f64_update_b_partial(this->handle, index.data(), values.data(), index.size());
+}
+
+template<>
+inline void DefaultSolver<float>::update_b(const Eigen::Ref<Eigen::VectorX<uintptr_t>> &index, const Eigen::Ref<Eigen::VectorX<float>> &values){
+    if(index.size() != values.size()){
+        throw std::invalid_argument("index and values must have the same size");
+    }
+     clarabel_DefaultSolver_f32_update_b_partial(this->handle, index.data(), values.data(), index.size());
+}
+
+template<>
+inline void DefaultSolver<double>::update_b(const uintptr_t* index, const double *values, uintptr_t nvals){
+     clarabel_DefaultSolver_f64_update_b_partial(this->handle, index, values, nvals);
+}
+
+template<>
+inline void DefaultSolver<float>::update_b(const uintptr_t* index, const float *values, uintptr_t nvals){
+     clarabel_DefaultSolver_f32_update_b_partial(this->handle, index, values, nvals);
 }
 
 } // namespace clarabel
