@@ -17,9 +17,9 @@ codegen-units = 1
 
 [features]
 # Define features for SDP support in Clarabel.rs
-sdp = []
-sdp-accelerate = ["sdp", "clarabel/sdp", "clarabel/sdp-accelerate"]
-sdp-netlib     = ["sdp", "clarabel/sdp", "clarabel/sdp-netlib"]
-sdp-openblas   = ["sdp", "clarabel/sdp", "clarabel/sdp-openblas"]
-sdp-mkl        = ["sdp", "clarabel/sdp", "clarabel/sdp-mkl"]
-sdp-r          = ["sdp", "clarabel/sdp", "clarabel/sdp-r"]
+sdp = ["clarabel/sdp"]
+sdp-accelerate = ["sdp", "clarabel/sdp-accelerate"]
+sdp-netlib     = ["sdp", "clarabel/sdp-netlib"]
+sdp-openblas   = ["sdp", "clarabel/sdp-openblas"]
+sdp-mkl        = ["sdp", "clarabel/sdp-mkl"]
+sdp-r          = ["sdp", "clarabel/sdp-r"]
