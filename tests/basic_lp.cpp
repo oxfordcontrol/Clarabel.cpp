@@ -75,7 +75,7 @@ TEST_F(BasicLPTest, InfeasibleIllCond)
 {
     double *A_nzval = A.valuePtr();
     A_nzval[0] = numeric_limits<double>::epsilon();
-    A_nzval[1] = -numeric_limits<double>::epsilon();
+    A_nzval[1] = 0.0;
 
     c[0] = 1.0;
     c[1] = 0.0;
