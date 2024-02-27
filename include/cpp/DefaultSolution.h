@@ -67,8 +67,4 @@ class DefaultSolution
     }
 };
 
-// Instantiate the templates
-template struct DefaultSolution<double>;
-template struct DefaultSolution<float>;
-
 } // namespace clarabel
