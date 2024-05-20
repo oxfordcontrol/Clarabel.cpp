@@ -43,24 +43,37 @@ unsafe fn _internal_DefaultSolver_new<T: FloatT>(
     let P = utils::convert_from_C_CscMatrix(P);
     let A = utils::convert_from_C_CscMatrix(A);
     // Recover the arrays from C pointers and deduce their lengths from the matrix dimensions
-    let q = Vec::from_raw_parts(q as *mut T, A.n, A.n);
-    let b = Vec::from_raw_parts(b as *mut T, A.m, A.m);
+    let q = match q.is_null() {
+        true => Vec::new(),
+        false => Vec::from_raw_parts(q as *mut T, P.n, P.n),
+    };
+    let b = match b.is_null() {
+        true => Vec::new(),
+        false => Vec::from_raw_parts(b as *mut T, A.m, A.m),
+    };
 
     // Get a reference to the DefaultSettings struct from the pointer passed from C
     let settings_struct = &*(settings as *const ClarabelDefaultSettings<T>);
     let settings = utils::get_solver_settings_from_c::<T>(settings_struct);
 
     // Convert the cones from C to Rust
-    let c_cones = slice::from_raw_parts(cones, n_cones);
-    // c_cones is a slice created from a raw pointer, so it is not managed by Rust, i.e. C side array is not freed when the slice is dropped.
-    let cones_vec = utils::convert_from_C_cones(c_cones);
-    let cones = cones_vec.as_slice();
+    let cones = match cones.is_null() {
+        true => Vec::new(),
+        false => {
+            let c_cones = slice::from_raw_parts(cones, n_cones);
+            utils::convert_from_C_cones(c_cones)
+        }
+    };
 
     // Create the solver
-    // This is dropped at the end of the function because it exists on the Rust side only, and cones and settings are created on the Rust side.
-    let solver = lib::DefaultSolver::<T>::new(&P, &q, &A, &b, cones, settings);
+    // This is dropped at the end of the function because it exists on the Rust side only,
+    // and cones and settings are created on the Rust side.
+    let solver = lib::DefaultSolver::<T>::new(&P, &q, &A, &b, &cones, settings);
 
     // Ensure Rust does not free the memory of arrays managed by C
+    // Should be fine to forget vectors that were created as zero-length 
+    // vecs when receiving null pointers, since rust vec::new() should 
+    // not allocate memory for zero-length vectors.
     forget(P);
     forget(A);
     forget(q);
