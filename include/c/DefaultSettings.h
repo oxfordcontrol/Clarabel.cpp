@@ -15,6 +15,15 @@ typedef enum ClarabelDirectSolveMethods
     // CHOLMOD, (not supported in Rust yet)
 } ClarabelDirectSolveMethods;
 
+#ifdef FEATURE_SDP
+    typedef enum ClarabelCliqueMergeMethods
+    {
+        CLIQUE_GRAPH,
+        PARENT_CHILD,
+        NONE,
+    } ClarabelCliqueMergeMethods;
+#endif 
+
 typedef struct ClarabelDefaultSettings_f64
 {
     uint32_t max_iter;
@@ -54,6 +63,12 @@ typedef struct ClarabelDefaultSettings_f64
     uint32_t iterative_refinement_max_iter;
     double iterative_refinement_stop_ratio;
     bool presolve_enable;
+    #ifdef FEATURE_SDP
+        bool chordal_decomposition_enable;
+        ClarabelCliqueMergeMethods chordal_decomposition_merge_method;
+        bool chordal_decomposition_compact;
+        bool chordal_decomposition_complete_dual;
+    #endif
 } ClarabelDefaultSettings_f64;
 
 typedef struct ClarabelDefaultSettings_f32
@@ -95,6 +110,12 @@ typedef struct ClarabelDefaultSettings_f32
     uint32_t iterative_refinement_max_iter;
     float iterative_refinement_stop_ratio;
     bool presolve_enable;
+    #ifdef FEATURE_SDP
+        bool chordal_decomposition_enable;
+        enum ClarabelCliqueMergeMethods chordal_decomposition_merge_method;
+        bool chordal_decomposition_compact;
+        bool chordal_decomposition_complete_dual;
+    #endif
 } ClarabelDefaultSettings_f32;
 
 #ifdef CLARABEL_USE_FLOAT

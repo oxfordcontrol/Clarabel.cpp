@@ -58,5 +58,17 @@ pub fn get_solver_settings_from_c<T: FloatT>(
         iterative_refinement_max_iter: value.iterative_refinement_max_iter,
         iterative_refinement_stop_ratio: value.iterative_refinement_stop_ratio,
         presolve_enable: value.presolve_enable,
+        #[cfg(feature = "sdp")]
+        chordal_decomposition_enable: value.chordal_decomposition_enable,
+        #[cfg(feature = "sdp")]
+        chordal_decomposition_merge_method: match value.chordal_decomposition_merge_method {
+            ClarabelCliqueMergeMethods::CLIQUE_GRAPH => String::from("clique_graph"),
+            ClarabelCliqueMergeMethods::PARENT_CHILD => String::from("parent_child"),
+            ClarabelCliqueMergeMethods::NONE => String::from("none"),
+        },
+        #[cfg(feature = "sdp")]
+        chordal_decomposition_compact: value.chordal_decomposition_compact,
+        #[cfg(feature = "sdp")]
+        chordal_decomposition_complete_dual: value.chordal_decomposition_complete_dual,
     }
 }
