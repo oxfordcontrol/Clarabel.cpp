@@ -97,7 +97,11 @@ By default, `CLARABEL_FEATURE_SDP` is `none` and SDP support is disabled.
 
 ### Unit tests
 
-By default, unit tests are disabled to reduce build time. To enable unit tests, set the `CLARABEL_BUILD_TESTS` option to 'true'.
+By default, unit tests are disabled to reduce build time. To enable unit tests, set `-DCLARABEL_BUILD_TESTS=true` in cmake.
+
+### Release mode
+
+The solver will build the Rust source in debug mode.   To build in release mode, set `-DCMAKE_BUILD_TYPE=Release` in cmake.
 
 ## Run examples
 
