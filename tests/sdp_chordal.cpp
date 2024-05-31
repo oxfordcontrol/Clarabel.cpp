@@ -106,7 +106,6 @@ TEST_F(SDPChordalTest, Feasible)
                                                                  ClarabelCliqueMergeMethods::PARENT_CHILD,
                                                                  ClarabelCliqueMergeMethods::NONE};
 
-
     for (auto &compact : compacts){
         for (auto &complete_dual : complete_duals){
             for (auto &merge_method : merge_methods){

@@ -10,7 +10,6 @@ using namespace std;
 using namespace clarabel;
 using namespace Eigen;
 
-
 TEST(BasicGenPowerConeTest, Feasible)
 {
     // solve the following power cone problem
