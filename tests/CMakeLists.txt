@@ -20,9 +20,16 @@ add_executable(clarabel_cpp_tests
     api_dimension_checks.cpp
     basic_lp.cpp
     basic_qp.cpp
+    basic_eq_constrained.cpp
+    basic_powcone.cpp
+    basic_genpowcone.cpp
+    basic_expcone.cpp
+    basic_sdp.cpp
+    basic_socp.cpp
     basic_unconstrained.cpp
     mixed_conic.cpp
     data_updating.cpp
+    sdp_chordal.cpp
 )
 target_link_libraries(clarabel_cpp_tests 
     libclarabel_c_shared
