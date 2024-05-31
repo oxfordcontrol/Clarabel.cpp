@@ -23,8 +23,16 @@ pub unsafe fn convert_from_C_CscMatrix<T: FloatT>(ptr: *const ClarabelCscMatrix<
     let colptr = Vec::from_raw_parts(matrix.colptr as *mut usize, n + 1, n + 1);
 
     // Length of rowval and nzval is given by colptr[n]
-    let rowval = Vec::from_raw_parts(matrix.rowval as *mut usize, colptr[n], colptr[n]);
-    let nzval_vec = Vec::from_raw_parts(matrix.nzval as *mut T, colptr[n], colptr[n]);
+    let rowval = match matrix.rowval.is_null() {
+        true => Vec::new(),
+        false => Vec::from_raw_parts(matrix.rowval as *mut usize, colptr[n], colptr[n]),
+    };
+    let nzval_vec = match matrix.nzval.is_null() {
+        true => Vec::new(),
+        false => Vec::from_raw_parts(matrix.nzval as *mut T, colptr[n], colptr[n]),
+    };
+  
+    assert!(rowval.len() == colptr[n]);
 
     // Call the CscMatrix constructor defined in Rust
     let rust_matrix = lib::CscMatrix::<T> {

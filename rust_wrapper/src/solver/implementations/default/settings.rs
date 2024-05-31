@@ -8,6 +8,15 @@ pub enum ClarabelDirectSolveMethods {
     // CHOLMOD, (not supported yet)
 }
 
+#[allow(non_camel_case_types)]
+#[cfg(feature = "sdp")]
+#[repr(C)]
+pub enum ClarabelCliqueMergeMethods {
+    CLIQUE_GRAPH,
+    PARENT_CHILD,
+    NONE,
+}
+
 /// DefaultSettings struct used by the C side
 #[repr(C)]
 pub struct ClarabelDefaultSettings<T: FloatT> {
@@ -67,6 +76,17 @@ pub struct ClarabelDefaultSettings<T: FloatT> {
 
     // preprocessing
     pub presolve_enable: bool,
+
+    // chordal decomposition
+    #[cfg(feature = "sdp")]
+    pub chordal_decomposition_enable: bool,
+    #[cfg(feature = "sdp")]
+    pub chordal_decomposition_merge_method: ClarabelCliqueMergeMethods,
+    #[cfg(feature = "sdp")]
+    pub chordal_decomposition_compact: bool,
+    #[cfg(feature = "sdp")]
+    pub chordal_decomposition_complete_dual: bool,
+
 }
 
 /// Wrapper function for DefaultSettings::default()
@@ -75,11 +95,20 @@ pub struct ClarabelDefaultSettings<T: FloatT> {
 #[allow(non_snake_case)]
 fn _internal_DefaultSettings_default<T: FloatT>() -> ClarabelDefaultSettings<T> {
     let default = clarabel::solver::DefaultSettings::<T>::default();
+
     let default_direct_solver_setting = match default.direct_solve_method.as_str() {
         "qdldl" => ClarabelDirectSolveMethods::QDLDL,
         //"mkl" => ClarabelDirectSolveMethods::MKL,
         //"cholmod" => ClarabelDirectSolveMethods::CHOLMOD,
         _ => ClarabelDirectSolveMethods::QDLDL, // Default
+    };
+
+    #[cfg(feature = "sdp")]
+    let default_clique_merge_setting = match default.chordal_decomposition_merge_method.as_str() {
+        "clique_graph" => ClarabelCliqueMergeMethods::CLIQUE_GRAPH,
+        "parent_child" => ClarabelCliqueMergeMethods::PARENT_CHILD,
+        "none" => ClarabelCliqueMergeMethods::NONE,
+        _ => ClarabelCliqueMergeMethods::CLIQUE_GRAPH, // Default
     };
 
     // Assign all fields to the C struct
@@ -121,6 +150,15 @@ fn _internal_DefaultSettings_default<T: FloatT>() -> ClarabelDefaultSettings<T> 
         iterative_refinement_max_iter: default.iterative_refinement_max_iter,
         iterative_refinement_stop_ratio: default.iterative_refinement_stop_ratio,
         presolve_enable: default.presolve_enable,
+        #[cfg(feature = "sdp")]
+        chordal_decomposition_enable: default.chordal_decomposition_enable,
+        #[cfg(feature = "sdp")]
+        chordal_decomposition_merge_method: default_clique_merge_setting,
+        #[cfg(feature = "sdp")]
+        chordal_decomposition_compact: default.chordal_decomposition_compact,
+        #[cfg(feature = "sdp")]
+        chordal_decomposition_complete_dual:  default.chordal_decomposition_complete_dual,
+
     }
 }
 
