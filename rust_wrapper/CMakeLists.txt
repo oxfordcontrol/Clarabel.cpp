@@ -30,7 +30,7 @@ set(CLARABEL_BUILD_FEATURES "")
 if(NOT CLARABEL_FEATURE_SDP STREQUAL "none")
 
     # Set the Rust feature flag
-    set(CLARABEL_BUILD_FEATURES "${CLARABEL_BUILD_FEATURES},sdp")
+    set(CLARABEL_BUILD_FEATURES "${CLARABEL_BUILD_FEATURES},${CLARABEL_FEATURE_SDP}")
     
     # Define the FEATURE_SDP flag for all targets that link against clarabel_c
     target_compile_definitions(libclarabel_c_static INTERFACE FEATURE_SDP)
