@@ -7,11 +7,17 @@ use crate::core::cones::ClarabelSupportedConeT;
 use crate::solver::implementations::default::settings::*;
 use crate::utils;
 use clarabel::algebra::FloatT;
-use clarabel::solver::SolverJSONReadWrite;
 use clarabel::solver::{self as lib, IPSolver, SolverStatus};
 use std::slice;
-use std::{ffi::{c_void,c_char}, mem::forget};
-use serde::{de::DeserializeOwned, Serialize};
+use std::{ffi::c_void, mem::forget};
+
+cfg_if::cfg_if! {
+    if #[cfg(feature = "serde")] {
+        use std::ffi::c_char;
+        use serde::{de::DeserializeOwned, Serialize};
+        use clarabel::solver::SolverJSONReadWrite;
+    }
+}
 
 
 use super::info::ClarabelDefaultInfo;
