@@ -86,14 +86,14 @@ where `VCPKG_TOOLCHAIN_PATH` is the path to the vcpkg toolchain file.
 
 ### SDP support
 
-To enable SDP features, set the `CLARABEL_FEATURE_SDP` option to one of the following values:
+To enable SDP features, set the `-DCLARABEL_FEATURE_SDP` option to one of the following values:
 - `sdp-accelerate`
 - `sdp-netlib`
 - `sdp-openblas`
 - `sdp-mkl`
 - `sdp-r`
 
-By default, `CLARABEL_FEATURE_SDP` is `none` and SDP support is disabled.
+By default, `-DCLARABEL_FEATURE_SDP=none` and SDP support is disabled.
 
 ### JSON file input/output support
 
