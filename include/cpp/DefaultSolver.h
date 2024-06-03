@@ -104,6 +104,7 @@ class DefaultSolver
                   const std::vector<SupportedConeT<T>> &cones,
                   const DefaultSettings<T> &settings);
 
+    DefaultSolver(void* handle);
     ~DefaultSolver();
     void solve();
 
@@ -141,6 +142,12 @@ class DefaultSolver
     void update_b(const Eigen::Ref<Eigen::VectorX<uintptr_t>> &index, const Eigen::Ref<Eigen::VectorX<T>> &values);
     void update_b(const uintptr_t* index, const T* values, uintptr_t nvals);
 
+    // Read / write to JSON file 
+    #ifdef FEATURE_SERDE
+    void write_to_file(const std::string &filename);
+    static DefaultSolver<T> read_from_file(const std::string &filename);
+    #endif
+
 };
 
 template<typename T>
@@ -177,16 +184,13 @@ RustDefaultSolverHandle_f32 clarabel_DefaultSolver_f32_new(const CscMatrix<float
                                                            const DefaultSettings<float> *settings);
 
 void clarabel_DefaultSolver_f64_solve(RustDefaultSolverHandle_f64 solver);
-
 void clarabel_DefaultSolver_f32_solve(RustDefaultSolverHandle_f32 solver);
 
 void clarabel_DefaultSolver_f64_free(RustDefaultSolverHandle_f64 solver);
-
 void clarabel_DefaultSolver_f32_free(RustDefaultSolverHandle_f32 solver);
 
 DefaultSolution<double>::ClarabelDefaultSolution
 clarabel_DefaultSolver_f64_solution(RustDefaultSolverHandle_f64 solver);
-
 DefaultSolution<float>::ClarabelDefaultSolution clarabel_DefaultSolver_f32_solution(RustDefaultSolverHandle_f32 solver);
 
 DefaultInfo<double> clarabel_DefaultSolver_f64_info(RustDefaultSolverHandle_f64 solver);
@@ -216,6 +220,14 @@ void clarabel_DefaultSolver_f64_update_b(RustDefaultSolverHandle_f64 solver, con
 void clarabel_DefaultSolver_f32_update_b(RustDefaultSolverHandle_f32 solver, const float  *values, uintptr_t n);
 void clarabel_DefaultSolver_f64_update_b_partial(RustDefaultSolverHandle_f64 solver, const uintptr_t* index, const double *values, uintptr_t nvals);
 void clarabel_DefaultSolver_f32_update_b_partial(RustDefaultSolverHandle_f32 solver, const uintptr_t* index, const float *values, uintptr_t nvals);
+
+#ifdef FEATURE_SERDE
+void clarabel_DefaultSolver_f64_write_to_file(RustDefaultSolverHandle_f64 solver, const char *filename);
+void clarabel_DefaultSolver_f32_write_to_file(RustDefaultSolverHandle_f32 solver, const char *filename);
+RustDefaultSolverHandle_f64 clarabel_DefaultSolver_f64_read_from_file( const char *filename);
+RustDefaultSolverHandle_f32 clarabel_DefaultSolver_f32_read_from_file( const char *filename);
+#endif
+
 
 }
 
@@ -261,6 +273,16 @@ inline DefaultSolver<float>::DefaultSolver(const Eigen::SparseMatrix<float, Eige
     CscMatrix<float> a(matrix_A.m, matrix_A.n, matrix_A.colptr.data(), matrix_A.rowval.data(), matrix_A.nzval);
 
     this->handle = clarabel_DefaultSolver_f32_new(&p, q.data(), &a, b.data(), cones.size(), cones.data(), &settings);
+}
+
+template<>
+inline DefaultSolver<double>::DefaultSolver(void* handle){
+    this->handle = handle;
+}
+
+template<>
+inline DefaultSolver<float>::DefaultSolver(void* handle){
+    this->handle = handle;
 }
 
 template<>
@@ -537,5 +559,29 @@ template<>
 inline void DefaultSolver<float>::update_b(const uintptr_t* index, const float *values, uintptr_t nvals){
      clarabel_DefaultSolver_f32_update_b_partial(this->handle, index, values, nvals);
 }
+
+#ifdef FEATURE_SERDE
+template<>
+inline void DefaultSolver<double>::write_to_file(const std::string &filename){
+    clarabel_DefaultSolver_f64_write_to_file(this->handle, filename.c_str());
+}
+
+template<>
+inline void DefaultSolver<float>::write_to_file(const std::string &filename){
+    clarabel_DefaultSolver_f32_write_to_file(this->handle, filename.c_str());
+}
+
+template<>
+inline DefaultSolver<double> DefaultSolver<double>::read_from_file(const std::string &filename){
+    RustDefaultSolverHandle_f64 handle = clarabel_DefaultSolver_f64_read_from_file(filename.c_str());
+    return DefaultSolver<double>(handle);
+}
+
+template<>
+inline DefaultSolver<float> DefaultSolver<float>::read_from_file(const std::string &filename){
+    RustDefaultSolverHandle_f32 handle = clarabel_DefaultSolver_f32_read_from_file(filename.c_str());
+    return DefaultSolver<float>(handle);
+}
+#endif // FEATURE_SERDE
 
 } // namespace clarabel

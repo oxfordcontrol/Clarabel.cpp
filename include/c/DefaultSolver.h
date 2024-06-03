@@ -57,6 +57,40 @@ static inline ClarabelDefaultSolver *clarabel_DefaultSolver_new(const ClarabelCs
 #endif
 }
 
+#ifdef FEATURE_SERDE 
+// DefaultSolver::read_from_file
+ClarabelDefaultSolver_f64 *clarabel_DefaultSolver_f64_read_from_file(const char *filename);
+ClarabelDefaultSolver_f32 *clarabel_DefaultSolver_f32_read_from_file(const char *filename);
+    #ifdef CLARABEL_USE_FLOAT
+    static inline ClarabelDefaultSolver *clarabel_DefaultSolver_read_from_file(const char *filename)
+    {
+        return clarabel_DefaultSolver_f32_read_from_file(filename);
+    }
+    #else
+    static inline ClarabelDefaultSolver *clarabel_DefaultSolver_read_from_file(const char *filename)
+    {
+        return clarabel_DefaultSolver_f64_read_from_file(filename);
+    }
+    #endif // CLARABEL_USE_FLOAT
+
+// DefaultSolver::write_to_file
+void clarabel_DefaultSolver_f64_write_to_file(ClarabelDefaultSolver_f64 *solver, const char *filename);
+void clarabel_DefaultSolver_f32_write_to_file(ClarabelDefaultSolver_f32 *solver, const char *filename);
+    #ifdef CLARABEL_USE_FLOAT
+    static inline void clarabel_DefaultSolver_write_to_file(ClarabelDefaultSolver *solver, const char *filename)
+    {
+        clarabel_DefaultSolver_f32_write_to_file(solver,filename);
+    }
+    #else
+    static inline void clarabel_DefaultSolver_write_to_file(ClarabelDefaultSolver *solver, const char *filename)
+    {
+        clarabel_DefaultSolver_f64_write_to_file(solver,filename);
+    }
+    #endif // CLARABEL_USE_FLOAT
+#endif // FEATURE_SERDE
+
+
+
 // DefaultSolver::solve
 void clarabel_DefaultSolver_f64_solve(ClarabelDefaultSolver_f64 *solver);
 

@@ -18,15 +18,57 @@ endif()
 
 set(CLARABEL_C_OUTPUT_DIR ${clarabel_c_output_directory} PARENT_SCOPE)
 
+
+# -------------------------------------
+# Cargo features configuration 
+#--------------------------------------
+
+# A list of features to pass to rustc 
+set(CLARABEL_BUILD_FEATURES "")
+
 # SDP feature flag
 if(NOT CLARABEL_FEATURE_SDP STREQUAL "none")
+
     # Set the Rust feature flag
-    set(clarabel_c_build_flags "${clarabel_c_build_flags};--features;${CLARABEL_FEATURE_SDP}")
+    set(CLARABEL_BUILD_FEATURES "${CLARABEL_BUILD_FEATURES},${CLARABEL_FEATURE_SDP}")
     
     # Define the FEATURE_SDP flag for all targets that link against clarabel_c
     target_compile_definitions(libclarabel_c_static INTERFACE FEATURE_SDP)
     target_compile_definitions(libclarabel_c_shared INTERFACE FEATURE_SDP)
 endif()
+
+# FAER_SPARSE feature flag
+if(CLARABEL_FEATURE_FAER_SPARSE)
+
+    # Set the Rust feature flag
+    set(CLARABEL_BUILD_FEATURES "${CLARABEL_BUILD_FEATURES},faer-sparse")
+    
+    # Define the FEATURE_FAER_SPARSE flag for all targets that link against clarabel_c
+    target_compile_definitions(libclarabel_c_static INTERFACE FEATURE_FAER_SPARSE)
+    target_compile_definitions(libclarabel_c_shared INTERFACE FEATURE_FAER_SPARSE)
+endif()
+
+# SERDE feature flag
+if(CLARABEL_FEATURE_SERDE)
+
+    # Set the Rust feature flag
+    set(CLARABEL_BUILD_FEATURES "${CLARABEL_BUILD_FEATURES},serde")
+    
+    # Define the FEATURE_SERDE flag for all targets that link against clarabel_c
+    target_compile_definitions(libclarabel_c_static INTERFACE FEATURE_SERDE)
+    target_compile_definitions(libclarabel_c_shared INTERFACE FEATURE_SERDE)
+endif()
+
+
+
+set(clarabel_c_build_flags "${clarabel_c_build_flags};--features=${CLARABEL_BUILD_FEATURES}")
+message("-- Rust feature list: " ${CLARABEL_BUILD_FEATURES})
+message("-- Cargo options: " "${clarabel_c_build_flags}")
+
+
+# -------------------------------------
+# -------------------------------------
+
 
 # Add the cargo project as a custom target
 add_custom_target(

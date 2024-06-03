@@ -12,3 +12,5 @@ documentation = false
 
 [defines]
 "feature = sdp" = "FEATURE_SDP"
+"feature = faer-sparse" = "FEATURE_FAER_SPARSE"
+"feature = serde" = "FEATURE_SERDE"

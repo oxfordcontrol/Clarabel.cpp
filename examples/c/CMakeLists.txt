@@ -9,6 +9,7 @@ set(C_EXAMPLES
   example_qp_f64
   example_socp
   example_sdp
+  example_json
 )
 
 # Compile utils.c as a library
