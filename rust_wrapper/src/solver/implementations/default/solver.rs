@@ -1,18 +1,23 @@
+#![allow(non_snake_case)]
+#![allow(non_camel_case_types)]
+
+
 use crate::algebra::ClarabelCscMatrix;
 use crate::core::cones::ClarabelSupportedConeT;
 use crate::solver::implementations::default::settings::*;
 use crate::utils;
 use clarabel::algebra::FloatT;
+use clarabel::solver::SolverJSONReadWrite;
 use clarabel::solver::{self as lib, IPSolver, SolverStatus};
 use std::slice;
-use std::{ffi::c_void, mem::forget};
+use std::{ffi::{c_void,c_char}, mem::forget};
+use serde::{de::DeserializeOwned, Serialize};
+
 
 use super::info::ClarabelDefaultInfo;
 use super::solution::DefaultSolution;
 
-#[allow(non_camel_case_types)]
 pub type ClarabelDefaultSolver_f32 = c_void;
-#[allow(non_camel_case_types)]
 pub type ClarabelDefaultSolver_f64 = c_void;
 
 // Wrapper function to create a DefaultSolver object from C using dynamic memory allocation
@@ -21,7 +26,6 @@ pub type ClarabelDefaultSolver_f64 = c_void;
 // - Settings are converted from C struct to Rust struct
 //
 // b and cones are allowed to be null pointers, in which case they form zero-length slices and this is consistent with Clarabel.rs.
-#[allow(non_snake_case)]
 unsafe fn _internal_DefaultSolver_new<T: FloatT>(
     P: *const ClarabelCscMatrix<T>, // Matrix P
     q: *const T,                    // Array of double from C
@@ -85,7 +89,6 @@ unsafe fn _internal_DefaultSolver_new<T: FloatT>(
 }
 
 #[no_mangle]
-#[allow(non_snake_case)]
 pub unsafe extern "C" fn clarabel_DefaultSolver_f64_new(
     P: *const ClarabelCscMatrix<f64>,
     q: *const f64,
@@ -99,7 +102,6 @@ pub unsafe extern "C" fn clarabel_DefaultSolver_f64_new(
 }
 
 #[no_mangle]
-#[allow(non_snake_case)]
 pub unsafe extern "C" fn clarabel_DefaultSolver_f32_new(
     P: *const ClarabelCscMatrix<f32>,
     q: *const f32,
@@ -113,7 +115,6 @@ pub unsafe extern "C" fn clarabel_DefaultSolver_f32_new(
 }
 
 // Wrapper function to call DefaultSolver.solve() from C
-#[allow(non_snake_case)]
 fn _internal_DefaultSolver_solve<T: FloatT>(solver: *mut c_void) {
     // Recover the solver object from the opaque pointer
     let mut solver = unsafe { Box::from_raw(solver as *mut lib::DefaultSolver<T>) };
@@ -136,7 +137,6 @@ pub extern "C" fn clarabel_DefaultSolver_f32_solve(solver: *mut ClarabelDefaultS
 }
 
 // Function to free the memory of the solver object
-#[allow(non_snake_case)]
 unsafe fn _internal_DefaultSolver_free<T: FloatT>(solver: *mut c_void) {
     if !solver.is_null() {
         // Reconstruct the box to drop the solver object
@@ -154,6 +154,73 @@ pub unsafe extern "C" fn clarabel_DefaultSolver_f64_free(solver: *mut ClarabelDe
 pub unsafe extern "C" fn clarabel_DefaultSolver_f32_free(solver: *mut ClarabelDefaultSolver_f32) {
     _internal_DefaultSolver_free::<f32>(solver);
 }
+
+#[cfg(feature = "serde")]
+pub unsafe fn _internal_DefaultSolver_read_from_file<T>(filename: *const c_char)
+ -> *mut c_void 
+where T: FloatT + DeserializeOwned + Serialize,
+{
+    if filename.is_null() {
+        return std::ptr::null_mut();
+    }
+    let filename = unsafe{std::ffi::CStr::from_ptr(filename).to_str().expect("Invalid filename")};
+    let mut file = std::fs::File::open(filename).expect("File not found");
+    let solver = lib::DefaultSolver::<T>::read_from_file(&mut file);
+    Box::into_raw(Box::new(solver)) as *mut c_void
+}
+
+#[cfg(feature = "serde")]
+fn _internal_DefaultSolver_write_to_file<T>(solver: *mut c_void, filename: *const c_char) 
+where T: FloatT + DeserializeOwned + Serialize,
+{
+    if filename.is_null() {
+        return;
+    }
+    let filename = unsafe{std::ffi::CStr::from_ptr(filename).to_str().expect("Invalid filename")};
+    let mut file = std::fs::File::create(filename).expect("File not found");
+
+    // Recover the solver object from the opaque pointer
+    let solver = unsafe { Box::from_raw(solver as *mut lib::DefaultSolver<T>) };
+
+    // Use the recovered solver object
+    solver.write_to_file(&mut file).unwrap();
+
+    // Leave the solver object on the heap
+    Box::into_raw(solver);
+}
+
+#[no_mangle]
+#[cfg(feature = "serde")]
+pub unsafe extern "C" fn clarabel_DefaultSolver_f64_read_from_file(
+    filename: *const c_char,
+) -> *mut ClarabelDefaultSolver_f64 {
+
+    _internal_DefaultSolver_read_from_file::<f64>(filename)
+}
+
+#[no_mangle]
+#[cfg(feature = "serde")]
+pub unsafe extern "C" fn clarabel_DefaultSolver_f32_read_from_file(
+    filename: *const c_char,
+) -> *mut ClarabelDefaultSolver_f32 {
+
+    _internal_DefaultSolver_read_from_file::<f32>(filename)
+}
+
+#[no_mangle]
+#[cfg(feature = "serde")]
+pub extern "C" fn clarabel_DefaultSolver_f64_write_to_file(solver: *mut ClarabelDefaultSolver_f64,filename: *const c_char) {
+    _internal_DefaultSolver_write_to_file::<f64>(solver,filename);
+}
+
+#[no_mangle]
+#[cfg(feature = "serde")]
+pub extern "C" fn clarabel_DefaultSolver_f32_write_to_file(solver: *mut ClarabelDefaultSolver_f32,filename: *const c_char) {
+    _internal_DefaultSolver_write_to_file::<f32>(solver,filename);
+}
+
+
+
 
 #[repr(C)]
 #[allow(dead_code)]
@@ -209,7 +276,6 @@ impl From<&mut SolverStatus> for ClarabelSolverStatus {
 /// Get the solution field from a DefaultSolver object.
 ///
 /// The solution is returned as a C struct.
-#[allow(non_snake_case)]
 fn _internal_DefaultSolver_solution<T: FloatT>(solver: *mut c_void) -> DefaultSolution<T> {
     // Recover the solver object from the opaque pointer
     let mut solver = unsafe { Box::from_raw(solver as *mut lib::DefaultSolver<T>) };
@@ -239,7 +305,6 @@ pub extern "C" fn clarabel_DefaultSolver_f32_solution(
 }
 
 /// Get the info field from a DefaultSolver object.
-#[allow(non_snake_case)]
 fn _internal_DefaultSolver_info<T: FloatT>(solver: *mut c_void) -> ClarabelDefaultInfo<T> {
     // Recover the solver object from the opaque pointer
     let mut solver = unsafe { Box::from_raw(solver as *mut lib::DefaultSolver<T>) };

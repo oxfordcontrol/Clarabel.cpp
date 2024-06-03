@@ -11,6 +11,9 @@
 typedef enum ClarabelDirectSolveMethods
 {
     QDLDL,
+    #ifdef FEATURE_FAER_SPARSE
+    FAER,
+    #endif 
     // MKL, (not supported in Rust yet)
     // CHOLMOD, (not supported in Rust yet)
 } ClarabelDirectSolveMethods;

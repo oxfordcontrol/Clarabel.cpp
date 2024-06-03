@@ -42,6 +42,8 @@ pub fn get_solver_settings_from_c<T: FloatT>(
         direct_kkt_solver: value.direct_kkt_solver,
         direct_solve_method: match value.direct_solve_method {
             ClarabelDirectSolveMethods::QDLDL => String::from("qdldl"),
+            #[cfg(feature = "faer-sparse")]
+            ClarabelDirectSolveMethods::FAER => String::from("faer"),
             // Not supported yet
             //ClarabelDirectSolveMethods::MKL => String::from("mkl"),
             //ClarabelDirectSolveMethods::CHOLMOD => String::from("cholmod"),

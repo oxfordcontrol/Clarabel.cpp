@@ -95,6 +95,17 @@ To enable SDP features, set the `CLARABEL_FEATURE_SDP` option to one of the foll
 
 By default, `CLARABEL_FEATURE_SDP` is `none` and SDP support is disabled.
 
+### JSON file input/output support
+
+To enable reading and writing of problem data to JSON files, set 
+`-DCLARABEL_FEATURE_SERDE=true`. 
+
+When reporting issues with the solver, it can be helpful to provide a JSON file that reproduces the problem.
+
+### Alternative linear algebra libraries
+
+To enable the use of the [faer-rs](https://faer-rs.github.io/) sparse linear algebra library as an additional solver option, set `-DCLARABEL_FEATURE_FAER_SPARSE=true`.
+
 ### Unit tests
 
 By default, unit tests are disabled to reduce build time. To enable unit tests, set `-DCLARABEL_BUILD_TESTS=true` in cmake.

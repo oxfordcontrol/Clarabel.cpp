@@ -6,6 +6,7 @@ edition = "2021"
 [dependencies]
 clarabel = { path = "../Clarabel.rs" }
 paste = "1.0"
+serde = { version = "1", optional = true }
 
 [lib]
 crate-type = ["cdylib", "staticlib"]
@@ -23,3 +24,6 @@ sdp-netlib     = ["sdp", "clarabel/sdp-netlib"]
 sdp-openblas   = ["sdp", "clarabel/sdp-openblas"]
 sdp-mkl        = ["sdp", "clarabel/sdp-mkl"]
 sdp-r          = ["sdp", "clarabel/sdp-r"]
+
+serde          = ["dep:serde", "clarabel/serde"]
+faer-sparse    = ["clarabel/faer-sparse"]

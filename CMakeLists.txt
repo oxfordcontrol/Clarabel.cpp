@@ -12,7 +12,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED True)
 
-# SDP feature configuration
+#----------------------------------------------
+# Clarabel feature configuration
+#----------------------------------------------
 set(CLARABEL_FEATURE_SDP "none" CACHE STRING "Package for SDP to be selected")
 set_property(CACHE CLARABEL_FEATURE_SDP PROPERTY STRINGS 
     none
@@ -22,6 +24,15 @@ set_property(CACHE CLARABEL_FEATURE_SDP PROPERTY STRINGS
     sdp-mkl
     sdp-r
 )
+
+option(CLARABEL_FEATURE_SERDE "Enable clarabel `serde` option " OFF)
+option(CLARABEL_FEATURE_FAER_SPARSE "Enable `faer-sparse` option" OFF)
+option(CLARABEL_FEATURE_SERDE "Enable `faer-sparse` option" OFF)
+
+
+#----------------------------------------------
+#----------------------------------------------
+
 
 # Get dependencies
 

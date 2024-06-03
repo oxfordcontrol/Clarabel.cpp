@@ -2,8 +2,11 @@ use clarabel::algebra::FloatT;
 
 /// Used to replace the String type in the DefaultSettings struct
 #[repr(C)]
+#[allow(dead_code)]
 pub enum ClarabelDirectSolveMethods {
     QDLDL,
+    #[cfg(feature = "faer-sparse")]
+    FAER,
     // MKL, (not supported yet)
     // CHOLMOD, (not supported yet)
 }

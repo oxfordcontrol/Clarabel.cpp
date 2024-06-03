@@ -7,6 +7,8 @@ set(CPP_EXAMPLES
   example_qp
   example_socp
   example_sdp
+  example_faer
+  example_json
 )
 
 # Define an executable target for each example
