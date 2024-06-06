@@ -1,5 +1,5 @@
 # Define a list of target names
-set(CPP_EXAMPLES 
+set(CPP_EXAMPLES
   example_expcone
   example_lp
   example_powcone
@@ -14,7 +14,7 @@ set(CPP_EXAMPLES
 # Define an executable target for each example
 foreach(EXAMPLE_NAME ${CPP_EXAMPLES})
   add_executable("cpp_${EXAMPLE_NAME}" ${EXAMPLE_NAME}.cpp)
-  target_compile_features("cpp_${EXAMPLE_NAME}" PRIVATE cxx_std_11) # Use C++11
+  target_compile_features("cpp_${EXAMPLE_NAME}" PRIVATE cxx_std_14) # Eigen requires at least c++14 support
 
   # Link to clarabel built from the Rust wrapper
   target_link_libraries("cpp_${EXAMPLE_NAME}" PRIVATE libclarabel_c_shared)
