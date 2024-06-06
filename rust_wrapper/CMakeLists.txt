@@ -10,10 +10,10 @@ add_library(libclarabel_c_shared INTERFACE)
 # Debug/Release flags
 if(CMAKE_BUILD_TYPE MATCHES Release)
    set(clarabel_c_build_flags "--release")
-   set(clarabel_c_output_directory "${CMAKE_SOURCE_DIR}/rust_wrapper/target/release")
+   set(clarabel_c_output_directory "${CLARABEL_ROOT_DIR}/rust_wrapper/target/release")
 else()
     set(clarabel_c_build_flags "")
-    set(clarabel_c_output_directory "${CMAKE_SOURCE_DIR}/rust_wrapper/target/debug")
+    set(clarabel_c_output_directory "${CLARABEL_ROOT_DIR}/rust_wrapper/target/debug")
 endif()
 
 set(CLARABEL_C_OUTPUT_DIR ${clarabel_c_output_directory} PARENT_SCOPE)
@@ -86,7 +86,7 @@ endif()
 # Add the cargo project as a custom target
 add_custom_target(
     libclarabel_c
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/rust_wrapper
+    WORKING_DIRECTORY ${CLARABEL_ROOT_DIR}/rust_wrapper
     # Commands for building the Rust library
     COMMAND cargo build ${clarabel_c_build_flags}
     COMMAND cargo install cbindgen --version 0.24.5
@@ -104,10 +104,10 @@ add_custom_target(
 
 # Static library
 target_link_libraries(libclarabel_c_static INTERFACE ${LIBCLARABEL_C_STATIC_PATH})
-target_include_directories(libclarabel_c_static INTERFACE ${CMAKE_SOURCE_DIR}/include)
+target_include_directories(libclarabel_c_static INTERFACE ${CLARABEL_ROOT_DIR}/include)
 add_dependencies(libclarabel_c_static libclarabel_c)
 
 # Shared library
 target_link_libraries(libclarabel_c_shared INTERFACE ${LIBCLARABEL_C_SHARED_PATH})
-target_include_directories(libclarabel_c_shared INTERFACE ${CMAKE_SOURCE_DIR}/include)
+target_include_directories(libclarabel_c_shared INTERFACE ${CLARABEL_ROOT_DIR}/include)
 add_dependencies(libclarabel_c_shared libclarabel_c)
