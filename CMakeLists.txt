@@ -12,11 +12,16 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED True)
 
+# Set the root directory of the project. This is needed
+# so that Clarabel.cpp can be consumed by other projects via
+# `add_subdirectory`
+set(CLARABEL_ROOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
+
 #----------------------------------------------
 # Clarabel feature configuration
 #----------------------------------------------
 set(CLARABEL_FEATURE_SDP "none" CACHE STRING "Package for SDP to be selected")
-set_property(CACHE CLARABEL_FEATURE_SDP PROPERTY STRINGS 
+set_property(CACHE CLARABEL_FEATURE_SDP PROPERTY STRINGS
     none
     sdp-accelerate
     sdp-netlib
