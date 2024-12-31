@@ -1,7 +1,6 @@
 #pragma once
 
 #include <cstdint>
-#include <iostream>
 #include <type_traits>
 
 namespace clarabel
