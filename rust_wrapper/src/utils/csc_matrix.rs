@@ -35,14 +35,11 @@ pub unsafe fn convert_from_C_CscMatrix<T: FloatT>(ptr: *const ClarabelCscMatrix<
     assert!(rowval.len() == colptr[n]);
 
     // Call the CscMatrix constructor defined in Rust
-    let rust_matrix = lib::CscMatrix::<T> {
+        lib::CscMatrix::<T> {
         m,
         n,
         colptr,
         rowval,
         nzval: nzval_vec,
-    };
-
-    // Return the Rust CscMatrix built from the C struct
-    rust_matrix
+    }
 }
