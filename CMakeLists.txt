@@ -38,10 +38,10 @@ option(CLARABEL_FEATURE_SERDE "Enable `faer-sparse` option" OFF)
 
 # Eigen3
 if (NOT TARGET Eigen3::Eigen)
-  find_package(Eigen3 CONFIG REQUIRED)
-  message(STATUS "Clarabel.cpp: `Eigen3` package found.")
+  find_package(Eigen3 CONFIG REQUIRED VERSION 3.4)
+  message(STATUS "Clarabel.cpp: `Eigen3` package found.  Version ${Eigen3_VERSION}.")
 else()
-  message(STATUS "Clarabel.cpp: `Eigen3` package already exists.")
+  message(STATUS "Clarabel.cpp: `Eigen3` package already exists.  Version ${Eigen3_VERSION}.")
 endif()
 
 # Build the Rust library
