@@ -159,7 +159,10 @@ pub unsafe extern "C" fn clarabel_DefaultSolver_f32_free(solver: *mut ClarabelDe
 }
 
 #[cfg(feature = "serde")]
-pub unsafe fn _internal_DefaultSolver_read_from_file<T>(filename: *const c_char)
+pub unsafe fn _internal_DefaultSolver_read_from_file<T>(
+    filename: *const c_char,
+    settings: *const ClarabelDefaultSettings<T>,
+)
  -> *mut c_void 
 where T: FloatT + DeserializeOwned + Serialize,
 {
@@ -168,7 +171,14 @@ where T: FloatT + DeserializeOwned + Serialize,
     }
     let filename = unsafe{std::ffi::CStr::from_ptr(filename).to_str().expect("Invalid filename")};
     let mut file = std::fs::File::open(filename).expect("File not found");
-    let solver = lib::DefaultSolver::<T>::read_from_file(&mut file);
+
+    let solver = if settings.is_null() {
+        lib::DefaultSolver::<T>::read_from_file(&mut file, None)
+    } else {
+        let settings_struct = &*(settings);
+        let settings = utils::get_solver_settings_from_c::<T>(settings_struct);
+        lib::DefaultSolver::<T>::read_from_file(&mut file, Some(settings))
+    };
     Box::into_raw(Box::new(solver)) as *mut c_void
 }
 
@@ -183,31 +193,31 @@ where T: FloatT + DeserializeOwned + Serialize,
     let mut file = std::fs::File::create(filename).expect("File not found");
 
     // Recover the solver object from the opaque pointer
-    let solver = unsafe { Box::from_raw(solver as *mut lib::DefaultSolver<T>) };
+    let solver = unsafe { &mut *(solver as *mut lib::DefaultSolver<T>) };
 
     // Use the recovered solver object
     solver.write_to_file(&mut file).unwrap();
 
-    // Leave the solver object on the heap
-    Box::into_raw(solver);
 }
 
 #[no_mangle]
 #[cfg(feature = "serde")]
 pub unsafe extern "C" fn clarabel_DefaultSolver_f64_read_from_file(
     filename: *const c_char,
+    settings: *const ClarabelDefaultSettings<f64>,
 ) -> *mut ClarabelDefaultSolver_f64 {
 
-    _internal_DefaultSolver_read_from_file::<f64>(filename)
+    _internal_DefaultSolver_read_from_file::<f64>(filename,settings)
 }
 
 #[no_mangle]
 #[cfg(feature = "serde")]
 pub unsafe extern "C" fn clarabel_DefaultSolver_f32_read_from_file(
     filename: *const c_char,
+    settings: *const ClarabelDefaultSettings<f32>,
 ) -> *mut ClarabelDefaultSolver_f32 {
 
-    _internal_DefaultSolver_read_from_file::<f32>(filename)
+    _internal_DefaultSolver_read_from_file::<f32>(filename,settings)
 }
 
 #[no_mangle]

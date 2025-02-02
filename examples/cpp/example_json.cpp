@@ -1,7 +1,7 @@
 // #define FEATURE_SDP
 #include "utils.h"
-#include <cstdio>
 #include <Clarabel>
+#include <iostream>
 
 using namespace clarabel;
 using namespace std;
@@ -21,7 +21,7 @@ int main(void)
     std::string rootdir  = TO_STRING(EXAMPLES_ROOT_DIR);
     std::string filepath = "/data/hs35.json";
     std::string filename = rootdir + filepath; 
-    cout << "Read from file: " << filename << endl;
+    std::cout << "Read from file: " << filename << endl;
 
     DefaultSolver<double> solver = DefaultSolver<double>::read_from_file(filename);
     solver.solve();
