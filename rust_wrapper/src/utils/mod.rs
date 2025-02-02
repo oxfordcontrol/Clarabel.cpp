@@ -39,6 +39,7 @@ pub fn get_solver_settings_from_c<T: FloatT>(
         linesearch_backtrack_step: value.linesearch_backtrack_step,
         min_switch_step_length: value.min_switch_step_length,
         min_terminate_step_length: value.min_terminate_step_length,
+        max_threads: value.max_threads,
         direct_kkt_solver: value.direct_kkt_solver,
         direct_solve_method: match value.direct_solve_method {
             ClarabelDirectSolveMethods::QDLDL => String::from("qdldl"),

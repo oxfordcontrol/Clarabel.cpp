@@ -52,6 +52,7 @@ typedef struct ClarabelDefaultSettings_f64
     double linesearch_backtrack_step;
     double min_switch_step_length;
     double min_terminate_step_length;
+    uint32_t max_threads;
     bool direct_kkt_solver;
     ClarabelDirectSolveMethods direct_solve_method;
     bool static_regularization_enable;
@@ -99,6 +100,7 @@ typedef struct ClarabelDefaultSettings_f32
     float linesearch_backtrack_step;
     float min_switch_step_length;
     float min_terminate_step_length;
+    uint32_t max_threads;
     bool direct_kkt_solver;
     enum ClarabelDirectSolveMethods direct_solve_method;
     bool static_regularization_enable;
