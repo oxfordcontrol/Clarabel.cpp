@@ -106,6 +106,12 @@ class DefaultSolver
 
     DefaultSolver(void* handle);
     ~DefaultSolver();
+
+    DefaultSolver(const DefaultSolver &) = delete;
+    DefaultSolver(DefaultSolver &&other);
+    DefaultSolver &operator=(const DefaultSolver &) = delete;
+    DefaultSolver &operator=(DefaultSolver &&other);
+
     void solve();
 
     // The solution can only be obtained when the solver is in the Solved state, and the DefaultSolution object is only
@@ -149,6 +155,22 @@ class DefaultSolver
     #endif
 
 };
+
+template<typename T>
+DefaultSolver<T>::DefaultSolver(DefaultSolver &&other) : handle(other.handle)
+{
+    other.handle = nullptr;
+}
+
+template<typename T>
+DefaultSolver<T> &DefaultSolver<T>::operator=(DefaultSolver &&other)
+{
+    if (this != &other){
+        handle = other.handle;
+        other.handle = nullptr;
+    }
+    return *this;
+}
 
 template<typename T>
 struct DefaultSolver<T>::ConvertedCscMatrix

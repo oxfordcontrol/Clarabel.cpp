@@ -25,7 +25,7 @@ unsafe fn _internal_DefaultSolver_update_csc<T: FloatT>(
 ) {
 
     // Recover the solver object from the opaque pointer
-    let mut solver = unsafe { Box::from_raw(solver as *mut lib::DefaultSolver<T>) };
+    let solver = unsafe { &mut *(solver as *mut lib::DefaultSolver<T>) };
 
     // convert values to rust CSC types
     let mat = utils::convert_from_C_CscMatrix(mat);
@@ -36,9 +36,6 @@ unsafe fn _internal_DefaultSolver_update_csc<T: FloatT>(
         DataUpdateTarget::A => solver.update_A(&mat).unwrap(),
         _ => panic!("Only P and A can be updated with a CSC matrix"),
     }
-
-    // Leave the solver object on the heap
-    Box::into_raw(solver);
 
     // Ensure Rust does not free the memory of arrays managed by C
     forget(mat);
@@ -54,7 +51,7 @@ unsafe fn _internal_DefaultSolver_update<T: FloatT>(
 ) {
 
     // Recover the solver object from the opaque pointer
-    let mut solver = unsafe { Box::from_raw(solver as *mut lib::DefaultSolver<T>) };
+    let solver = unsafe { &mut *(solver as *mut lib::DefaultSolver<T>) };
 
     // convert values to a vector
     let nzval = Vec::from_raw_parts(nzval as *mut T, nnz, nnz);
@@ -66,9 +63,6 @@ unsafe fn _internal_DefaultSolver_update<T: FloatT>(
         DataUpdateTarget::q => solver.update_q(&nzval).unwrap(),
         DataUpdateTarget::b => solver.update_b(&nzval).unwrap(),
     }
-
-    // Leave the solver object on the heap
-    Box::into_raw(solver);
 
     // Ensure Rust does not free the memory of arrays managed by C
     forget(nzval);
@@ -84,7 +78,7 @@ unsafe fn _internal_DefaultSolver_update_partial<T: FloatT>(
     method: DataUpdateTarget
 ) {
     // Recover the solver object from the opaque pointer
-    let mut solver = unsafe { Box::from_raw(solver as *mut lib::DefaultSolver<T>) };
+    let solver = unsafe { &mut *(solver as *mut lib::DefaultSolver<T>) };
 
     // convert values to a vector
     let index  = Vec::from_raw_parts(index as *mut usize, nvals, nvals);
@@ -97,9 +91,6 @@ unsafe fn _internal_DefaultSolver_update_partial<T: FloatT>(
         DataUpdateTarget::q => solver.update_q(&zip(&index,&values)).unwrap(),
         DataUpdateTarget::b => solver.update_b(&zip(&index,&values)).unwrap(),
     }
-
-    // Leave the solver object on the heap
-    Box::into_raw(solver);
 
     // Ensure Rust does not free the memory of arrays managed by C
     forget(index);

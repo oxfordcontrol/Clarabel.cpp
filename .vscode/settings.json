@@ -8,6 +8,7 @@
         "stack": "cpp",
         "iosfwd": "cpp",
         "vector": "cpp",
-        "complex": "cpp"
+        "complex": "cpp",
+        "ostream": "cpp"
     }
 }

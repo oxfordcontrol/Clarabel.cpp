@@ -53,6 +53,7 @@ struct DefaultSettings
     T linesearch_backtrack_step;
     T min_switch_step_length;
     T min_terminate_step_length;
+    uint32_t max_threads;
     bool direct_kkt_solver;
     ClarabelDirectSolveMethods direct_solve_method;
     bool static_regularization_enable;
@@ -231,6 +232,12 @@ class DefaultSettingsBuilder
     DefaultSettingsBuilder<T> &min_terminate_step_length(T min_terminate_step_length)
     {
         settings.min_terminate_step_length = min_terminate_step_length;
+        return *this;
+    }
+
+    DefaultSettingsBuilder<T> &max_threads(uint32_t max_threads)
+    {
+        settings.max_threads = max_threads;
         return *this;
     }
 

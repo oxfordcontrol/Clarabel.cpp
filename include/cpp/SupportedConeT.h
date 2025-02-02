@@ -112,7 +112,7 @@ struct ZeroConeT : public SupportedConeT<T>
     ZeroConeT(uintptr_t dimension)
     {
         this->tag = SupportedConeT<T>::Tag::ZeroConeT;
-        this->nonnegative_cone_t = { dimension };
+        this->zero_cone_t = { dimension };
     }
 
     uintptr_t dimension() const { return this->nonnegative_cone_t._0; }
@@ -125,7 +125,7 @@ struct NonnegativeConeT : public SupportedConeT<T>
     NonnegativeConeT(uintptr_t dimension)
     {
         this->tag = SupportedConeT<T>::Tag::NonnegativeConeT;
-        this->zero_cone_t = { dimension };
+        this->nonnegative_cone_t = { dimension };
     }
 
     uintptr_t dimension() const { return this->zero_cone_t._0; }

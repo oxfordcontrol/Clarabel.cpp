@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 
 # Project properties
-set(CLARABEL_PROJECT_VERSION 0.9.0)
+set(CLARABEL_PROJECT_VERSION 0.10.0)
 project(Clarabel VERSION ${CLARABEL_PROJECT_VERSION})
 
 # Specify the default C++ standard applied to all targets
@@ -12,11 +12,16 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED True)
 
+# Set the root directory of the project. This is needed
+# so that Clarabel.cpp can be consumed by other projects via
+# `add_subdirectory`
+set(CLARABEL_ROOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
+
 #----------------------------------------------
 # Clarabel feature configuration
 #----------------------------------------------
 set(CLARABEL_FEATURE_SDP "none" CACHE STRING "Package for SDP to be selected")
-set_property(CACHE CLARABEL_FEATURE_SDP PROPERTY STRINGS 
+set_property(CACHE CLARABEL_FEATURE_SDP PROPERTY STRINGS
     none
     sdp-accelerate
     sdp-netlib
@@ -38,10 +43,10 @@ option(CLARABEL_FEATURE_SERDE "Enable `faer-sparse` option" OFF)
 
 # Eigen3
 if (NOT TARGET Eigen3::Eigen)
-  find_package(Eigen3 CONFIG REQUIRED)
-  message(STATUS "Clarabel.cpp: `Eigen3` package found.")
+  find_package(Eigen3 CONFIG REQUIRED VERSION 3.4)
+  message(STATUS "Clarabel.cpp: `Eigen3` package found.  Version ${Eigen3_VERSION}.")
 else()
-  message(STATUS "Clarabel.cpp: `Eigen3` package already exists.")
+  message(STATUS "Clarabel.cpp: `Eigen3` package already exists.  Version ${Eigen3_VERSION}.")
 endif()
 
 # Build the Rust library

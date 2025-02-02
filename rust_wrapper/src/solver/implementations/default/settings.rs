@@ -3,6 +3,7 @@ use clarabel::algebra::FloatT;
 /// Used to replace the String type in the DefaultSettings struct
 #[repr(C)]
 #[allow(dead_code)]
+#[allow(clippy::upper_case_acronyms)]
 pub enum ClarabelDirectSolveMethods {
     QDLDL,
     #[cfg(feature = "faer-sparse")]
@@ -57,6 +58,7 @@ pub struct ClarabelDefaultSettings<T: FloatT> {
     pub min_terminate_step_length: T,
 
     // Linear solver settings
+    pub max_threads: u32,
     pub direct_kkt_solver: bool,
     pub direct_solve_method: ClarabelDirectSolveMethods,
 
@@ -139,6 +141,7 @@ fn _internal_DefaultSettings_default<T: FloatT>() -> ClarabelDefaultSettings<T> 
         linesearch_backtrack_step: default.linesearch_backtrack_step,
         min_switch_step_length: default.min_switch_step_length,
         min_terminate_step_length: default.min_terminate_step_length,
+        max_threads: default.max_threads,
         direct_kkt_solver: default.direct_kkt_solver,
         direct_solve_method: default_direct_solver_setting,
         static_regularization_enable: default.static_regularization_enable,
