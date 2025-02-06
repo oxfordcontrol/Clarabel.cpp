@@ -23,13 +23,13 @@ int main(void)
     std::string filename = rootdir + filepath; 
     std::cout << "Read from file: " << filename << endl;
 
-    DefaultSolver<double> solver = DefaultSolver<double>::read_from_file(filename);
+    DefaultSolver<double> solver = DefaultSolver<double>::load_from_file(filename);
     solver.solve();
 
     // write it back to a file 
     // std::string outpath = "/data/output.json";
     // std::string filename_out = rootdir + outpath;
-    // solver.write_to_file(filename_out);
+    // solver.save_to_file(filename_out);
 
     return 0;
 

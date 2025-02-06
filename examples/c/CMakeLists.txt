@@ -10,6 +10,7 @@ set(C_EXAMPLES
   example_socp
   example_sdp
   example_json
+  example_print_stream
 )
 
 # Compile utils.c as a library

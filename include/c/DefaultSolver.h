@@ -58,37 +58,101 @@ static inline ClarabelDefaultSolver *clarabel_DefaultSolver_new(const ClarabelCs
 }
 
 #ifdef FEATURE_SERDE 
-// DefaultSolver::read_from_file
-ClarabelDefaultSolver_f64 *clarabel_DefaultSolver_f64_read_from_file(const char *filename);
-ClarabelDefaultSolver_f32 *clarabel_DefaultSolver_f32_read_from_file(const char *filename);
+// DefaultSolver::load_from_file
+ClarabelDefaultSolver_f64 *clarabel_DefaultSolver_f64_load_from_file(const char *filename);
+ClarabelDefaultSolver_f32 *clarabel_DefaultSolver_f32_load_from_file(const char *filename);
     #ifdef CLARABEL_USE_FLOAT
-    static inline ClarabelDefaultSolver *clarabel_DefaultSolver_read_from_file(const char *filename)
+    static inline ClarabelDefaultSolver *clarabel_DefaultSolver_load_from_file(const char *filename)
     {
-        return clarabel_DefaultSolver_f32_read_from_file(filename);
+        return clarabel_DefaultSolver_f32_load_from_file(filename);
     }
     #else
-    static inline ClarabelDefaultSolver *clarabel_DefaultSolver_read_from_file(const char *filename)
+    static inline ClarabelDefaultSolver *clarabel_DefaultSolver_load_from_file(const char *filename)
     {
-        return clarabel_DefaultSolver_f64_read_from_file(filename);
+        return clarabel_DefaultSolver_f64_load_from_file(filename);
     }
     #endif // CLARABEL_USE_FLOAT
 
-// DefaultSolver::write_to_file
-void clarabel_DefaultSolver_f64_write_to_file(ClarabelDefaultSolver_f64 *solver, const char *filename);
-void clarabel_DefaultSolver_f32_write_to_file(ClarabelDefaultSolver_f32 *solver, const char *filename);
+// DefaultSolver::save_to_file
+void clarabel_DefaultSolver_f64_save_to_file(ClarabelDefaultSolver_f64 *solver, const char *filename);
+void clarabel_DefaultSolver_f32_save_to_file(ClarabelDefaultSolver_f32 *solver, const char *filename);
     #ifdef CLARABEL_USE_FLOAT
-    static inline void clarabel_DefaultSolver_write_to_file(ClarabelDefaultSolver *solver, const char *filename)
+    static inline void clarabel_DefaultSolver_save_to_file(ClarabelDefaultSolver *solver, const char *filename)
     {
-        clarabel_DefaultSolver_f32_write_to_file(solver,filename);
+        clarabel_DefaultSolver_f32_save_to_file(solver,filename);
     }
     #else
-    static inline void clarabel_DefaultSolver_write_to_file(ClarabelDefaultSolver *solver, const char *filename)
+    static inline void clarabel_DefaultSolver_save_to_file(ClarabelDefaultSolver *solver, const char *filename)
     {
-        clarabel_DefaultSolver_f64_write_to_file(solver,filename);
+        clarabel_DefaultSolver_f64_save_to_file(solver,filename);
     }
     #endif // CLARABEL_USE_FLOAT
 #endif // FEATURE_SERDE
 
+// DefaultSolver::print_to_stdout
+void clarabel_DefaultSolver_f64_print_to_stdout(ClarabelDefaultSolver_f64 *solver);
+void clarabel_DefaultSolver_f32_print_to_stdout(ClarabelDefaultSolver_f32 *solver);
+#ifdef CLARABEL_USE_FLOAT
+    static inline void clarabel_DefaultSolver_print_to_stdout(ClarabelDefaultSolver *solver)
+    {
+        clarabel_DefaultSolver_f32_print_to_stdout(solver);
+    }
+#else
+    static inline void clarabel_DefaultSolver_print_to_stdout(ClarabelDefaultSolver *solver)
+    {
+        clarabel_DefaultSolver_f64_print_to_stdout(solver);
+    }
+#endif // CLARABEL_USE_FLOAT
+
+// DefaultSolver::print_to_file
+void clarabel_DefaultSolver_f64_print_to_file(ClarabelDefaultSolver_f64 *solver, const char *filename);
+void clarabel_DefaultSolver_f32_print_to_file(ClarabelDefaultSolver_f32 *solver, const char *filename);
+#ifdef CLARABEL_USE_FLOAT
+    static inline void clarabel_DefaultSolver_print_to_file(ClarabelDefaultSolver *solver, const char *filename)
+    {
+        clarabel_DefaultSolver_f32_print_to_file(solver, const char *filename);
+    }
+#else
+    static inline void clarabel_DefaultSolver_print_to_file(ClarabelDefaultSolver *solver, const char *filename)
+    {
+        clarabel_DefaultSolver_f64_print_to_file(solver, filename);
+    }
+#endif // CLARABEL_USE_FLOAT
+
+// DefaultSolver::print_to_buffer
+void clarabel_DefaultSolver_f64_print_to_buffer(ClarabelDefaultSolver_f64 *solver);
+void clarabel_DefaultSolver_f32_print_to_buffer(ClarabelDefaultSolver_f32 *solver);
+#ifdef CLARABEL_USE_FLOAT
+    static inline void clarabel_DefaultSolver_print_to_buffer(ClarabelDefaultSolver *solver)
+    {
+        clarabel_DefaultSolver_f32_print_to_buffer(solver);
+    }
+#else
+    static inline void clarabel_DefaultSolver_print_to_buffer(ClarabelDefaultSolver *solver)
+    {
+        clarabel_DefaultSolver_f64_print_to_buffer(solver);
+    }
+#endif // CLARABEL_USE_FLOAT
+
+// DefaultSolver::print_to_buffer
+// NB: The buffer is owned by rust and should not be freed by the C side caller.
+// Call clarabel_free_print_buffer to free the buffer.  Failure to do so will
+// result in a memory leak.
+const char* clarabel_DefaultSolver_f64_get_print_buffer(ClarabelDefaultSolver_f64 *solver);
+const char* clarabel_DefaultSolver_f32_get_print_buffer(ClarabelDefaultSolver_f32 *solver);
+void clarabel_free_print_buffer(const char* buffer);
+
+#ifdef CLARABEL_USE_FLOAT
+    static inline const char* clarabel_DefaultSolver_get_print_buffer(ClarabelDefaultSolver *solver)
+    {
+        return clarabel_DefaultSolver_f32_get_print_buffer(solver);
+    }
+    #else
+static inline const char* clarabel_DefaultSolver_get_print_buffer(ClarabelDefaultSolver *solver)
+    {
+        return clarabel_DefaultSolver_f64_get_print_buffer(solver);
+    }
+#endif // CLARABEL_USE_FLOAT
 
 
 // DefaultSolver::solve

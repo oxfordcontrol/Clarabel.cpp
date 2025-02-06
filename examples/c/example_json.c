@@ -19,14 +19,14 @@ int main(void)
     strcpy(filename, TO_STRING(EXAMPLES_ROOT_DIR));
     strcat(filename, "/data/hs35.json");
 
-    ClarabelDefaultSolver* solver = clarabel_DefaultSolver_read_from_file(filename);
+    ClarabelDefaultSolver* solver = clarabel_DefaultSolver_load_from_file(filename);
     clarabel_DefaultSolver_solve(solver);
 
     // write it back to a file
     // char filename_out[1024];
     // strcpy(filename_out, TO_STRING(EXAMPLES_ROOT_DIR));
     // strcat(filename_out, "/data/output_c.json");
-    // clarabel_DefaultSolver_write_to_file(solver, filename_out);
+    // clarabel_DefaultSolver_save_to_file(solver, filename_out);
 
     clarabel_DefaultSolver_free(solver);
     return 0;

@@ -28,6 +28,7 @@ struct DefaultInfo
     T ktratio;
     double solve_time;
     clarabel::SolverStatus status;
+    // NB : `PrintStream stream` not passed to C++ API
 };
 
 // Instantiate the templates
