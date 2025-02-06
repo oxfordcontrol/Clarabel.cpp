@@ -150,9 +150,15 @@ class DefaultSolver
 
     // Read / write to JSON file 
     #ifdef FEATURE_SERDE
-    void write_to_file(const std::string &filename);
-    static DefaultSolver<T> read_from_file(const std::string &filename);
+    void save_to_file(const std::string &filename);
+    static DefaultSolver<T> load_from_file(const std::string &filename);
     #endif
+
+    // print stream configurations 
+    void print_to_stdout();
+    void print_to_file(const std::string &filename);
+    void print_to_buffer();
+    std::string get_print_buffer();
 
 };
 
@@ -244,14 +250,25 @@ void clarabel_DefaultSolver_f64_update_b_partial(RustDefaultSolverHandle_f64 sol
 void clarabel_DefaultSolver_f32_update_b_partial(RustDefaultSolverHandle_f32 solver, const uintptr_t* index, const float *values, uintptr_t nvals);
 
 #ifdef FEATURE_SERDE
-void clarabel_DefaultSolver_f64_write_to_file(RustDefaultSolverHandle_f64 solver, const char *filename);
-void clarabel_DefaultSolver_f32_write_to_file(RustDefaultSolverHandle_f32 solver, const char *filename);
-RustDefaultSolverHandle_f64 clarabel_DefaultSolver_f64_read_from_file( const char *filename);
-RustDefaultSolverHandle_f32 clarabel_DefaultSolver_f32_read_from_file( const char *filename);
+void clarabel_DefaultSolver_f64_save_to_file(RustDefaultSolverHandle_f64 solver, const char *filename);
+void clarabel_DefaultSolver_f32_save_to_file(RustDefaultSolverHandle_f32 solver, const char *filename);
+RustDefaultSolverHandle_f64 clarabel_DefaultSolver_f64_load_from_file( const char *filename);
+RustDefaultSolverHandle_f32 clarabel_DefaultSolver_f32_load_from_file( const char *filename);
 #endif
 
+void clarabel_DefaultSolver_f64_print_to_stdout(RustDefaultSolverHandle_f64 solver);
+void clarabel_DefaultSolver_f32_print_to_stdout(RustDefaultSolverHandle_f32 solver);
+void clarabel_DefaultSolver_f64_print_to_file(RustDefaultSolverHandle_f64 solver, const char *filename);
+void clarabel_DefaultSolver_f32_print_to_file(RustDefaultSolverHandle_f32 solver, const char *filename);
+void clarabel_DefaultSolver_f64_print_to_buffer(RustDefaultSolverHandle_f64 solver);
+void clarabel_DefaultSolver_f32_print_to_buffer(RustDefaultSolverHandle_f32 solver);
+const char* clarabel_DefaultSolver_f64_get_print_buffer(RustDefaultSolverHandle_f64 solver);
+const char* clarabel_DefaultSolver_f32_get_print_buffer(RustDefaultSolverHandle_f32 solver);
+void clarabel_free_print_buffer(const char *s);
 
-}
+} // extern "C"
+
+
 
 // Convert unique_ptr P, A to CscMatrix objects, then init the solver
 // The CscMatrix objects are only used to pass the information needed to Rust.
@@ -584,26 +601,67 @@ inline void DefaultSolver<float>::update_b(const uintptr_t* index, const float *
 
 #ifdef FEATURE_SERDE
 template<>
-inline void DefaultSolver<double>::write_to_file(const std::string &filename){
-    clarabel_DefaultSolver_f64_write_to_file(this->handle, filename.c_str());
+inline void DefaultSolver<double>::save_to_file(const std::string &filename){
+    clarabel_DefaultSolver_f64_save_to_file(this->handle, filename.c_str());
 }
 
 template<>
-inline void DefaultSolver<float>::write_to_file(const std::string &filename){
-    clarabel_DefaultSolver_f32_write_to_file(this->handle, filename.c_str());
+inline void DefaultSolver<float>::save_to_file(const std::string &filename){
+    clarabel_DefaultSolver_f32_save_to_file(this->handle, filename.c_str());
 }
 
 template<>
-inline DefaultSolver<double> DefaultSolver<double>::read_from_file(const std::string &filename){
-    RustDefaultSolverHandle_f64 handle = clarabel_DefaultSolver_f64_read_from_file(filename.c_str());
+inline DefaultSolver<double> DefaultSolver<double>::load_from_file(const std::string &filename){
+    RustDefaultSolverHandle_f64 handle = clarabel_DefaultSolver_f64_load_from_file(filename.c_str());
     return DefaultSolver<double>(handle);
 }
 
 template<>
-inline DefaultSolver<float> DefaultSolver<float>::read_from_file(const std::string &filename){
-    RustDefaultSolverHandle_f32 handle = clarabel_DefaultSolver_f32_read_from_file(filename.c_str());
+inline DefaultSolver<float> DefaultSolver<float>::load_from_file(const std::string &filename){
+    RustDefaultSolverHandle_f32 handle = clarabel_DefaultSolver_f32_load_from_file(filename.c_str());
     return DefaultSolver<float>(handle);
 }
 #endif // FEATURE_SERDE
+
+// print configurations
+
+template<>
+inline void DefaultSolver<double>::print_to_stdout(){
+    clarabel_DefaultSolver_f64_print_to_stdout(this->handle);
+}
+template<>
+inline void DefaultSolver<float>::print_to_stdout(){
+    clarabel_DefaultSolver_f32_print_to_stdout(this->handle);
+}
+template<>
+inline void DefaultSolver<double>::print_to_file(const std::string &filename){
+    clarabel_DefaultSolver_f64_print_to_file(this->handle, filename.c_str());
+}
+template<>
+inline void DefaultSolver<float>::print_to_file(const std::string &filename){
+    clarabel_DefaultSolver_f32_print_to_file(this->handle, filename.c_str());
+}
+template<>
+inline void DefaultSolver<double>::print_to_buffer(){
+    clarabel_DefaultSolver_f64_print_to_buffer(this->handle);
+}
+template<>
+inline void DefaultSolver<float>::print_to_buffer(){
+    clarabel_DefaultSolver_f32_print_to_buffer(this->handle);
+}
+template<>
+inline std::string DefaultSolver<double>::get_print_buffer(){
+    const char* buffer = clarabel_DefaultSolver_f64_get_print_buffer(this->handle);
+    std::string str(buffer);
+    clarabel_free_print_buffer(buffer);
+    return str;
+}
+template<>
+inline std::string DefaultSolver<float>::get_print_buffer(){
+    const char* buffer = clarabel_DefaultSolver_f32_get_print_buffer(this->handle);
+    std::string str(buffer);
+    clarabel_free_print_buffer(buffer);
+    return str;
+}
 
 } // namespace clarabel

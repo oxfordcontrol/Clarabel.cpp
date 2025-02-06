@@ -3,11 +3,20 @@ rust_wrapper/target
 rust_wrapper/headers
 rust_wrapper/Cargo.lock
 
-# CMake build directory
-build
+# CMake build directory and other cruft
+build/*
+*.cmake 
+Makefile
+CmakeFiles/*
 
 .*/
 !.vscode/
 !.github
 
 CMakePresets.json
+
+# compiled examples, but not source
+examples/cpp/*
+examples/c/*
+!examples/c/*.c
+!examples/cpp/*.cpp
