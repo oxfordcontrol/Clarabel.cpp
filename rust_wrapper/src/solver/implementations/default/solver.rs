@@ -2,6 +2,8 @@
 #![allow(non_camel_case_types)]
 
 
+use std::ffi::c_char;
+use clarabel::io::*;
 use crate::algebra::ClarabelCscMatrix;
 use crate::core::cones::ClarabelSupportedConeT;
 use crate::solver::implementations::default::settings::*;
@@ -13,7 +15,6 @@ use std::{ffi::c_void, mem::forget};
 
 cfg_if::cfg_if! {
     if #[cfg(feature = "serde")] {
-        use std::ffi::c_char;
         use serde::{de::DeserializeOwned, Serialize};
         use clarabel::solver::SolverJSONReadWrite;
     }
@@ -158,8 +159,107 @@ pub unsafe extern "C" fn clarabel_DefaultSolver_f32_free(solver: *mut ClarabelDe
     _internal_DefaultSolver_free::<f32>(solver);
 }
 
+fn _internal_DefaultSolver_print_to_stdout<T>(solver: *mut c_void) 
+where T: FloatT,
+{
+    // Recover the solver object from the opaque pointer
+    let solver = unsafe { &mut *(solver as *mut lib::DefaultSolver<T>) };
+
+    // Use the recovered solver object
+    solver.print_to_stdout();
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn clarabel_DefaultSolver_f64_print_to_stdout(solver: *mut ClarabelDefaultSolver_f64) {
+    _internal_DefaultSolver_print_to_stdout::<f64>(solver);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn clarabel_DefaultSolver_f32_print_to_stdout(solver: *mut ClarabelDefaultSolver_f32) {
+    _internal_DefaultSolver_print_to_stdout::<f32>(solver);
+}
+
+fn _internal_DefaultSolver_print_to_file<T>(solver: *mut c_void, filename: *const c_char) 
+where T: FloatT,
+{
+    if filename.is_null() {
+        return;
+    }
+    let filename = unsafe{std::ffi::CStr::from_ptr(filename).to_str().expect("Invalid filename")};
+    let file = std::fs::File::create(filename).expect("File not found");
+
+    // Recover the solver object from the opaque pointer
+    let solver = unsafe { &mut *(solver as *mut lib::DefaultSolver<T>) };
+
+    // Use the recovered solver object
+    solver.print_to_file(file);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn clarabel_DefaultSolver_f64_print_to_file(solver: *mut ClarabelDefaultSolver_f64, filename: *const c_char) {
+    _internal_DefaultSolver_print_to_file::<f64>(solver,filename);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn clarabel_DefaultSolver_f32_print_to_file(solver: *mut ClarabelDefaultSolver_f32, filename: *const c_char) {
+    _internal_DefaultSolver_print_to_file::<f32>(solver,filename);
+}
+
+
+fn _internal_DefaultSolver_print_to_buffer<T>(solver: *mut c_void) 
+where T: FloatT,
+{
+    // Recover the solver object from the opaque pointer
+    let solver = unsafe { &mut *(solver as *mut lib::DefaultSolver<T>) };
+
+    // Use the recovered solver object
+    solver.print_to_buffer();
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn clarabel_DefaultSolver_f64_print_to_buffer(solver: *mut ClarabelDefaultSolver_f64) {
+    _internal_DefaultSolver_print_to_buffer::<f64>(solver);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn clarabel_DefaultSolver_f32_print_to_buffer(solver: *mut ClarabelDefaultSolver_f32) {
+    _internal_DefaultSolver_print_to_buffer::<f32>(solver);
+}
+
+fn _internal_DefaultSolver_get_from_buffer<T>(solver: *mut c_void) -> *const c_char 
+where T: FloatT,
+{
+    // Recover the solver object from the opaque pointer
+    let solver = unsafe { &mut *(solver as *mut lib::DefaultSolver<T>) };
+    let out = solver.get_print_buffer().unwrap_or("".to_string());
+    let c_str = std::ffi::CString::new(out).unwrap();
+    // Return the string as a raw pointer.  It must be returned to 
+    // rust to freed here.  Can't call free from C on it.
+    c_str.into_raw()
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn clarabel_DefaultSolver_f64_get_print_buffer(solver: *mut ClarabelDefaultSolver_f64) -> *const c_char {
+   _internal_DefaultSolver_get_from_buffer::<f64>(solver)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn clarabel_DefaultSolver_f32_get_print_buffer(solver: *mut ClarabelDefaultSolver_f32) -> *const c_char {
+    _internal_DefaultSolver_get_from_buffer::<f32>(solver)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn clarabel_free_print_buffer(ptr: *const c_char){
+    // This function should be called from C to free the memory of the string
+    // returned by get_from_buffer.  
+    unsafe {
+        let _ = std::ffi::CString::from_raw(ptr as *mut c_char);
+    }
+}
+
+
 #[cfg(feature = "serde")]
-pub unsafe fn _internal_DefaultSolver_read_from_file<T>(
+pub unsafe fn _internal_DefaultSolver_load_from_file<T>(
     filename: *const c_char,
     settings: *const ClarabelDefaultSettings<T>,
 )
@@ -173,17 +273,17 @@ where T: FloatT + DeserializeOwned + Serialize,
     let mut file = std::fs::File::open(filename).expect("File not found");
 
     let solver = if settings.is_null() {
-        lib::DefaultSolver::<T>::read_from_file(&mut file, None)
+        lib::DefaultSolver::<T>::load_from_file(&mut file, None)
     } else {
         let settings_struct = &*(settings);
         let settings = utils::get_solver_settings_from_c::<T>(settings_struct);
-        lib::DefaultSolver::<T>::read_from_file(&mut file, Some(settings))
+        lib::DefaultSolver::<T>::load_from_file(&mut file, Some(settings))
     };
     Box::into_raw(Box::new(solver)) as *mut c_void
 }
 
 #[cfg(feature = "serde")]
-fn _internal_DefaultSolver_write_to_file<T>(solver: *mut c_void, filename: *const c_char) 
+fn _internal_DefaultSolver_save_to_file<T>(solver: *mut c_void, filename: *const c_char) 
 where T: FloatT + DeserializeOwned + Serialize,
 {
     if filename.is_null() {
@@ -196,40 +296,39 @@ where T: FloatT + DeserializeOwned + Serialize,
     let solver = unsafe { &mut *(solver as *mut lib::DefaultSolver<T>) };
 
     // Use the recovered solver object
-    solver.write_to_file(&mut file).unwrap();
-
+    solver.save_to_file(&mut file).unwrap();
 }
 
 #[no_mangle]
 #[cfg(feature = "serde")]
-pub unsafe extern "C" fn clarabel_DefaultSolver_f64_read_from_file(
+pub unsafe extern "C" fn clarabel_DefaultSolver_f64_load_from_file(
     filename: *const c_char,
     settings: *const ClarabelDefaultSettings<f64>,
 ) -> *mut ClarabelDefaultSolver_f64 {
 
-    _internal_DefaultSolver_read_from_file::<f64>(filename,settings)
+    _internal_DefaultSolver_load_from_file::<f64>(filename,settings)
 }
 
 #[no_mangle]
 #[cfg(feature = "serde")]
-pub unsafe extern "C" fn clarabel_DefaultSolver_f32_read_from_file(
+pub unsafe extern "C" fn clarabel_DefaultSolver_f32_load_from_file(
     filename: *const c_char,
     settings: *const ClarabelDefaultSettings<f32>,
 ) -> *mut ClarabelDefaultSolver_f32 {
 
-    _internal_DefaultSolver_read_from_file::<f32>(filename,settings)
+    _internal_DefaultSolver_load_from_file::<f32>(filename,settings)
 }
 
 #[no_mangle]
 #[cfg(feature = "serde")]
-pub extern "C" fn clarabel_DefaultSolver_f64_write_to_file(solver: *mut ClarabelDefaultSolver_f64,filename: *const c_char) {
-    _internal_DefaultSolver_write_to_file::<f64>(solver,filename);
+pub extern "C" fn clarabel_DefaultSolver_f64_save_to_file(solver: *mut ClarabelDefaultSolver_f64,filename: *const c_char) {
+    _internal_DefaultSolver_save_to_file::<f64>(solver,filename);
 }
 
 #[no_mangle]
 #[cfg(feature = "serde")]
-pub extern "C" fn clarabel_DefaultSolver_f32_write_to_file(solver: *mut ClarabelDefaultSolver_f32,filename: *const c_char) {
-    _internal_DefaultSolver_write_to_file::<f32>(solver,filename);
+pub extern "C" fn clarabel_DefaultSolver_f32_save_to_file(solver: *mut ClarabelDefaultSolver_f32,filename: *const c_char) {
+    _internal_DefaultSolver_save_to_file::<f32>(solver,filename);
 }
 
 

@@ -9,6 +9,7 @@ set(CPP_EXAMPLES
   example_sdp
   example_faer
   example_json
+  example_print_stream
 )
 
 # Define an executable target for each example
