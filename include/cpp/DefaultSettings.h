@@ -8,6 +8,7 @@ namespace clarabel
 
 enum class ClarabelDirectSolveMethods
 {
+    AUTO,
     QDLDL,
     #ifdef FEATURE_FAER_SPARSE
     FAER,

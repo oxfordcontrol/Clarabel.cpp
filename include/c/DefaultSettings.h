@@ -10,6 +10,7 @@
 // ClarabelDefaultSettings types
 typedef enum ClarabelDirectSolveMethods
 {
+    AUTO,
     QDLDL,
     #ifdef FEATURE_FAER_SPARSE
     FAER,

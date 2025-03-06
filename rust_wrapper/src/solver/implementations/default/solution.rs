@@ -31,7 +31,7 @@ impl<T: FloatT> DefaultSolution<T> {
             z_length: solution.z.len(),
             s: solution.s.as_mut_ptr(),
             s_length: solution.s.len(),
-            status: ClarabelSolverStatus::from(&mut solution.status),
+            status: ClarabelSolverStatus::from(&solution.status),
             obj_val: solution.obj_val,
             obj_val_dual: solution.obj_val_dual,
             solve_time: solution.solve_time,
