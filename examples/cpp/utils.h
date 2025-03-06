@@ -33,6 +33,7 @@ namespace utils
         printf("Slacks (s)\t = ");
         print_array(solution.s);
     }
+
 }
 
 #endif /* UTILS_H */

@@ -2,7 +2,7 @@
 // #define CLARABEL_USE_FLOAT
 
 #include "utils.h"
-
+#include <stdio.h>
 #include <Clarabel.h>
 
 int main(void)
@@ -65,6 +65,14 @@ int main(void)
     // Get solution
     ClarabelDefaultSolution solution = clarabel_DefaultSolver_solution(solver);
     print_solution(&solution);
+
+    // Get some detailed solve information
+    ClarabelDefaultInfo_f64 info = clarabel_DefaultSolver_info(solver);
+    printf("primal residual = %e\n", info.res_primal);
+    printf("dual residual   = %e\n", info.res_dual);
+    printf("# of threads    = %d\n", info.linsolver.threads);
+    printf("KKT nonzeros    = %d\n", info.linsolver.nnzA);
+    printf("factor nonzeros = %d\n", info.linsolver.nnzL);
 
     // Free the matrices and the solver
     clarabel_DefaultSolver_free(solver);

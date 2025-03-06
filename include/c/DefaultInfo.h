@@ -2,6 +2,7 @@
 #define CLARABEL_DEFAULT_INFO_H
 
 #include "ClarabelTypes.h"
+#include "DefaultSettings.h"
 #include "DefaultSolution.h"
 
 #include <stdint.h>
@@ -37,6 +38,7 @@ typedef struct ClarabelDefaultInfo_f64
     double solve_time;
     enum ClarabelSolverStatus status;
     ClarabelLinearSolverInfo linsolver;
+    // NB : `PrintStream stream` not passed to C API
 } ClarabelDefaultInfo_f64;
 
 typedef struct ClarabelDefaultInfo_f32
@@ -57,6 +59,7 @@ typedef struct ClarabelDefaultInfo_f32
     double solve_time;
     enum ClarabelSolverStatus status;
     ClarabelLinearSolverInfo linsolver;
+    // NB : `PrintStream stream` not passed to C API
 } ClarabelDefaultInfo_f32;
 
 #ifdef CLARABEL_USE_FLOAT

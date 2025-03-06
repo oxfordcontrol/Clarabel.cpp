@@ -1,5 +1,5 @@
 #include "utils.h"
-
+#include <iostream>
 #include <Clarabel>
 #include <Eigen/Eigen>
 #include <vector>
@@ -55,6 +55,14 @@ int main(void)
     // Get solution
     DefaultSolution<double> solution = solver.solution();
     utils::print_solution(solution);
+
+    // Get some detailed solve information
+    DefaultInfo<double> info = solver.info();
+    std::cout << "primal residual = " << info.res_primal << std::endl;
+    std::cout << "dual residual   = " << info.res_dual << std::endl;
+    std::cout << "# of threads    = " << info.linsolver.threads << std::endl;
+    std::cout << "KKT nonzeros    = " << info.linsolver.nnzA << std::endl;
+    std::cout << "factor nonzeros = " << info.linsolver.nnzL << std::endl;
 
     return 0;
 }
