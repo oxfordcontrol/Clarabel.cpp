@@ -362,8 +362,8 @@ pub enum ClarabelSolverStatus {
     ClarabelInsufficientProgress,
 }
 
-impl From<&mut SolverStatus> for ClarabelSolverStatus {
-    fn from(value: &mut SolverStatus) -> Self {
+impl From<&SolverStatus> for ClarabelSolverStatus {
+    fn from(value: &SolverStatus) -> Self {
         match value {
             SolverStatus::Unsolved => ClarabelSolverStatus::ClarabelUnsolved,
             SolverStatus::Solved => ClarabelSolverStatus::ClarabelSolved,
@@ -418,7 +418,7 @@ fn _internal_DefaultSolver_info<T: FloatT>(solver: *mut c_void) -> ClarabelDefau
     let solver = unsafe { &mut *(solver as *mut lib::DefaultSolver<T>) };
 
     // Get the info field and convert it to a C struct.
-    ClarabelDefaultInfo::<T>::from(&mut solver.info)
+    ClarabelDefaultInfo::<T>::from(&solver.info)
 }
 
 #[no_mangle]

@@ -5,12 +5,37 @@ use clarabel::algebra::FloatT;
 #[allow(dead_code)]
 #[allow(clippy::upper_case_acronyms)]
 pub enum ClarabelDirectSolveMethods {
+    AUTO,
     QDLDL,
     #[cfg(feature = "faer-sparse")]
     FAER,
     // MKL, (not supported yet)
     // CHOLMOD, (not supported yet)
 }
+
+impl From<&ClarabelDirectSolveMethods> for String {
+    fn from(value: &ClarabelDirectSolveMethods) -> Self {
+        match value {
+            ClarabelDirectSolveMethods::AUTO => String::from("auto"),
+            ClarabelDirectSolveMethods::QDLDL => String::from("qdldl"),
+            #[cfg(feature = "faer-sparse")]
+            ClarabelDirectSolveMethods::FAER => String::from("faer"),
+        }
+    }
+}
+
+impl From<&String> for ClarabelDirectSolveMethods {
+    fn from(value: &String) -> Self {
+        match value.as_str() {
+            "auto" => ClarabelDirectSolveMethods::AUTO,
+            "qdldl" => ClarabelDirectSolveMethods::QDLDL,
+            #[cfg(feature = "faer-sparse")]
+            "faer" => ClarabelDirectSolveMethods::FAER,
+            _ => ClarabelDirectSolveMethods::AUTO,
+        }
+    }
+}
+
 
 #[allow(non_camel_case_types)]
 #[cfg(feature = "sdp")]
@@ -102,10 +127,11 @@ fn _internal_DefaultSettings_default<T: FloatT>() -> ClarabelDefaultSettings<T> 
     let default = clarabel::solver::DefaultSettings::<T>::default();
 
     let default_direct_solver_setting = match default.direct_solve_method.as_str() {
+        "auto" => ClarabelDirectSolveMethods::AUTO, 
         "qdldl" => ClarabelDirectSolveMethods::QDLDL,
         //"mkl" => ClarabelDirectSolveMethods::MKL,
         //"cholmod" => ClarabelDirectSolveMethods::CHOLMOD,
-        _ => ClarabelDirectSolveMethods::QDLDL, // Default
+        _ => ClarabelDirectSolveMethods::AUTO, // Default
     };
 
     #[cfg(feature = "sdp")]

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "DefaultSettings.h"
 #include "DefaultSolution.h"
 
 #include <cstdint>
@@ -7,6 +8,16 @@
 
 namespace clarabel
 {
+
+
+struct LinearSolverInfo
+{
+    ClarabelDirectSolveMethods name;
+    uint32_t threads;
+    bool direct;
+    uint32_t nnzA;
+    uint32_t nnzL;
+};
 
 template<typename T = double>
 struct DefaultInfo
@@ -28,6 +39,7 @@ struct DefaultInfo
     T ktratio;
     double solve_time;
     clarabel::SolverStatus status;
+    clarabel::LinearSolverInfo linsolver;
     // NB : `PrintStream stream` not passed to C++ API
 };
 

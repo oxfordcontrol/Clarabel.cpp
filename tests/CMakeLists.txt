@@ -30,6 +30,7 @@ add_executable(clarabel_cpp_tests
     mixed_conic.cpp
     data_updating.cpp
     sdp_chordal.cpp
+    get_info.cpp
 )
 target_link_libraries(clarabel_cpp_tests 
     libclarabel_c_shared
