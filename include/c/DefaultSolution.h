@@ -9,7 +9,7 @@
 
 typedef enum ClarabelSolverStatus
 {
-    ClarabelUnsolved,
+    ClarabelUnsolved = 0,
     ClarabelSolved,
     ClarabelPrimalInfeasible,
     ClarabelDualInfeasible,
@@ -20,6 +20,7 @@ typedef enum ClarabelSolverStatus
     ClarabelMaxTime,
     ClarabelNumericalError,
     ClarabelInsufficientProgress,
+    ClarabelCallbackTerminated,
 } ClarabelSolverStatus;
 
 typedef struct ClarabelDefaultSolution_f64

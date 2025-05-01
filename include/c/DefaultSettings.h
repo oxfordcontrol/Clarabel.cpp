@@ -130,6 +130,7 @@ typedef ClarabelDefaultSettings_f32 ClarabelDefaultSettings;
 typedef ClarabelDefaultSettings_f64 ClarabelDefaultSettings;
 #endif
 
+
 // ClarabelDefaultSettings APIs
 
 // ClarabelDefaultSettings::default

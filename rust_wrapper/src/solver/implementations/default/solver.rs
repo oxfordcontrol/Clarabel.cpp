@@ -3,13 +3,15 @@
 
 use crate::algebra::ClarabelCscMatrix;
 use crate::core::cones::ClarabelSupportedConeT;
-use crate::solver::implementations::default::settings::*;
+use crate::solver::implementations::default::settings::{
+    ClarabelDefaultSettings, ClarabelDefaultSettings_f32, ClarabelDefaultSettings_f64,
+};
 use crate::utils;
+
 use clarabel::algebra::FloatT;
-use clarabel::io::*;
-use clarabel::solver::ffi::*;
+use clarabel::io::ConfigurablePrintTarget;
 use clarabel::solver::implementations::default::ffi::*;
-use clarabel::solver::{self as lib, IPSolver, SolverStatus};
+use clarabel::solver::{self as lib, IPSolver};
 use std::ffi::c_char;
 use std::slice;
 use std::{ffi::c_void, mem::forget};
@@ -26,6 +28,8 @@ use super::solution::DefaultSolution;
 
 pub type ClarabelDefaultSolver_f32 = c_void;
 pub type ClarabelDefaultSolver_f64 = c_void;
+
+pub type ClarabelSolverStatus = clarabel::solver::ffi::SolverStatusFFI;
 
 // Wrapper function to create a DefaultSolver object from C using dynamic memory allocation
 // - Matrices and vectors are constructed from raw pointers
@@ -102,7 +106,7 @@ pub unsafe extern "C" fn clarabel_DefaultSolver_f64_new(
     b: *const f64,
     n_cones: usize,
     cones: *const ClarabelSupportedConeT<f64>,
-    settings: *const ClarabelDefaultSettings<f64>,
+    settings: *const ClarabelDefaultSettings_f64,
 ) -> *mut ClarabelDefaultSolver_f64 {
     _internal_DefaultSolver_new(P, q, A, b, n_cones, cones, settings)
 }
@@ -115,7 +119,7 @@ pub unsafe extern "C" fn clarabel_DefaultSolver_f32_new(
     b: *const f32,
     n_cones: usize,
     cones: *const ClarabelSupportedConeT<f32>,
-    settings: *const ClarabelDefaultSettings<f32>,
+    settings: *const ClarabelDefaultSettings_f32,
 ) -> *mut ClarabelDefaultSolver_f32 {
     _internal_DefaultSolver_new(P, q, A, b, n_cones, cones, settings)
 }
@@ -366,8 +370,6 @@ pub extern "C" fn clarabel_DefaultSolver_f32_save_to_file(
 ) {
     _internal_DefaultSolver_save_to_file::<f32>(solver, filename);
 }
-
-pub type ClarabelSolverStatus = SolverStatus;
 
 /// Get the solution field from a DefaultSolver object.
 ///

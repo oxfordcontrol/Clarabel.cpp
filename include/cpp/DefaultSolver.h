@@ -119,6 +119,14 @@ class DefaultSolver
     DefaultSolution<T> solution() const;
     DefaultInfo<T> info() const;
 
+    // termination callbacks 
+    // -------------------------------
+    void set_termination_callback(
+        int (*callback)(clarabel::DefaultInfo<T>&));
+    
+    void unset_termination_callback();
+
+
     // problem data updating functions 
     // ------------------------------- 
 
@@ -224,6 +232,12 @@ DefaultSolution<float>::ClarabelDefaultSolution clarabel_DefaultSolver_f32_solut
 DefaultInfo<double> clarabel_DefaultSolver_f64_info(RustDefaultSolverHandle_f64 solver);
 
 DefaultInfo<float> clarabel_DefaultSolver_f32_info(RustDefaultSolverHandle_f32 solver);
+
+void clarabel_DefaultSolver_f64_set_termination_callback(RustDefaultSolverHandle_f64 solver, int (*callback)(DefaultInfo<double>&));
+void clarabel_DefaultSolver_f32_set_termination_callback(RustDefaultSolverHandle_f32 solver, int (*callback)(DefaultInfo<float>&));
+void clarabel_DefaultSolver_f64_unset_termination_callback(RustDefaultSolverHandle_f64 solver);
+void clarabel_DefaultSolver_f32_unset_termination_callback(RustDefaultSolverHandle_f32 solver);
+
 
 void clarabel_DefaultSolver_f64_update_P_csc(RustDefaultSolverHandle_f64 solver, const CscMatrix<double> *P);
 void clarabel_DefaultSolver_f32_update_P_csc(RustDefaultSolverHandle_f32 solver, const CscMatrix<float> *P);
@@ -376,6 +390,26 @@ inline DefaultInfo<float> DefaultSolver<float>::info() const
     return clarabel_DefaultSolver_f32_info(handle);
 }
 
+
+template<>
+inline void DefaultSolver<double>::set_termination_callback(int (*callback)(DefaultInfo<double>&)) {
+    clarabel_DefaultSolver_f64_set_termination_callback(this->handle, callback);
+}
+
+template<>
+inline void DefaultSolver<float>::set_termination_callback(int (*callback)(DefaultInfo<float>&)) {
+    clarabel_DefaultSolver_f32_set_termination_callback(this->handle, callback);
+}
+
+template<>
+inline void DefaultSolver<double>::unset_termination_callback() {
+    clarabel_DefaultSolver_f64_unset_termination_callback(this->handle);
+}
+
+template<>
+inline void DefaultSolver<float>::unset_termination_callback() {
+    clarabel_DefaultSolver_f32_unset_termination_callback(this->handle);
+}
 
 // update P
 
