@@ -12,11 +12,15 @@ typedef enum ClarabelDirectSolveMethods
 {
     AUTO,
     QDLDL,
-    #ifdef FEATURE_FAER_SPARSE
+#ifdef FEATURE_FAER_SPARSE
     FAER,
-    #endif 
-    // MKL, (not supported in Rust yet)
-    // CHOLMOD, (not supported in Rust yet)
+#endif 
+#ifdef FEATURE_PARDISO_MKL
+    PARDISO_MKL,
+#endif 
+#ifdef FEATURE_PARDISO_PANUA
+    PARDISO_PANUA,
+#endif 
 } ClarabelDirectSolveMethods;
 
 #ifdef FEATURE_SDP

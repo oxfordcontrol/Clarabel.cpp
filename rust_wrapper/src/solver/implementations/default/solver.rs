@@ -10,8 +10,8 @@ use crate::utils;
 
 use clarabel::algebra::FloatT;
 use clarabel::io::ConfigurablePrintTarget;
-use clarabel::solver::implementations::default::ffi::*;
 use clarabel::solver::{self as lib, IPSolver};
+
 use std::ffi::c_char;
 use std::slice;
 use std::{ffi::c_void, mem::forget};

@@ -1,4 +1,5 @@
 #![allow(non_snake_case)]
+#![allow(non_camel_case_types)]
 
 use super::solver::*;
 use crate::solver::implementations::default::info::ClarabelDefaultInfo;

@@ -104,7 +104,19 @@ When reporting issues with the solver, it can be helpful to provide a JSON file 
 
 ### Alternative linear algebra libraries
 
-To enable the use of the [faer-rs](https://faer-rs.github.io/) sparse linear algebra library as an additional solver option, set `-DCLARABEL_FEATURE_FAER_SPARSE=true`.
+To enable the [faer-rs](https://faer-rs.github.io/) sparse linear algebra library as an additional solver option, set `-DCLARABEL_FEATURE_FAER_SPARSE=true`.
+
+To enable the [`MKL Pardiso`](https://www.intel.com/content/www/us/en/docs/onemkl/developer-reference-c/) sparse linear algebra library as an additional solver option, set `-DCLARABEL_FEATURE_PARDISO_MKL=true`.   
+
+The solver will dynamically link to the MKL library, which must be accessible via the system library path (e.g. on `LD_LIBRARY_PATH` on Linux).   
+
+Alternatively, set the `MKLROOT` environment variable to the root of the MKL installation or `MKL_PARDISO_PATH` to the location of the MKL Pardiso library (e.g. the location of `libmkl_rt.so` in Linux).
+
+To enable the [`Panua Pardiso`](https://panua.ch/pardiso/) sparse linear algebra library as an additional solver option, set `-DCLARABEL_FEATURE_PARDISO_PANUA=true`.   This library is not open source and requires a license.
+
+The solver will dynamically link to the Panua Pardiso library, which must be accessible via the system library path (e.g. on `LD_LIBRARY_PATH` on Linux).   
+
+Alternatively, set the `PARDISO_PATH` environment variable to the location of the Panua Pardiso library (e.g. the location of `libpardiso.so` in Linux).
 
 ### Unit tests
 
