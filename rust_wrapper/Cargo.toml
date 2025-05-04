@@ -28,3 +28,6 @@ sdp-r          = ["sdp", "clarabel/sdp-r"]
 
 serde          = ["dep:serde", "clarabel/serde"]
 faer-sparse    = ["clarabel/faer-sparse"]
+pardiso-mkl    = ["clarabel/pardiso-mkl"]
+pardiso-panua  = ["clarabel/pardiso-panua"]
+pardiso        = ["clarabel/pardiso"] #chooses both

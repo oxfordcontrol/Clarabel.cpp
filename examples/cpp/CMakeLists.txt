@@ -8,6 +8,7 @@ set(CPP_EXAMPLES
   example_socp
   example_sdp
   example_faer
+  example_mkl_pardiso
   example_json
   example_print_stream
   example_callback
