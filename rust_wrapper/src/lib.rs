@@ -1,5 +1,4 @@
 mod algebra;
-mod solver;
 mod core;
-
+mod solver;
 mod utils;

@@ -20,3 +20,5 @@ examples/cpp/*
 examples/c/*
 !examples/c/*.c
 !examples/cpp/*.cpp
+!examples/c/CMakeLists.txt
+!examples/cpp/CMakeLists.txt

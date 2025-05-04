@@ -211,6 +211,40 @@ static inline ClarabelDefaultInfo clarabel_DefaultSolver_info(ClarabelDefaultSol
 #endif
 }
 
+// DefaultSolver callbacks
+typedef int (*ClarabelCallbackFcn_f32)(ClarabelDefaultInfo_f32 *info);
+typedef int (*ClarabelCallbackFcn_f64)(ClarabelDefaultInfo_f64 *info);
+
+#ifdef CLARABEL_USE_FLOAT
+typedef ClarabelCallbackFcn_f32 ClarabelCallbackFcn;
+#else
+typedef ClarabelCallbackFcn_f64 ClarabelCallbackFcn;
+#endif
+
+void clarabel_DefaultSolver_f64_set_termination_callback(ClarabelDefaultSolver_f64 *solver, ClarabelCallbackFcn_f64 callback);
+void clarabel_DefaultSolver_f32_set_termination_callback(ClarabelDefaultSolver_f32 *solver, ClarabelCallbackFcn_f32 callback);
+
+static inline void clarabel_DefaultSolver_set_termination_callback(ClarabelDefaultSolver *solver, ClarabelCallbackFcn callback)
+{
+#ifdef CLARABEL_USE_FLOAT
+    clarabel_DefaultSolver_f32_set_termination_callback(solver,callback);
+#else
+    clarabel_DefaultSolver_f64_set_termination_callback(solver,callback);
+#endif
+}
+
+void clarabel_DefaultSolver_f64_unset_termination_callback(ClarabelDefaultSolver_f64 *solver);
+void clarabel_DefaultSolver_f32_unset_termination_callback(ClarabelDefaultSolver_f32 *solver);
+
+static inline void clarabel_DefaultSolver_unset_termination_callback(ClarabelDefaultSolver *solver )
+{
+#ifdef CLARABEL_USE_FLOAT
+    clarabel_DefaultSolver_f32_unset_termination_callback(solver);
+#else
+    clarabel_DefaultSolver_f64_unset_termination_callback(solver);
+#endif
+}
+
 
 ////// P data updating 
 

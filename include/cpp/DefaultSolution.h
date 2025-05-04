@@ -20,6 +20,7 @@ enum class SolverStatus
     MaxTime,
     NumericalError,
     InsufficientProgress,
+    CallbackTerminated,
 };
 
 template<typename T = double>

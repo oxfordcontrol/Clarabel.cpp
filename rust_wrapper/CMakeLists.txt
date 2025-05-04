@@ -48,6 +48,29 @@ if(CLARABEL_FEATURE_FAER_SPARSE)
     target_compile_definitions(libclarabel_c_shared INTERFACE FEATURE_FAER_SPARSE)
 endif()
 
+# PARDISO_MKL feature flag
+if(CLARABEL_FEATURE_PARDISO_MKL)
+
+    # Set the Rust feature flag
+    set(CLARABEL_BUILD_FEATURES "${CLARABEL_BUILD_FEATURES},pardiso-mkl")
+
+    # Define the FEATURE_PARDISO_MKL flag for all targets that link against clarabel_c
+    target_compile_definitions(libclarabel_c_static INTERFACE FEATURE_PARDISO_MKL)
+    target_compile_definitions(libclarabel_c_shared INTERFACE FEATURE_PARDISO_MKL)
+endif()
+
+# PARDISO_PANUA feature flag
+if(CLARABEL_FEATURE_PARDISO_PANUA)
+
+    # Set the Rust feature flag
+    set(CLARABEL_BUILD_FEATURES "${CLARABEL_BUILD_FEATURES},pardiso-panua")
+
+    # Define the FEATURE_PARDISO_PANUA flag for all targets that link against clarabel_c
+    target_compile_definitions(libclarabel_c_static INTERFACE FEATURE_PARDISO_PANUA)
+    target_compile_definitions(libclarabel_c_shared INTERFACE FEATURE_PARDISO_PANUA)
+endif()
+
+
 # SERDE feature flag
 if(CLARABEL_FEATURE_SERDE)
 

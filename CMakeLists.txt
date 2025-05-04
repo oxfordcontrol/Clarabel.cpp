@@ -32,7 +32,8 @@ set_property(CACHE CLARABEL_FEATURE_SDP PROPERTY STRINGS
 
 option(CLARABEL_FEATURE_SERDE "Enable clarabel `serde` option " OFF)
 option(CLARABEL_FEATURE_FAER_SPARSE "Enable `faer-sparse` option" OFF)
-option(CLARABEL_FEATURE_SERDE "Enable `faer-sparse` option" OFF)
+option(CLARABEL_FEATURE_PARDISO_MKL "Enable `pardiso-mkl` option" OFF)
+option(CLARABEL_FEATURE_PARDISO_PANUA "Enable `pardiso-panua` option" OFF)
 
 
 #----------------------------------------------

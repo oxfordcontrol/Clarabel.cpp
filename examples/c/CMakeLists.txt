@@ -11,6 +11,7 @@ set(C_EXAMPLES
   example_sdp
   example_json
   example_print_stream
+  example_callback
 )
 
 # Compile utils.c as a library
