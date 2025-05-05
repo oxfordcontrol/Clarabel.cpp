@@ -12,6 +12,7 @@ set(C_EXAMPLES
   example_json
   example_print_stream
   example_callback
+  example_pardiso_mkl
 )
 
 # Compile utils.c as a library

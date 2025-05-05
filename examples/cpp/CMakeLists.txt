@@ -7,11 +7,11 @@ set(CPP_EXAMPLES
   example_qp
   example_socp
   example_sdp
-  example_faer
-  example_mkl_pardiso
   example_json
   example_print_stream
   example_callback
+  example_faer
+  example_pardiso_mkl
 )
 
 # Define an executable target for each example

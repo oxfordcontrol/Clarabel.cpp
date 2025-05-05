@@ -54,7 +54,13 @@ int main(void)
 
     // Settings
     DefaultSettings<double> settings = DefaultSettings<double>::default_settings();
-    settings.direct_solve_method = ClarabelDirectSolveMethods::PARDISO_MKL;
+
+    //settings.direct_solve_method = ClarabelDirectSolveMethods::PARDISO_PANUA;    
+    settings.direct_solve_method = ClarabelDirectSolveMethods::PARDISO_MKL;    
+
+    settings.pardiso_verbose = true;
+    settings.pardiso_iparm[1] = 0; // tries minimum degree ordering instead of default 
+
     //set the number of threads
     settings.max_threads = 16;
 
@@ -67,6 +73,14 @@ int main(void)
     // Get solution
     DefaultSolution<double> solution = solver.solution();
     utils::print_solution(solution);
+
+    DefaultInfo<double> info = solver.info();
+
+    printf("primal residual = %e\n", info.res_primal);
+    printf("dual residual   = %e\n", info.res_dual);
+    printf("# of threads    = %d\n", info.linsolver.threads);
+    printf("KKT nonzeros    = %d\n", info.linsolver.nnzA);
+    printf("factor nonzeros = %d\n", info.linsolver.nnzL);
 
     return 0;
 

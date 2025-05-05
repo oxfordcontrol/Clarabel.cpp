@@ -57,6 +57,7 @@ if(CLARABEL_FEATURE_PARDISO_MKL)
     # Define the FEATURE_PARDISO_MKL flag for all targets that link against clarabel_c
     target_compile_definitions(libclarabel_c_static INTERFACE FEATURE_PARDISO_MKL)
     target_compile_definitions(libclarabel_c_shared INTERFACE FEATURE_PARDISO_MKL)
+    
 endif()
 
 # PARDISO_PANUA feature flag
@@ -68,6 +69,11 @@ if(CLARABEL_FEATURE_PARDISO_PANUA)
     # Define the FEATURE_PARDISO_PANUA flag for all targets that link against clarabel_c
     target_compile_definitions(libclarabel_c_static INTERFACE FEATURE_PARDISO_PANUA)
     target_compile_definitions(libclarabel_c_shared INTERFACE FEATURE_PARDISO_PANUA)
+endif()
+
+if(CLARABEL_FEATURE_PARDISO_MKL OR CLARABEL_FEATURE_PARDISO_PANUA)
+    target_compile_definitions(libclarabel_c_static INTERFACE FEATURE_PARDISO_ANY)
+    target_compile_definitions(libclarabel_c_shared INTERFACE FEATURE_PARDISO_ANY)
 endif()
 
 
