@@ -79,7 +79,10 @@ struct DefaultSettings
         bool chordal_decomposition_compact;
         bool chordal_decomposition_complete_dual;
     #endif
-    
+    #ifdef FEATURE_PARDISO_ANY
+        int32_t pardiso_iparm[64];
+        bool pardiso_verbose;
+    #endif 
 
     static DefaultSettings<T> default_settings();
 };
@@ -352,6 +355,22 @@ class DefaultSettingsBuilder
         DefaultSettingsBuilder<T> &chordal_decomposition_complete_dual(bool chordal_decomposition_complete_dual)
         {
             settings.chordal_decomposition_complete_dual = chordal_decomposition_complete_dual;
+            return *this;
+        }
+    #endif
+    #ifdef FEATURE_PARDISO_ANY
+        DefaultSettingsBuilder<T> &pardiso_iparm(int32_t pardiso_iparm[64])
+        {
+            for (int i = 0; i < 64; i++)
+            {
+                settings.pardiso_iparm[i] = pardiso_iparm[i];
+            }
+            return *this;
+        }
+
+        DefaultSettingsBuilder<T> &pardiso_verbose(bool pardiso_verbose)
+        {
+            settings.pardiso_verbose = pardiso_verbose;
             return *this;
         }
     #endif

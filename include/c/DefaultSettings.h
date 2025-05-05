@@ -78,6 +78,10 @@ typedef struct ClarabelDefaultSettings_f64
         bool chordal_decomposition_compact;
         bool chordal_decomposition_complete_dual;
     #endif
+    #ifdef FEATURE_PARDISO_ANY
+        int32_t pardiso_iparm[64];
+        bool pardiso_verbose;
+    #endif 
 } ClarabelDefaultSettings_f64;
 
 typedef struct ClarabelDefaultSettings_f32
@@ -126,6 +130,10 @@ typedef struct ClarabelDefaultSettings_f32
         bool chordal_decomposition_compact;
         bool chordal_decomposition_complete_dual;
     #endif
+    #ifdef FEATURE_PARDISO_ANY
+        int32_t pardiso_iparm[64];
+        bool pardiso_verbose;
+#endif 
 } ClarabelDefaultSettings_f32;
 
 #ifdef CLARABEL_USE_FLOAT
