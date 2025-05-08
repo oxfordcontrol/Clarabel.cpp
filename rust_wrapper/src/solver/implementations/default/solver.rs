@@ -93,9 +93,16 @@ unsafe fn _internal_DefaultSolver_new<T: FloatT>(
     forget(q);
     forget(b);
 
-    // Return the solver object as an opaque pointer to C.
-    // The solver object is boxed and left on the heap.
-    Box::into_raw(Box::new(solver)) as *mut c_void
+    // Solver should be a Result<DefaultSolver<T>, SolverError>
+    match solver {
+        Ok(solver) => Box::into_raw(Box::new(solver)) as *mut c_void,
+        Err(e) => {
+            // Just print an error here and return a null pointer
+            // This could surely done in a more graceful way
+            println!("Error creating DefaultSolver: {:?}", e);
+            std::ptr::null_mut()
+        }
+    }
 }
 
 #[no_mangle]
