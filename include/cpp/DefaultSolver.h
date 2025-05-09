@@ -122,7 +122,7 @@ class DefaultSolver
     // termination callbacks 
     // -------------------------------
     void set_termination_callback(
-        int (*callback)(clarabel::DefaultInfo<T>&));
+        int (*callback)(clarabel::DefaultInfo<T>&,void*), void* userdata);
     
     void unset_termination_callback();
 
@@ -233,8 +233,8 @@ DefaultInfo<double> clarabel_DefaultSolver_f64_info(RustDefaultSolverHandle_f64 
 
 DefaultInfo<float> clarabel_DefaultSolver_f32_info(RustDefaultSolverHandle_f32 solver);
 
-void clarabel_DefaultSolver_f64_set_termination_callback(RustDefaultSolverHandle_f64 solver, int (*callback)(DefaultInfo<double>&));
-void clarabel_DefaultSolver_f32_set_termination_callback(RustDefaultSolverHandle_f32 solver, int (*callback)(DefaultInfo<float>&));
+void clarabel_DefaultSolver_f64_set_termination_callback(RustDefaultSolverHandle_f64 solver, int (*callback)(DefaultInfo<double>& ,void*),void* userdata);
+void clarabel_DefaultSolver_f32_set_termination_callback(RustDefaultSolverHandle_f32 solver, int (*callback)(DefaultInfo<float>&, void*),void* userdata);
 void clarabel_DefaultSolver_f64_unset_termination_callback(RustDefaultSolverHandle_f64 solver);
 void clarabel_DefaultSolver_f32_unset_termination_callback(RustDefaultSolverHandle_f32 solver);
 
@@ -392,13 +392,13 @@ inline DefaultInfo<float> DefaultSolver<float>::info() const
 
 
 template<>
-inline void DefaultSolver<double>::set_termination_callback(int (*callback)(DefaultInfo<double>&)) {
-    clarabel_DefaultSolver_f64_set_termination_callback(this->handle, callback);
+inline void DefaultSolver<double>::set_termination_callback(int (*callback)(DefaultInfo<double>&, void*), void* userdata) {
+    clarabel_DefaultSolver_f64_set_termination_callback(this->handle, callback,userdata);
 }
 
 template<>
-inline void DefaultSolver<float>::set_termination_callback(int (*callback)(DefaultInfo<float>&)) {
-    clarabel_DefaultSolver_f32_set_termination_callback(this->handle, callback);
+inline void DefaultSolver<float>::set_termination_callback(int (*callback)(DefaultInfo<float>&, void*), void* userdata) {
+    clarabel_DefaultSolver_f32_set_termination_callback(this->handle, callback, userdata);
 }
 
 template<>

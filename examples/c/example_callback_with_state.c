@@ -3,17 +3,22 @@
 #include <Clarabel.h>
 
 
-int custom_callback(ClarabelDefaultInfo *info, void* _userdata)
+typedef struct 
 {
-    // This function is called at each iteration of the solver.
-    // You can use it to monitor the progress of the solver or
-    // to implement custom stopping criteria.
+    int count;
+} CallbackData;
 
-    // For example, we can print the current iteration number:
-    printf("Custom callback at iteration %d: ", info->iterations);
 
-    // Return 0 to continue.   Anything else to stop.
-    if (info->iterations < 3) {
+int custom_callback(ClarabelDefaultInfo *info, void* userdata)
+{
+    // Cast the userdata pointer back to our struct type
+    CallbackData* data = (CallbackData*)userdata;
+    
+    // Access and modify the state
+    data->count++;
+    
+    // Return 0 to continue. Anything else to stop.
+    if (data->count < 3) {
         printf("tick\n");
         return 0; //continue
     }
@@ -21,7 +26,6 @@ int custom_callback(ClarabelDefaultInfo *info, void* _userdata)
         printf("BOOM!\n");
         return 1; // stop
     }
-
 }
 
 int main(void)
@@ -70,8 +74,10 @@ int main(void)
         cones, &settings
     );
 
+
     // configure a custom callback function 
-    clarabel_DefaultSolver_set_termination_callback(solver,custom_callback, NULL);
+    CallbackData userdata = {-1};
+    clarabel_DefaultSolver_set_termination_callback(solver,custom_callback,&userdata);
 
     // Solve
     clarabel_DefaultSolver_solve(solver);

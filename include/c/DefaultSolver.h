@@ -212,8 +212,8 @@ static inline ClarabelDefaultInfo clarabel_DefaultSolver_info(ClarabelDefaultSol
 }
 
 // DefaultSolver callbacks
-typedef int (*ClarabelCallbackFcn_f32)(ClarabelDefaultInfo_f32 *info);
-typedef int (*ClarabelCallbackFcn_f64)(ClarabelDefaultInfo_f64 *info);
+typedef int (*ClarabelCallbackFcn_f32)(ClarabelDefaultInfo_f32 *info, void* userdata);
+typedef int (*ClarabelCallbackFcn_f64)(ClarabelDefaultInfo_f64 *info, void* userdata);
 
 #ifdef CLARABEL_USE_FLOAT
 typedef ClarabelCallbackFcn_f32 ClarabelCallbackFcn;
@@ -221,15 +221,15 @@ typedef ClarabelCallbackFcn_f32 ClarabelCallbackFcn;
 typedef ClarabelCallbackFcn_f64 ClarabelCallbackFcn;
 #endif
 
-void clarabel_DefaultSolver_f64_set_termination_callback(ClarabelDefaultSolver_f64 *solver, ClarabelCallbackFcn_f64 callback);
-void clarabel_DefaultSolver_f32_set_termination_callback(ClarabelDefaultSolver_f32 *solver, ClarabelCallbackFcn_f32 callback);
+void clarabel_DefaultSolver_f64_set_termination_callback(ClarabelDefaultSolver_f64 *solver, ClarabelCallbackFcn_f64 callback, void* userdata);
+void clarabel_DefaultSolver_f32_set_termination_callback(ClarabelDefaultSolver_f32 *solver, ClarabelCallbackFcn_f32 callback, void* userdata);
 
-static inline void clarabel_DefaultSolver_set_termination_callback(ClarabelDefaultSolver *solver, ClarabelCallbackFcn callback)
+static inline void clarabel_DefaultSolver_set_termination_callback(ClarabelDefaultSolver *solver, ClarabelCallbackFcn callback, void* userdata)
 {
 #ifdef CLARABEL_USE_FLOAT
-    clarabel_DefaultSolver_f32_set_termination_callback(solver,callback);
+    clarabel_DefaultSolver_f32_set_termination_callback(solver,callback, userdata);
 #else
-    clarabel_DefaultSolver_f64_set_termination_callback(solver,callback);
+    clarabel_DefaultSolver_f64_set_termination_callback(solver,callback, userdata);
 #endif
 }
 
