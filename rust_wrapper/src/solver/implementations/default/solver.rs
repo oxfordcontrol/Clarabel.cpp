@@ -7,6 +7,7 @@ use crate::solver::implementations::default::settings::{
     ClarabelDefaultSettings, ClarabelDefaultSettings_f32, ClarabelDefaultSettings_f64,
 };
 use crate::utils;
+use clarabel::solver::ffi::SolverStatusFFI;
 
 use clarabel::algebra::FloatT;
 use clarabel::io::ConfigurablePrintTarget;
@@ -29,7 +30,7 @@ use super::solution::DefaultSolution;
 pub type ClarabelDefaultSolver_f32 = c_void;
 pub type ClarabelDefaultSolver_f64 = c_void;
 
-pub type ClarabelSolverStatus = clarabel::solver::ffi::SolverStatusFFI;
+pub type ClarabelSolverStatus = SolverStatusFFI;
 
 // Wrapper function to create a DefaultSolver object from C using dynamic memory allocation
 // - Matrices and vectors are constructed from raw pointers

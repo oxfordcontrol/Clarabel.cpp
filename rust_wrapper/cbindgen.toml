@@ -12,5 +12,19 @@ documentation = false
 
 [defines]
 "feature = sdp" = "FEATURE_SDP"
-"feature = faer-sparse" = "FEATURE_FAER_SPARSE"
 "feature = serde" = "FEATURE_SERDE"
+"feature = faer-sparse" = "FEATURE_FAER_SPARSE"
+"feature = pardiso-mkl" = "FEATURE_PARDISO_MKL"
+"feature = pardiso-panua" = "FEATURE_PARDISO_PANUA"
+
+[parse]
+parse_deps = true
+include = ["clarabel"] 
+exclude = ["indexmap"]
+
+[export]
+include = [
+    "SolverStatusFFI",
+    "DefaultInfoFFI", 
+    "DefaultSettingsFFI",
+]

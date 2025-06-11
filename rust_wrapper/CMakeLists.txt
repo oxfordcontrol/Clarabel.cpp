@@ -187,9 +187,9 @@ add_custom_target(
     COMMAND cargo build ${clarabel_c_build_flags}
     COMMAND cargo install cbindgen
     # Generate the C header
-    COMMAND cbindgen --config cbindgen.toml --crate clarabel_c --output ./headers/clarabel.h --lang c
+    COMMAND cbindgen --config cbindgen.toml --quiet --crate clarabel_c --output ./headers/clarabel.h --lang c
     # Generate the C++ header
-    COMMAND cbindgen --config cbindgen.toml --crate clarabel_c --output ./headers/clarabel.hpp
+    COMMAND cbindgen --config cbindgen.toml --quiet --crate clarabel_c --output ./headers/clarabel.hpp
     BYPRODUCTS
         "${LIBCLARABEL_C_SHARED_PATH}"
         "${LIBCLARABEL_C_STATIC_PATH}"

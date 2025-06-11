@@ -19,7 +19,9 @@ pub mod cones {
         /// The exponential cone in R^3.
         ///
         /// This cone takes no parameters
-        ExponentialConeT(),
+        /// NB: Just a plain enum variant and not a unit type (i.e. not ExponentialConeT())
+        /// as in the clarabel crate to avoid ZST / FFI complaints from cbindgen
+        ExponentialConeT,
         /// The power cone in R^3.
         ///
         /// The parameter indicates the power.

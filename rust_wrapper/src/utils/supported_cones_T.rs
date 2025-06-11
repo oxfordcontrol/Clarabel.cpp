@@ -28,11 +28,11 @@ pub fn convert_from_C_cone<T: FloatT>(cone: &ClarabelSupportedConeT<T>) -> lib::
         ClarabelSupportedConeT::SecondOrderConeT(payload) => {
             lib::SupportedConeT::SecondOrderConeT(*payload)
         }
-        ClarabelSupportedConeT::ExponentialConeT() => lib::SupportedConeT::ExponentialConeT(),
+        ClarabelSupportedConeT::ExponentialConeT => lib::SupportedConeT::ExponentialConeT(),
         ClarabelSupportedConeT::PowerConeT(payload) => lib::SupportedConeT::PowerConeT(*payload),
-        ClarabelSupportedConeT::GenPowerConeT(ptr_alpha,dim1,dim2) => {
+        ClarabelSupportedConeT::GenPowerConeT(ptr_alpha, dim1, dim2) => {
             let alpha = unsafe { std::slice::from_raw_parts(*ptr_alpha, *dim1) };
-            lib::SupportedConeT::GenPowerConeT(alpha.to_vec(),*dim2)
+            lib::SupportedConeT::GenPowerConeT(alpha.to_vec(), *dim2)
         }
         #[cfg(feature = "sdp")]
         ClarabelSupportedConeT::PSDTriangleConeT(payload) => {
