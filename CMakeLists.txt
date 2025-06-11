@@ -35,6 +35,8 @@ option(CLARABEL_FEATURE_FAER_SPARSE "Enable `faer-sparse` option" OFF)
 option(CLARABEL_FEATURE_PARDISO_MKL "Enable `pardiso-mkl` option" OFF)
 option(CLARABEL_FEATURE_PARDISO_PANUA "Enable `pardiso-panua` option" OFF)
 
+# option for direct cargo feature specification
+set(CLARABEL_CARGO_FEATURES "" CACHE STRING "Comma-separated list of clarabel features for cargo")
 
 #----------------------------------------------
 #----------------------------------------------
