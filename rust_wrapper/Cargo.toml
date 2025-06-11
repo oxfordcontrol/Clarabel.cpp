@@ -18,16 +18,6 @@ lto = true
 codegen-units = 1
 
 [features]
-# Define features for SDP support in Clarabel.rs
-sdp = ["clarabel/sdp"]
-sdp-accelerate = ["sdp", "clarabel/sdp-accelerate"]
-sdp-netlib     = ["sdp", "clarabel/sdp-netlib"]
-sdp-openblas   = ["sdp", "clarabel/sdp-openblas"]
-sdp-mkl        = ["sdp", "clarabel/sdp-mkl"]
-sdp-r          = ["sdp", "clarabel/sdp-r"]
-
-serde          = ["dep:serde", "clarabel/serde"]
-faer-sparse    = ["clarabel/faer-sparse"]
-pardiso-mkl    = ["clarabel/pardiso-mkl"]
-pardiso-panua  = ["clarabel/pardiso-panua"]
-pardiso        = ["clarabel/pardiso"] #chooses both
+default = []
+sdp = []
+serde = ["dep:serde"]

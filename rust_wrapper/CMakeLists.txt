@@ -18,82 +18,149 @@ endif()
 
 set(CLARABEL_C_OUTPUT_DIR ${clarabel_c_output_directory} PARENT_SCOPE)
 
+if(NOT DEFINED CLARABEL_RUST_FEATURES)
+    set(CLARABEL_RUST_FEATURES "")
+endif()
 
 # -------------------------------------
-# Cargo features configuration
+# Cargo feature configuration helper functions
 #--------------------------------------
 
-# A list of features to pass to rustc
-set(CLARABEL_BUILD_FEATURES "")
+# Check if CLARABEL_RUST_FEATURES contains a specific feature
+function(rust_feature_is_enabled PATTERN RESULT_VAR)
+    string(REPLACE "," ";" FEATURE_LIST "${CLARABEL_RUST_FEATURES}")
+    set(${RESULT_VAR} FALSE PARENT_SCOPE)
+    foreach(FEATURE ${FEATURE_LIST})
+        if(FEATURE MATCHES "${PATTERN}")
+            set(${RESULT_VAR} TRUE PARENT_SCOPE)
+            break()
+        endif()
+    endforeach()
+endfunction()
 
-# SDP feature flag
+# Check if CLARABEL_RUST_FEATURES contains any of the "sdp" options
+function(rust_features_has_sdp RESULT_VAR)
+    if(CLARABEL_RUST_FEATURES MATCHES ".*sdp.*")
+        set(${RESULT_VAR} TRUE PARENT_SCOPE)
+    else()
+        set(${RESULT_VAR} FALSE PARENT_SCOPE)
+    endif()
+endfunction()
+
+# Helper function to append a feature to a comma-separated list
+function(append_feature FEATURE_LIST_VAR NEW_FEATURE)
+    if(${FEATURE_LIST_VAR} STREQUAL "")
+        set(${FEATURE_LIST_VAR} "${NEW_FEATURE}" PARENT_SCOPE)
+    else()
+        set(${FEATURE_LIST_VAR} "${${FEATURE_LIST_VAR}},${NEW_FEATURE}" PARENT_SCOPE)
+    endif()
+endfunction()
+
+# Automatically prefix features with 'clarabel/' if not already prefixed
+# For serde, add it as both clarabel/serde and serde, with the latter 
+# necessary for the rust_wrapper cargo configuration.
+
+function(format_clarabel_rust_features INPUT_FEATURES OUTPUT_VAR)
+    string(REPLACE "," ";" FEATURE_LIST "${INPUT_FEATURES}")
+    set(FORMATTED_FEATURES "")
+    foreach(FEATURE ${FEATURE_LIST})
+        # Regular handling: prefix with clarabel/ if not already prefixed
+        if(NOT FEATURE MATCHES "^clarabel/")
+            set(FEATURE "clarabel/${FEATURE}")
+        endif()
+        append_feature(FORMATTED_FEATURES "${FEATURE}")
+    endforeach()
+    set(${OUTPUT_VAR} "${FORMATTED_FEATURES}" PARENT_SCOPE)
+endfunction()
+
+
+# -------------------------------------
+# Cargo feature configuration backward compatibility
+#--------------------------------------
+
+
 if(NOT CLARABEL_FEATURE_SDP STREQUAL "none")
+    append_feature(CLARABEL_RUST_FEATURES "${CLARABEL_FEATURE_SDP}")
+endif()
 
-    # Set the Rust feature flag
-    set(CLARABEL_BUILD_FEATURES "${CLARABEL_BUILD_FEATURES},${CLARABEL_FEATURE_SDP}")
+if(CLARABEL_FEATURE_FAER_SPARSE)
+    append_feature(CLARABEL_RUST_FEATURES "faer-sparse")
+endif()
 
+if(CLARABEL_FEATURE_PARDISO_MKL)
+    append_feature(CLARABEL_RUST_FEATURES "pardiso-mkl")
+endif()
+
+# SERDE feature flag
+if(CLARABEL_FEATURE_SERDE)
+    append_feature(CLARABEL_RUST_FEATURES "serde")
+endif()
+
+
+# -------------------------------------
+# Cargo feature configuration 
+#--------------------------------------
+
+# ----
+# Rust features should be passed via the CLARABEL_RUST_FEATURES variable.
+# For some features, we requires some additional CMake configuration.
+# --- 
+
+rust_features_has_sdp(CONFIG_SDP)
+if(CONFIG_SDP)
     # Define the FEATURE_SDP flag for all targets that link against clarabel_c
     target_compile_definitions(libclarabel_c_static INTERFACE FEATURE_SDP)
     target_compile_definitions(libclarabel_c_shared INTERFACE FEATURE_SDP)
 endif()
 
-# FAER_SPARSE feature flag
-if(CLARABEL_FEATURE_FAER_SPARSE)
-
-    # Set the Rust feature flag
-    set(CLARABEL_BUILD_FEATURES "${CLARABEL_BUILD_FEATURES},faer-sparse")
-
-    # Define the FEATURE_FAER_SPARSE flag for all targets that link against clarabel_c
+rust_feature_is_enabled("faer-sparse" CONFIG_FAER_SPARSE)
+if(CONFIG_FAER_SPARSE)
     target_compile_definitions(libclarabel_c_static INTERFACE FEATURE_FAER_SPARSE)
     target_compile_definitions(libclarabel_c_shared INTERFACE FEATURE_FAER_SPARSE)
 endif()
 
-# PARDISO_MKL feature flag
-if(CLARABEL_FEATURE_PARDISO_MKL)
-
-    # Set the Rust feature flag
-    set(CLARABEL_BUILD_FEATURES "${CLARABEL_BUILD_FEATURES},pardiso-mkl")
-
-    # Define the FEATURE_PARDISO_MKL flag for all targets that link against clarabel_c
+rust_feature_is_enabled("pardiso-mkl" CONFIG_PARDISO_MKL)
+if(CONFIG_PARDISO_MKL)
     target_compile_definitions(libclarabel_c_static INTERFACE FEATURE_PARDISO_MKL)
     target_compile_definitions(libclarabel_c_shared INTERFACE FEATURE_PARDISO_MKL)
-    
 endif()
 
-# PARDISO_PANUA feature flag
-if(CLARABEL_FEATURE_PARDISO_PANUA)
-
-    # Set the Rust feature flag
-    set(CLARABEL_BUILD_FEATURES "${CLARABEL_BUILD_FEATURES},pardiso-panua")
-
-    # Define the FEATURE_PARDISO_PANUA flag for all targets that link against clarabel_c
+rust_feature_is_enabled("pardiso-panua" CONFIG_PARDISO_PANUA)
+if(CONFIG_PARDISO_PANUA)
     target_compile_definitions(libclarabel_c_static INTERFACE FEATURE_PARDISO_PANUA)
     target_compile_definitions(libclarabel_c_shared INTERFACE FEATURE_PARDISO_PANUA)
 endif()
 
-if(CLARABEL_FEATURE_PARDISO_MKL OR CLARABEL_FEATURE_PARDISO_PANUA)
+if(CONFIG_PARDISO_MKL OR CONFIG_PARDISO_PANUA)
     target_compile_definitions(libclarabel_c_static INTERFACE FEATURE_PARDISO_ANY)
     target_compile_definitions(libclarabel_c_shared INTERFACE FEATURE_PARDISO_ANY)
 endif()
 
-
-# SERDE feature flag
-if(CLARABEL_FEATURE_SERDE)
-
-    # Set the Rust feature flag
-    set(CLARABEL_BUILD_FEATURES "${CLARABEL_BUILD_FEATURES},serde")
-
-    # Define the FEATURE_SERDE flag for all targets that link against clarabel_c
+rust_feature_is_enabled("serde" CONFIG_SERDE)
+if(CONFIG_SERDE)
     target_compile_definitions(libclarabel_c_static INTERFACE FEATURE_SERDE)
     target_compile_definitions(libclarabel_c_shared INTERFACE FEATURE_SERDE)
 endif()
 
+# replace each rust <feature> with clarabel/<feature> so that they pass through 
+# this wrapper to the clarabel crate underneath
+format_clarabel_rust_features("${CLARABEL_RUST_FEATURES}" CLARABEL_RUST_FEATURES)
 
+# some features must also be specified at the wrapper level 
+# add them again, but after prepending clarabel/ to everything
+if(CONFIG_SDP)
+    append_feature(CLARABEL_RUST_FEATURES "sdp")
+endif()
+if(CONFIG_SERDE)
+    append_feature(CLARABEL_RUST_FEATURES "serde")
+endif()
 
-set(clarabel_c_build_flags "${clarabel_c_build_flags};--features=${CLARABEL_BUILD_FEATURES}")
-message("-- Rust feature list: " ${CLARABEL_BUILD_FEATURES})
+if(NOT CLARABEL_RUST_FEATURES STREQUAL "")
+    set(clarabel_c_build_flags "${clarabel_c_build_flags};--features=${CLARABEL_RUST_FEATURES}")
+endif()
+
+message("-- Rust feature list: " ${CLARABEL_RUST_FEATURES})
 message("-- Cargo options: " "${clarabel_c_build_flags}")
-
 
 # -------------------------------------
 # -------------------------------------
@@ -118,7 +185,7 @@ add_custom_target(
     WORKING_DIRECTORY ${CLARABEL_ROOT_DIR}/rust_wrapper
     # Commands for building the Rust library
     COMMAND cargo build ${clarabel_c_build_flags}
-    COMMAND cargo install cbindgen --version 0.24.5
+    COMMAND cargo install cbindgen
     # Generate the C header
     COMMAND cbindgen --config cbindgen.toml --crate clarabel_c --output ./headers/clarabel.h --lang c
     # Generate the C++ header
