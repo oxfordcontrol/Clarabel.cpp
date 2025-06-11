@@ -18,17 +18,17 @@ endif()
 
 set(CLARABEL_C_OUTPUT_DIR ${clarabel_c_output_directory} PARENT_SCOPE)
 
-if(NOT DEFINED CLARABEL_RUST_FEATURES)
-    set(CLARABEL_RUST_FEATURES "")
+if(NOT DEFINED CLARABEL_CARGO_FEATURES)
+    set(CLARABEL_CARGO_FEATURES "")
 endif()
 
 # -------------------------------------
 # Cargo feature configuration helper functions
 #--------------------------------------
 
-# Check if CLARABEL_RUST_FEATURES contains a specific feature
+# Check if CLARABEL_CARGO_FEATURES contains a specific feature
 function(rust_feature_is_enabled PATTERN RESULT_VAR)
-    string(REPLACE "," ";" FEATURE_LIST "${CLARABEL_RUST_FEATURES}")
+    string(REPLACE "," ";" FEATURE_LIST "${CLARABEL_CARGO_FEATURES}")
     set(${RESULT_VAR} FALSE PARENT_SCOPE)
     foreach(FEATURE ${FEATURE_LIST})
         if(FEATURE MATCHES "${PATTERN}")
@@ -38,9 +38,9 @@ function(rust_feature_is_enabled PATTERN RESULT_VAR)
     endforeach()
 endfunction()
 
-# Check if CLARABEL_RUST_FEATURES contains any of the "sdp" options
+# Check if CLARABEL_CARGO_FEATURES contains any of the "sdp" options
 function(rust_features_has_sdp RESULT_VAR)
-    if(CLARABEL_RUST_FEATURES MATCHES ".*sdp.*")
+    if(CLARABEL_CARGO_FEATURES MATCHES ".*sdp.*")
         set(${RESULT_VAR} TRUE PARENT_SCOPE)
     else()
         set(${RESULT_VAR} FALSE PARENT_SCOPE)
@@ -80,20 +80,20 @@ endfunction()
 
 
 if(NOT CLARABEL_FEATURE_SDP STREQUAL "none")
-    append_feature(CLARABEL_RUST_FEATURES "${CLARABEL_FEATURE_SDP}")
+    append_feature(CLARABEL_CARGO_FEATURES "${CLARABEL_FEATURE_SDP}")
 endif()
 
 if(CLARABEL_FEATURE_FAER_SPARSE)
-    append_feature(CLARABEL_RUST_FEATURES "faer-sparse")
+    append_feature(CLARABEL_CARGO_FEATURES "faer-sparse")
 endif()
 
 if(CLARABEL_FEATURE_PARDISO_MKL)
-    append_feature(CLARABEL_RUST_FEATURES "pardiso-mkl")
+    append_feature(CLARABEL_CARGO_FEATURES "pardiso-mkl")
 endif()
 
 # SERDE feature flag
 if(CLARABEL_FEATURE_SERDE)
-    append_feature(CLARABEL_RUST_FEATURES "serde")
+    append_feature(CLARABEL_CARGO_FEATURES "serde")
 endif()
 
 
@@ -102,7 +102,7 @@ endif()
 #--------------------------------------
 
 # ----
-# Rust features should be passed via the CLARABEL_RUST_FEATURES variable.
+# Cargo features can be passed directly via the CLARABEL_CARGO_FEATURES variable.
 # For some features, we requires some additional CMake configuration.
 # --- 
 
@@ -144,22 +144,22 @@ endif()
 
 # replace each rust <feature> with clarabel/<feature> so that they pass through 
 # this wrapper to the clarabel crate underneath
-format_clarabel_rust_features("${CLARABEL_RUST_FEATURES}" CLARABEL_RUST_FEATURES)
+format_clarabel_rust_features("${CLARABEL_CARGO_FEATURES}" CLARABEL_CARGO_FEATURES)
 
 # some features must also be specified at the wrapper level 
 # add them again, but after prepending clarabel/ to everything
 if(CONFIG_SDP)
-    append_feature(CLARABEL_RUST_FEATURES "sdp")
+    append_feature(CLARABEL_CARGO_FEATURES "sdp")
 endif()
 if(CONFIG_SERDE)
-    append_feature(CLARABEL_RUST_FEATURES "serde")
+    append_feature(CLARABEL_CARGO_FEATURES "serde")
 endif()
 
-if(NOT CLARABEL_RUST_FEATURES STREQUAL "")
-    set(clarabel_c_build_flags "${clarabel_c_build_flags};--features=${CLARABEL_RUST_FEATURES}")
+if(NOT CLARABEL_CARGO_FEATURES STREQUAL "")
+    set(clarabel_c_build_flags "${clarabel_c_build_flags};--features=${CLARABEL_CARGO_FEATURES}")
 endif()
 
-message("-- Rust feature list: " ${CLARABEL_RUST_FEATURES})
+message("-- Cargo feature list: " ${CLARABEL_CARGO_FEATURES})
 message("-- Cargo options: " "${clarabel_c_build_flags}")
 
 # -------------------------------------
