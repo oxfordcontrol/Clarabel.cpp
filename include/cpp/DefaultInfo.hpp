@@ -1,7 +1,7 @@
 #pragma once
 
-#include "DefaultSettings.h"
-#include "DefaultSolution.h"
+#include "DefaultSettings.hpp"
+#include "DefaultSolution.hpp"
 
 #include <cstdint>
 #include <type_traits>

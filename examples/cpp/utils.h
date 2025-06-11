@@ -1,7 +1,7 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#include <Clarabel>
+#include <clarabel.hpp>
 #include <cstddef>
 #include <cstdio>
 

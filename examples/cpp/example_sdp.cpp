@@ -1,7 +1,7 @@
 // #define FEATURE_SDP
 #include "utils.h"
 
-#include <Clarabel>
+#include <clarabel.hpp>
 #include <Eigen/Eigen>
 #include <cmath>
 #include <vector>

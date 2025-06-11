@@ -1,6 +1,6 @@
 #include "utils.h"
 
-#include <Clarabel.h>
+#include <clarabel.h>
 #include <math.h>
 
 int main(void)

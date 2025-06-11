@@ -1,10 +1,10 @@
 #pragma once
 
-#include "CscMatrix.h"
-#include "DefaultInfo.h"
-#include "DefaultSettings.h"
-#include "DefaultSolution.h"
-#include "SupportedConeT.h"
+#include "CscMatrix.hpp"
+#include "DefaultInfo.hpp"
+#include "DefaultSettings.hpp"
+#include "DefaultSolution.hpp"
+#include "SupportedConeT.hpp"
 
 #include <Eigen/Eigen>
 #include <memory>

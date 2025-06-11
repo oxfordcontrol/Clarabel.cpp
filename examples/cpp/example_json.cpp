@@ -1,6 +1,6 @@
 // #define FEATURE_SDP
 #include "utils.h"
-#include <Clarabel>
+#include <clarabel.hpp>
 #include <iostream>
 
 using namespace clarabel;
