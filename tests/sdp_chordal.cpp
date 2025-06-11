@@ -1,5 +1,5 @@
 #ifdef FEATURE_SDP
-#include <Clarabel>
+#include <clarabel.hpp>
 #include <Eigen/Eigen>
 #include <cmath>
 #include <gtest/gtest.h>

@@ -1,6 +1,6 @@
 #include "utils.h"
 
-#include <Clarabel>
+#include <clarabel.hpp>
 #include <Eigen/Eigen>
 #include <vector>
 

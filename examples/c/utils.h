@@ -1,7 +1,7 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#include <Clarabel.h>
+#include <clarabel.h>
 
 void print_solution_f64(ClarabelDefaultSolution_f64 *solution);
 

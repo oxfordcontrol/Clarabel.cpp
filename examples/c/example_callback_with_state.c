@@ -1,6 +1,6 @@
 #include "utils.h"
 #include <stdio.h>
-#include <Clarabel.h>
+#include <clarabel.h>
 
 
 typedef struct 

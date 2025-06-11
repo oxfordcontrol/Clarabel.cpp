@@ -1,4 +1,4 @@
-#include <Clarabel>
+#include <clarabel.hpp>
 #include <Eigen/Eigen>
 #include <Eigen/src/Core/Matrix.h>
 #include <cmath>

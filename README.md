@@ -124,7 +124,7 @@ Examples for both C and C++ are available in `examples/c` and `examples/cpp` and
 # Usage
 
 - Link to the `libclarabel_c_shared` (shared library) or `libclarabel_c_static` (static library) target in CMake.
-- `#include <Clarabel>` in your C/C++ source files.
+- `#include <clarabel.hpp>` in your C++ source files or <clarabel.h>` in your C source files.
 
 # License 🔍
 This project is licensed under the Apache License 2.0 - see the [LICENSE.md](LICENSE.md) file for details.
