@@ -313,8 +313,7 @@ where
     let solver = if settings.is_null() {
         lib::DefaultSolver::<T>::load_from_file(&mut file, None)
     } else {
-        let settings_struct = &*(settings);
-        let settings = utils::get_solver_settings_from_c::<T>(settings_struct);
+        let settings = (*settings).clone().into();
         lib::DefaultSolver::<T>::load_from_file(&mut file, Some(settings))
     };
     Box::into_raw(Box::new(solver)) as *mut c_void
