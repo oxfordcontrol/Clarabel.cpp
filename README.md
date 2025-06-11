@@ -19,8 +19,6 @@ __Clarabel.cpp__ is a C/C++ wrapper of [Clarabel.rs](https://github.com/oxfordco
 
 # Installation
 
-> **Note:** The C++ interface is WIP and there might be breaking changes in future releases.
-
 Clarabel.cpp uses CMake to generate the build system and requires the following dependencies:
 
 - Rust
@@ -53,7 +51,7 @@ git clone --recurse-submodules https://github.com/oxfordcontrol/Clarabel.cpp.git
 cd Clarabel.cpp
 ```
 
-## Build
+## Building the solver
 
 ```sh
 mkdir build
@@ -82,51 +80,39 @@ where `VCPKG_TOOLCHAIN_PATH` is the path to the vcpkg toolchain file.
 
 - For 32-bit platforms, use `x86-windows` instead of `x64-windows`.
 
-## CMake options
+## Optional solver features
 
-### SDP support
+Clarabel.rs supports a variety of build options for semidefinite program (SDP) support, JSON file read/write, 3rd party linear solvers etc.  Feature options can be passed to cargo via CMake using `-DCLARABEL_RUST_FEATURES = "feature1,feature2,..."`.
 
-To enable SDP features, set the `-DCLARABEL_FEATURE_SDP` option to one of the following values:
-- `sdp-accelerate`
-- `sdp-netlib`
-- `sdp-openblas`
-- `sdp-mkl`
-- `sdp-r`
+| Feature | Description |
+|---------|-------------|
+| `serde` | enables read/write of problem instances to .json files (enabled by default) |
+| `faer-sparse` | enables "faer" as an optional direct_solve_method |
+| `pardiso-mkl` | enables "mkl" as an optional direct_solve_method (Intel only) |
+| `pardiso-panua` | enables "panua" as an optional direct_solve_method (requires separate license) |
+| `pardiso` | enables both the "mkl" and "panua" options |
+| `sdp-accelerate` | enables solution of SDPs using Apple's "accelerate" BLAS/LAPACK implementation (OSX only) |
+| `sdp-mkl` | enables solution of SDPs using Intel's BLAS/LAPACK implementation (Intel only) |
+| `sdp-openblas` | enables solution of SDPs using OpenBlas |
+| `sdp-netlib` | enables solution of SDPs using the Netlib reference BLAS/LAPACK (not recommended) |
+| `buildinfo` | adds a buildinfo function to the package that reports on the build configuration |
 
-By default, `-DCLARABEL_FEATURE_SDP=none` and SDP support is disabled.
+### Linking to Pardiso
+To enable dynamic linking to MKL Pardiso, the MKL Pardiso libary (e.g. `libmkl_rt.so`) must be on the system library path (e.g. on `LD_LIBRARY_PATH` on Linux). Alternatively, set the `MKLROOT` environment variable to the root of the MKL installation or `MKL_PARDISO_PATH` to the location of the library. The Intel MKL library is available as part of the Intel oneAPI toolkit and is only available on x86_64 platforms.
 
-### JSON file input/output support
+To enable dynamic linking to Panua Pardiso, the Panua Pardiso library (e.g. `libpardiso.so`) must be on the system library path (e.g. on `LD_LIBRARY_PATH` on Linux). Alternatively, set the `PARDISO_PATH` environment variable to the location of the library.
 
-To enable reading and writing of problem data to JSON files, set 
-`-DCLARABEL_FEATURE_SERDE=true`. 
+Panua Pardiso is a commercial solver and requires a separate license.
 
-When reporting issues with the solver, it can be helpful to provide a JSON file that reproduces the problem.
-
-### Alternative linear algebra libraries
-
-To enable the [faer-rs](https://faer-rs.github.io/) sparse linear algebra library as an additional solver option, set `-DCLARABEL_FEATURE_FAER_SPARSE=true`.
-
-To enable the [`MKL Pardiso`](https://www.intel.com/content/www/us/en/docs/onemkl/developer-reference-c/) sparse linear algebra library as an additional solver option, set `-DCLARABEL_FEATURE_PARDISO_MKL=true`.   
-
-The solver will dynamically link to the MKL library, which must be accessible via the system library path (e.g. on `LD_LIBRARY_PATH` on Linux).   
-
-Alternatively, set the `MKLROOT` environment variable to the root of the MKL installation or `MKL_PARDISO_PATH` to the location of the MKL Pardiso library (e.g. the location of `libmkl_rt.so` in Linux).
-
-To enable the [`Panua Pardiso`](https://panua.ch/pardiso/) sparse linear algebra library as an additional solver option, set `-DCLARABEL_FEATURE_PARDISO_PANUA=true`.   This library is not open source and requires a license.
-
-The solver will dynamically link to the Panua Pardiso library, which must be accessible via the system library path (e.g. on `LD_LIBRARY_PATH` on Linux).   
-
-Alternatively, set the `PARDISO_PATH` environment variable to the location of the Panua Pardiso library (e.g. the location of `libpardiso.so` in Linux).
-
-### Unit tests
+## Unit tests
 
 By default, unit tests are disabled to reduce build time. To enable unit tests, set `-DCLARABEL_BUILD_TESTS=true` in cmake.
 
-### Release mode
+## Release mode
 
 The solver will build the Rust source in debug mode.   To build in release mode, set `-DCMAKE_BUILD_TYPE=Release` in cmake.
 
-## Run examples
+## Running examples
 
 Examples for both C and C++ are available in `examples/c` and `examples/cpp` and can be run from the `build` directory using:
 

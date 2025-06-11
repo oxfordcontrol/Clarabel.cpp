@@ -9,7 +9,7 @@ pub struct ClarabelCscMatrix<T = f64> {
     pub n: usize,
     /// CSC format column pointer.   
     ///
-    /// Ths field should have length `n+1`. The last entry corresponds
+    /// This field should have length `n+1`. The last entry corresponds
     /// to the the number of nonzeros and should agree with the lengths
     /// of the `rowval` and `nzval` fields.
     pub colptr: *const usize,
