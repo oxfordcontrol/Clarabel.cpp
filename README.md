@@ -82,7 +82,7 @@ where `VCPKG_TOOLCHAIN_PATH` is the path to the vcpkg toolchain file.
 
 ## Optional solver features
 
-Clarabel.rs supports a variety of build options for supporting SDPs, JSON file read/write, various 3rd party linear solvers etc.  Feature options can be passed to cargo via CMake using `-DCLARABEL_RUST_FEATURES = "feature1,feature2,..."`.
+Clarabel.rs supports a variety of build options for semidefinite program (SDP) support, JSON file read/write, 3rd party linear solvers etc.  Feature options can be passed to cargo via CMake using `-DCLARABEL_RUST_FEATURES = "feature1,feature2,..."`.
 
 | Feature | Description |
 |---------|-------------|
