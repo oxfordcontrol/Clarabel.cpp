@@ -19,8 +19,6 @@ __Clarabel.cpp__ is a C/C++ wrapper of [Clarabel.rs](https://github.com/oxfordco
 
 # Installation
 
-> **Note:** The C++ interface is WIP and there might be breaking changes in future releases.
-
 Clarabel.cpp uses CMake to generate the build system and requires the following dependencies:
 
 - Rust
